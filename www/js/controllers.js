@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-  .controller('DashCtrl', function ($scope, $cordovaGeolocation, GOOGLE_CONFIG) {
+  .controller('DashCtrl', function ($scope, $cordovaGeolocation, $stateParams, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService) {
 
     var options = {timeout: 10000, enableHighAccuracy: true};
     $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
@@ -25,6 +25,12 @@ angular.module('starter.controllers', [])
         center: latLng
       });
 
+      //update location start
+      UserGeoService.saveUserLocation($stateParams.profileInfoId, position.coords.latitude, position.coords.longitude).then(function () {
+        console.log("User Location saved to Geo database");
+      }, function (error) {
+        console.log("User Location can't saved to Geo database: " + error);
+      });
 
     }, function (error) {
       console.log("Could not get location");
@@ -87,7 +93,7 @@ angular.module('starter.controllers', [])
       FacebookCtrl.getFacebookProfileInfo(response.authResponse.authToken).then(function (profileInfo) {
         //update user info
         UserService.updateUserProfile(profileInfo);
-        $state.go('tab.dash');
+        $state.go('tab.dash', {profileInfoId: profileInfo.id});
       })
     };
 
@@ -110,7 +116,7 @@ angular.module('starter.controllers', [])
           FacebookCtrl.getFacebookProfileInfo(success.authToken).then(function (profileInfo) {
             //update user info
             UserService.updateUserProfile(profileInfo);
-            $state.go('tab.dash');
+            $state.go('tab.dash', {profileInfoId: profileInfo.id});
           })
 
         } else {

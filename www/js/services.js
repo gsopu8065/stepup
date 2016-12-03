@@ -49,6 +49,20 @@ angular.module('starter.services', [])
     };
   })
 
+  .factory('UserGeoService', function () {
+
+    var UserGeoService = {};
+
+    var firebaseRef = firebase.database().ref();
+    var geoFire = new GeoFire(firebaseRef);
+
+    UserGeoService.saveUserLocation = function(userId, lat, long){
+      return geoFire.set(userId, [lat, long]);
+    }
+
+    return UserGeoService
+  })
+
   .factory('UserService', function ($q) {
     var UserService = {};
 
