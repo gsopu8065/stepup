@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-  .controller('DashCtrl', function ($scope, $cordovaGeolocation, $stateParams, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService) {
+  .controller('DashCtrl', function ($scope, $cordovaGeolocation, $stateParams,$ionicModal, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService) {
 
     var options = {timeout: 10000, enableHighAccuracy: true};
     $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
@@ -32,9 +32,64 @@ angular.module('starter.controllers', [])
         console.log("User Location can't saved to Geo database: " + error);
       });
 
+
+      //read map service 
+      var firebaseRef = firebase.database().ref();
+      var geoFire = new GeoFire(firebaseRef);
+      var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15})
+      var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
+        //for each near by user
+        if ($stateParams.profileInfoId != key) {
+          firebase.database().ref('/users/' + key).once('value').then(function (user) {
+            var userDetails = user.val();
+            var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(location[0], location[1]),
+              map: $scope.map,
+              icon: {
+                url: userDetails.photoURL,
+                scaledSize: new google.maps.Size(38, 38),
+                scale: 10
+              },
+              optimized: false
+            })
+            marker.addListener('click', function () {
+              //$scope.openModal(key);
+            });
+          });
+        }
+      })
+      var onReadyRegistration = geoQuery.on("ready", function () {
+        geoQuery.cancel();
+      })
+
     }, function (error) {
       console.log("Could not get location");
+      console.log(error)
     });
+
+
+    //modal open
+    $ionicModal.fromTemplateUrl('templates/user-detail.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.modal = modal;
+    });
+    $scope.openModal = function (userId) {
+      UserService.getUserProfile(userId).then(function (userQueryRes) {
+        $scope.userInfoDisplay = response.data
+        $scope.chatButton = true;
+        $scope.modal.show();
+        $ionicSlideBoxDelegate.slide(0);
+      })
+    };
+    $scope.closeModal = function () {
+      $scope.modal.hide();
+    };
+    $scope.startConversation = function () {
+      $state.go('tab.chat-detail', {chatId: $scope.chatUserId})
+      $scope.modal.hide();
+    };
 
 
   })

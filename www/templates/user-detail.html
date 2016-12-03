@@ -1,0 +1,13 @@
+<ion-modal-view>
+  <ion-content>
+    <!--<ion-slide-box show-pager="false">
+      <ion-slide ng-repeat="oImage in aImages">
+        <img ng-src="{{oImage}}" class="fullscreen-image1" />
+      </ion-slide>
+    </ion-slide-box>-->
+    <img ng-src="{{userInfoDisplay.picture.data.url}}" class="fullscreen-image1" /> <br/>
+    <div>{{userInfoDisplay.name}}</div>
+    <button class = "button" ng-click = "closeModal()">close</button> <br/>
+    <button class = "button" ng-show="chatButton == true" ng-click = "startConversation()">Chat</button>
+  </ion-content>
+</ion-modal-view>
