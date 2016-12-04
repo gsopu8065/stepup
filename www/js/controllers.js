@@ -134,7 +134,7 @@ angular.module('starter.controllers', [])
     };
   })
 
-  .controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $ionicSlideBoxDelegate, $http, LocalStorage) {
+  .controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $ionicSlideBoxDelegate, $http, UserService, LocalStorage) {
 
     //dom start
     var messageList = document.getElementById('messageList');
@@ -142,7 +142,7 @@ angular.module('starter.controllers', [])
     //dom end
 
     $scope.titleUserDisplayName = $stateParams.chatName
-    $scope.titleUserDisplayUrl = 'http://graph.facebook.com/'+$stateParams.chatId+'/picture?type=large'
+    $scope.titleUserDisplayUrl = 'https://graph.facebook.com/'+$stateParams.chatId+'/picture?type=large'
 
     $scope.user = LocalStorage.getUser();
     var dbName = ""
@@ -295,26 +295,18 @@ angular.module('starter.controllers', [])
     $scope.openModal = function (userId) {
       $scope.chatUserId = userId;
       firebase.database().ref('users/' + $scope.chatUserId).once('value').then(function (userQueryRes) {
-        $http({
-          method: 'GET',
-          url: 'https://graph.facebook.com/v2.8/' + userQueryRes.val().token + '?fields=id,name,about,birthday,picture&access_token=' +
-          'EAAXV6r5YQYQBAGIwq1BavDQoXr2ZAMTOGyQ8OztTE7WngCj5ufRQfzmZBNxpw5jKl8D0VjgV7yoSwciF8CxMsniK9IoD9d8jrYZCaE0uIWZAqElGmpRmpjrzBOgcaU3UxI2yaJ8kkSEVELJPSHChDQZBJkZAmzG96qUMgwlDDgtQZDZD'
-        }).then(function successCallback(response) {
-          // this callback will be called asynchronously
-          // when the response is available
-          $scope.userInfoDisplay = response.data
-          $scope.chatButton = true;
+        UserService.getUserProfile(userId).then(function (userQueryRes) {
+          $scope.userInfoDisplay = userQueryRes.val();
+          $scope.chatButton = false;
           $scope.modal.show();
           $ionicSlideBoxDelegate.slide(0);
-        }, function errorCallback(response) {
-        });
+        })
       })
 
     };
     $scope.closeModal = function () {
       $scope.modal.hide();
     };
-
     loadMessages()
 
   })
