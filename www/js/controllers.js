@@ -1,6 +1,14 @@
 angular.module('starter.controllers', [])
 
-  .controller('DashCtrl', function ($scope, $cordovaGeolocation, $stateParams,$ionicModal, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService) {
+  .controller('DashCtrl', function ($scope, $state, $cordovaGeolocation, $stateParams,$ionicModal, $ionicSlideBoxDelegate, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
+
+    //this is temporary,later remove it
+    LocalStorage.setUser({userID: $stateParams.profileInfoId});
+
+    if(!$stateParams.profileInfoId){
+      $state.go("login")
+    }
+
 
     var options = {timeout: 10000, enableHighAccuracy: true};
     $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
@@ -46,14 +54,14 @@ angular.module('starter.controllers', [])
               position: new google.maps.LatLng(location[0], location[1]),
               map: $scope.map,
               icon: {
-                url: userDetails.photoURL,
+                url: 'https://graph.facebook.com/'+key+'/picture?type=small',
                 scaledSize: new google.maps.Size(38, 38),
                 scale: 10
               },
               optimized: false
             })
             marker.addListener('click', function () {
-              //$scope.openModal(key);
+              $scope.openModal(key);
             });
           });
         }
@@ -76,8 +84,10 @@ angular.module('starter.controllers', [])
       $scope.modal = modal;
     });
     $scope.openModal = function (userId) {
+      $scope.chatUserId = userId;
+
       UserService.getUserProfile(userId).then(function (userQueryRes) {
-        $scope.userInfoDisplay = response.data
+        $scope.userInfoDisplay = userQueryRes.val();
         $scope.chatButton = true;
         $scope.modal.show();
         $ionicSlideBoxDelegate.slide(0);
@@ -87,24 +97,226 @@ angular.module('starter.controllers', [])
       $scope.modal.hide();
     };
     $scope.startConversation = function () {
-      $state.go('tab.chat-detail', {chatId: $scope.chatUserId})
+      $state.go('tab.chat-detail', {chatId: $scope.chatUserId, chatName: $scope.userInfoDisplay.displayName })
       $scope.modal.hide();
     };
 
 
   })
-  .controller('ChatsCtrl', function ($scope, Chats) {
-    //$scope.$on('$ionicView.enter', function(e) {
-    //});
 
-    $scope.chats = Chats.all();
+  .controller('ChatsCtrl', function ($scope, Chats, LocalStorage) {
+    // With the new view caching in Ionic, Controllers are only called
+    // when they are recreated or on app start, instead of every page change.
+    // To listen for when this page is active (for example, to refresh data),
+    // listen for the $ionicView.enter event:
+    //
+    //get contacts list start
+    /*$scope.$on('$ionicView.enter', function(e) {
+     console.log($scope.chats)
+     });*/
+
+    var user = LocalStorage.getUser();
+    if (user) {
+      firebase.database().ref('/users/' + user.userID).once('value').then(function (user) {
+        var userDetails = user.val();
+        if (userDetails.contacts) {
+          $scope.chats = userDetails.contacts;
+        }
+        else {
+          $scope.chats = [];
+        }
+      });
+
+    }
+
     $scope.remove = function (chat) {
       Chats.remove(chat);
     };
   })
 
-  .controller('ChatDetailCtrl', function ($scope, $stateParams, Chats) {
-    $scope.chat = Chats.get($stateParams.chatId);
+  .controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $ionicSlideBoxDelegate, $http, LocalStorage) {
+
+    //dom start
+    var messageList = document.getElementById('messageList');
+    var messageText = document.getElementById('messageText');
+    //dom end
+
+    $scope.titleUserDisplayName = $stateParams.chatName
+    $scope.titleUserDisplayUrl = 'http://graph.facebook.com/'+$stateParams.chatId+'/picture?type=large'
+
+    $scope.user = LocalStorage.getUser();
+    var dbName = ""
+    if ($stateParams.chatId < $scope.user.userID) {
+      dbName = $stateParams.chatId + $scope.user.userID
+    }
+    else {
+      dbName = $scope.user.userID + $stateParams.chatId
+    }
+
+
+    var messagesRef = firebase.database().ref(dbName);
+    // Make sure we remove all previous listeners.
+    messagesRef.off();
+
+
+    $scope.gotoChats = function () {
+      $state.go('tab.chats')
+    }
+
+    // Saves a new message on the Firebase DB.
+    $scope.saveMessage = function (message) {
+      // Add a new message entry to the Firebase Database.
+      if (message) {
+
+        //save in sender and receiver contacts start
+        messagesRef.once("value", function (snapshot) {
+          if (!snapshot.exists()) {
+
+            firebase.database().ref('users/' + $stateParams.chatId).once('value').then(function (userQueryRes) {
+
+              var currentUserContactDetails = {
+                messageDb: dbName,
+                contactid: $stateParams.chatId,
+                displayName: userQueryRes.val().displayName,
+                status: userQueryRes.val().status
+              }
+
+              firebase.database().ref('users/' + $scope.user.userID).once('value').then(function (currentUserQueryRes) {
+                var currentUserContacts = currentUserQueryRes.val().contacts || [];
+                currentUserContacts.push(currentUserContactDetails)
+                firebase.database().ref('users/' + $scope.user.userID).update({
+                  contacts: currentUserContacts
+                })
+
+                var chatUserContacts = userQueryRes.val().contacts || [];
+                var chatUserContactDetails = {
+                  messageDb: dbName,
+                  contactid: $scope.user.userID,
+                  displayName: currentUserQueryRes.val().displayName,
+                  status: currentUserQueryRes.val().status
+                }
+                chatUserContacts.push(chatUserContactDetails)
+                firebase.database().ref('users/' + $stateParams.chatId).update({
+                  contacts: chatUserContacts
+                })
+
+              })
+            });
+          }
+
+          messagesRef.push({
+            text: message.text,
+            timestamp: new Date().getTime(),
+            sender: $scope.user.userID
+          }).then(function () {
+            // Clear message text field and SEND button state.
+            messageText.value = '';
+          }.bind(this)).catch(function (error) {
+            console.error('Error writing new message to Firebase Database', error);
+          });
+
+        })
+        //save in sender and receiver contacts end
+      }
+
+    };
+
+    var loadMessages = function () {
+
+      // Loads the last 12 messages and listen for new ones.
+      var setMessage = function (data) {
+        var val = data.val();
+        displayMessage(val.text, val.timestamp, val.sender, val.imageUrl);
+      }.bind(this);
+      messagesRef.limitToLast(12).on('child_added', setMessage);
+      messagesRef.limitToLast(12).on('child_changed', setMessage);
+    };
+
+    var MESSAGE_TEMPLATE =
+      '<div class="msg">' +
+      '<p></p>' +
+      '</div>';
+
+    var displayMessage = function (text, timestamp, sender, imageUri) {
+
+      var container = document.createElement('li');
+      container.innerHTML = MESSAGE_TEMPLATE;
+      var pDiv = container.firstChild.firstChild;
+      if ($scope.user.userID == sender) {
+        container.setAttribute('class', "self");
+      }
+      else {
+        container.setAttribute('class', "other");
+      }
+
+      messageList.appendChild(container);
+
+      // If the message is text.
+      if (text) {
+        pDiv.textContent = text;
+        // Replace all line breaks by <br>.
+        pDiv.innerHTML = pDiv.innerHTML.replace(/\n/g, '<br>');
+      } else if (imageUri) { // If the message is an image.
+        var image = document.createElement('img');
+        image.addEventListener('load', function () {
+          messageList.scrollTop = messageList.scrollHeight;
+        }.bind(this));
+        //this.setImageUrl(imageUri, image);
+        pDiv.innerHTML = '';
+        pDiv.appendChild(image);
+      }
+      //add timestamp
+      var timeElement = document.createElement('time');
+      var date = new Date(timestamp);
+      var hour = date.getHours() - (date.getHours() >= 12 ? 12 : 0);
+      var period = date.getHours() >= 12 ? 'PM' : 'AM';
+
+      timeElement.textContent = hour + ':' + date.getMinutes() + ' ' + period
+      pDiv.appendChild(timeElement)
+      // Show the card fading-in.
+      setTimeout(function () {
+        container.classList.add('visible')
+      }, 1);
+      container.scrollTop = container.scrollHeight;
+    };
+
+    //show profile
+    $scope.showProfile = function () {
+      $scope.openModal($stateParams.chatId);
+    }
+
+    //modal open
+    $ionicModal.fromTemplateUrl('templates/user-detail.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.modal = modal;
+    });
+    $scope.openModal = function (userId) {
+      $scope.chatUserId = userId;
+      firebase.database().ref('users/' + $scope.chatUserId).once('value').then(function (userQueryRes) {
+        $http({
+          method: 'GET',
+          url: 'https://graph.facebook.com/v2.8/' + userQueryRes.val().token + '?fields=id,name,about,birthday,picture&access_token=' +
+          'EAAXV6r5YQYQBAGIwq1BavDQoXr2ZAMTOGyQ8OztTE7WngCj5ufRQfzmZBNxpw5jKl8D0VjgV7yoSwciF8CxMsniK9IoD9d8jrYZCaE0uIWZAqElGmpRmpjrzBOgcaU3UxI2yaJ8kkSEVELJPSHChDQZBJkZAmzG96qUMgwlDDgtQZDZD'
+        }).then(function successCallback(response) {
+          // this callback will be called asynchronously
+          // when the response is available
+          $scope.userInfoDisplay = response.data
+          $scope.chatButton = true;
+          $scope.modal.show();
+          $ionicSlideBoxDelegate.slide(0);
+        }, function errorCallback(response) {
+        });
+      })
+
+    };
+    $scope.closeModal = function () {
+      $scope.modal.hide();
+    };
+
+    loadMessages()
+
   })
 
   .controller('AccountCtrl', function ($scope, $state, $ionicActionSheet) {
@@ -138,7 +350,7 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserService) {
+  .controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserService, LocalStorage) {
 
     //This is the success callback from the login method
     var fbLoginSuccess = function (response) {
@@ -148,6 +360,7 @@ angular.module('starter.controllers', [])
       FacebookCtrl.getFacebookProfileInfo(response.authResponse.authToken).then(function (profileInfo) {
         //update user info
         UserService.updateUserProfile(profileInfo);
+        LocalStorage.setUser({userID: profileInfo.id});
         $state.go('tab.dash', {profileInfoId: profileInfo.id});
       })
     };
@@ -171,6 +384,7 @@ angular.module('starter.controllers', [])
           FacebookCtrl.getFacebookProfileInfo(success.authToken).then(function (profileInfo) {
             //update user info
             UserService.updateUserProfile(profileInfo);
+            LocalStorage.setUser({userID: profileInfo.id});
             $state.go('tab.dash', {profileInfoId: profileInfo.id});
           })
 
@@ -181,6 +395,9 @@ angular.module('starter.controllers', [])
       });
     };
 
+  })
+  .filter('escape', function () {
+    return window.encodeURIComponent;
   })
   .constant('GOOGLE_CONFIG', [{
     "featureType": "landscape.natural",

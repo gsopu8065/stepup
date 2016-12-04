@@ -32,6 +32,36 @@
 }
 
 #map {
-  width: 100%;
   height: 100%;
+  width: 100%;
+}
+.spinner svg{
+  background: transparent;
+}
+
+.loading-container .loading {
+  background: transparent;
+}
+
+#markerLayer img {
+  border-radius: 50%;
+}
+
+.fullscreen-image1 {
+  max-width: 100%;
+  max-height: 80%;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  overflow: auto;
+  right: 0;
+  top: 0;
+}
+
+
+.nocontacts-error{
+  text-align: center;
+  font-size: 16px;
+  color: cadetblue;
+  font-weight: 900;
 }
