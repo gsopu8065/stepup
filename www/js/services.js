@@ -60,7 +60,7 @@ angular.module('starter.services', [])
           info.resolve(response);
         },
         function (response) {
-          console.log(response);
+          console.log(JSON.stringify(response));
           info.reject(response);
         }
       );
@@ -72,11 +72,17 @@ angular.module('starter.services', [])
   .service('LocalStorage', function() {
 
     var setUser = function(user_data) {
+      delete window.localStorage.starter_facebook_user;
       window.localStorage.starter_facebook_user = JSON.stringify(user_data);
     };
 
     var getUser = function(){
       return JSON.parse(window.localStorage.starter_facebook_user || '{}');
+    };
+
+    var removeUser = function(){
+      window.localStorage.clear();
+      window.localStorage.removeItem(starter_facebook_user);
     };
 
     return {

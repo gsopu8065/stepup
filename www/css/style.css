@@ -65,3 +65,7 @@
   color: cadetblue;
   font-weight: 900;
 }
+
+.loading-container .loading {
+  background-color: rgba(0, 0, 0, 0.7);
+}

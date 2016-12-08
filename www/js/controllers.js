@@ -1,20 +1,28 @@
 angular.module('starter.controllers', [])
 
-  .controller('DashCtrl', function ($scope, $state, $cordovaGeolocation, $stateParams,$ionicModal, $ionicSlideBoxDelegate, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
+  .controller('DashCtrl', function ($scope, $state, $filter, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, $ionicSlideBoxDelegate, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
 
     //this is temporary,later remove it
     LocalStorage.setUser({userID: $stateParams.profileInfoId});
 
-    if(!$stateParams.profileInfoId){
+    if (!$stateParams.profileInfoId) {
       $state.go("login")
     }
 
+    $ionicLoading.show({
+      template: '<ion-spinner></ion-spinner> <br/> Current Location'
+    });
 
-    var options = {timeout: 10000, enableHighAccuracy: true};
+    var firebaseRef = firebase.database().ref();
+    var geoFire = new GeoFire(firebaseRef);
+
+    var options = {timeout: 30000, enableHighAccuracy: true};
     $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-      var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+      $ionicLoading.hide();
+      $scope.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       var mapOptions = {
-        center: latLng,
+        center: $scope.latLng,
         zoom: 17,
         disableDefaultUI: true,
         styles: GOOGLE_CONFIG,
@@ -30,51 +38,131 @@ angular.module('starter.controllers', [])
         fillOpacity: 0.3,
         strokeColor: "#FFF",
         strokeWeight: 0,
-        center: latLng
+        center: $scope.latLng
       });
 
-      //update location start
-      UserGeoService.saveUserLocation($stateParams.profileInfoId, position.coords.latitude, position.coords.longitude).then(function () {
-        console.log("User Location saved to Geo database");
-      }, function (error) {
-        console.log("User Location can't saved to Geo database: " + error);
-      });
+      //add id to map for css
+      var myoverlay = new google.maps.OverlayView();
+      myoverlay.draw = function () {
+        this.getPanes().markerLayer.id = 'markerLayer';
+      };
+      myoverlay.setMap($scope.map);
 
 
       //read map service 
-      var firebaseRef = firebase.database().ref();
-      var geoFire = new GeoFire(firebaseRef);
-      var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15})
-      var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
-        //for each near by user
-        if ($stateParams.profileInfoId != key) {
-          firebase.database().ref('/users/' + key).once('value').then(function (user) {
-            var userDetails = user.val();
-            var marker = new google.maps.Marker({
-              position: new google.maps.LatLng(location[0], location[1]),
-              map: $scope.map,
-              icon: {
-                url: 'https://graph.facebook.com/'+key+'/picture?type=small',
-                scaledSize: new google.maps.Size(38, 38),
-                scale: 10
-              },
-              optimized: false
-            })
-            marker.addListener('click', function () {
-              $scope.openModal(key);
-            });
-          });
-        }
-      })
-      var onReadyRegistration = geoQuery.on("ready", function () {
-        geoQuery.cancel();
-      })
+      /*var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15})
+       var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
+       //for each near by user
+       firebase.database().ref('/users/' + key).once('value').then(function (user) {
+       var userDetails = user.val();
+       var marker = new google.maps.Marker({
+       position: new google.maps.LatLng(location[0], location[1]),
+       map: $scope.map,
+       icon: {
+       url: 'https://graph.facebook.com/' + key + '/picture?type=small',
+       scaledSize: new google.maps.Size(28, 28),
+       scale: 10
+       },
+       optimized: false,
+       draggable: true
+       });
+       marker.addListener('click', function () {
+       $scope.openModal(key);
+       });
+       });
+       })
+       var onReadyRegistration = geoQuery.on("ready", function () {
+       geoQuery.cancel();
+       })*/
+      //read map service 
 
     }, function (error) {
+      $ionicLoading.hide();
       console.log("Could not get location");
+      var alertPopup = $ionicPopup.alert({
+        title: 'Network Error',
+        template: 'Error in reading current location!'
+      });
+
       console.log(error)
+      alertPopup.then(function (res) {
+        console.log(error)
+        $state.go('login', {profileInfoId: $stateParams.profileInfoId});
+      });
+
     });
 
+
+    var markersList = []
+    //update position when moving
+    var watchOptions = {
+      timeout: 30000,
+      enableHighAccuracy: false // may cause errors if true
+    };
+    var watch = $cordovaGeolocation.watchPosition(watchOptions);
+    watch.then(
+      null,
+      function (err) {
+        // error
+        console.log('error in watch');
+        console.log('code: ' + err.code + '\n' +
+          'message: ' + err.message + '\n');
+      },
+      function (position) {
+        console.log(position)
+        $scope.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        $scope.map.setCenter($scope.latLng)
+        $scope.circle.setCenter($scope.latLng)
+
+        //update location start
+        UserGeoService.saveUserLocation($stateParams.profileInfoId, position.coords.latitude, position.coords.longitude).then(function () {
+          console.log("User Location saved to Geo database");
+        }, function (error) {
+          console.log("User Location can't saved to Geo database: " + error);
+        });
+
+        //update markers
+        var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15})
+        var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
+          var result_find = $filter('filter')(markersList, {id: key});
+          if (result_find.length == 0) {
+            markersList.push({id: key})
+            firebase.database().ref('/users/' + key).once('value').then(function (user) {
+              var userDetails = user.val();
+              var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(location[0], location[1]),
+                map: $scope.map,
+                icon: {
+                  url: 'https://graph.facebook.com/' + key + '/picture?type=small',
+                  scaledSize: new google.maps.Size(28, 28),
+                  scale: 10
+                },
+                optimized: false,
+                draggable: true
+              });
+              marker.addListener('click', function () {
+                $scope.openModal(key);
+              });
+            });
+          }
+        })
+        var onReadyRegistration = geoQuery.on("ready", function () {
+          geoQuery.cancel();
+        })
+
+
+      }
+    );
+    //$cordovaGeolocation.clearWatch(watch)
+
+    //on every tab level
+    $scope.$on('$ionicView.enter', function (e) {
+      if ($scope.map) {
+        $scope.map.setZoom(17);
+        $scope.map.setCenter($scope.latLng)
+        $scope.circle.setCenter($scope.latLng)
+      }
+    });
 
     //modal open
     $ionicModal.fromTemplateUrl('templates/user-detail.html', {
@@ -88,7 +176,13 @@ angular.module('starter.controllers', [])
 
       UserService.getUserProfile(userId).then(function (userQueryRes) {
         $scope.userInfoDisplay = userQueryRes.val();
-        $scope.chatButton = true;
+        if (userId != $stateParams.profileInfoId) {
+          $scope.chatButton = true;
+        }
+        else {
+          $scope.chatButton = false;
+        }
+
         $scope.modal.show();
         $ionicSlideBoxDelegate.slide(0);
       })
@@ -97,14 +191,14 @@ angular.module('starter.controllers', [])
       $scope.modal.hide();
     };
     $scope.startConversation = function () {
-      $state.go('tab.chat-detail', {chatId: $scope.chatUserId, chatName: $scope.userInfoDisplay.displayName })
+      $state.go('tab.chat-detail', {chatId: $scope.chatUserId, chatName: $scope.userInfoDisplay.displayName})
       $scope.modal.hide();
     };
 
 
   })
 
-  .controller('ChatsCtrl', function ($scope, Chats, LocalStorage) {
+  .controller('ChatsCtrl', function ($scope, $ionicLoading, LocalStorage) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -115,9 +209,11 @@ angular.module('starter.controllers', [])
      console.log($scope.chats)
      });*/
 
+    $ionicLoading.show();
     var user = LocalStorage.getUser();
     if (user) {
       firebase.database().ref('/users/' + user.userID).once('value').then(function (user) {
+        $ionicLoading.hide();
         var userDetails = user.val();
         if (userDetails.contacts) {
           $scope.chats = userDetails.contacts;
@@ -130,7 +226,7 @@ angular.module('starter.controllers', [])
     }
 
     $scope.remove = function (chat) {
-      Chats.remove(chat);
+      //Chats.remove(chat);
     };
   })
 
@@ -142,7 +238,7 @@ angular.module('starter.controllers', [])
     //dom end
 
     $scope.titleUserDisplayName = $stateParams.chatName
-    $scope.titleUserDisplayUrl = 'https://graph.facebook.com/'+$stateParams.chatId+'/picture?type=large'
+    $scope.titleUserDisplayUrl = 'https://graph.facebook.com/' + $stateParams.chatId + '/picture?type=large'
 
     $scope.user = LocalStorage.getUser();
     var dbName = ""
