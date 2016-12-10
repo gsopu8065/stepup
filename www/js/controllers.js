@@ -13,8 +13,7 @@ angular.module('starter.controllers', [])
       template: '<ion-spinner></ion-spinner> <br/> Current Location'
     });
 
-    var firebaseRef = firebase.database().ref();
-    var geoFire = new GeoFire(firebaseRef);
+    var markersList = []
 
     var options = {timeout: 30000, enableHighAccuracy: true};
     $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
@@ -48,32 +47,43 @@ angular.module('starter.controllers', [])
       };
       myoverlay.setMap($scope.map);
 
+      //update location start
+      UserGeoService.saveUserLocation($stateParams.profileInfoId, position.coords.latitude, position.coords.longitude).then(function () {
+        console.log("User Location saved to Geo database");
+      }, function (error) {
+        console.log("User Location can't saved to Geo database: " + error);
+      });
 
       //read map service 
-      /*var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15})
-       var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
-       //for each near by user
-       firebase.database().ref('/users/' + key).once('value').then(function (user) {
-       var userDetails = user.val();
-       var marker = new google.maps.Marker({
-       position: new google.maps.LatLng(location[0], location[1]),
-       map: $scope.map,
-       icon: {
-       url: 'https://graph.facebook.com/' + key + '/picture?type=small',
-       scaledSize: new google.maps.Size(28, 28),
-       scale: 10
-       },
-       optimized: false,
-       draggable: true
-       });
-       marker.addListener('click', function () {
-       $scope.openModal(key);
-       });
-       });
-       })
-       var onReadyRegistration = geoQuery.on("ready", function () {
-       geoQuery.cancel();
-       })*/
+      var firebaseRef = firebase.database().ref();
+      var geoFire = new GeoFire(firebaseRef);
+      var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15})
+      var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
+        var result_find = $filter('filter')(markersList, {id: key});
+        if (result_find.length == 0) {
+          markersList.push({id: key})
+          firebase.database().ref('/users/' + key).once('value').then(function (user) {
+            var userDetails = user.val();
+            var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(location[0], location[1]),
+              map: $scope.map,
+              icon: {
+                url: 'https://graph.facebook.com/' + key + '/picture?type=small',
+                scaledSize: new google.maps.Size(28, 28),
+                scale: 10
+              },
+              optimized: false,
+              draggable: true
+            });
+            marker.addListener('click', function () {
+              $scope.openModal(key);
+            });
+          });
+        }
+      })
+      var onReadyRegistration = geoQuery.on("ready", function () {
+        geoQuery.cancel();
+      })
       //read map service 
 
     }, function (error) {
@@ -87,13 +97,11 @@ angular.module('starter.controllers', [])
       console.log(error)
       alertPopup.then(function (res) {
         console.log(error)
-        $state.go('login', {profileInfoId: $stateParams.profileInfoId});
+        //$state.transitionTo($state.current, $state.$current.params, { reload: true, inherit: true, notify: true });//reload
       });
 
     });
 
-
-    var markersList = []
     //update position when moving
     var watchOptions = {
       timeout: 30000,
@@ -122,8 +130,12 @@ angular.module('starter.controllers', [])
         });
 
         //update markers
+        var firebaseRef = firebase.database().ref();
+        var geoFire = new GeoFire(firebaseRef);
         var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15})
         var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
+
+          console.log(key)
           var result_find = $filter('filter')(markersList, {id: key});
           if (result_find.length == 0) {
             markersList.push({id: key})
@@ -198,7 +210,7 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('ChatsCtrl', function ($scope, $ionicLoading, LocalStorage) {
+  .controller('ChatsCtrl', function ($scope,$state, $ionicLoading, $ionicPopup, LocalStorage, UserService) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -211,21 +223,46 @@ angular.module('starter.controllers', [])
 
     $ionicLoading.show();
     var user = LocalStorage.getUser();
-    if (user) {
+    if (user.userID) {
       firebase.database().ref('/users/' + user.userID).once('value').then(function (user) {
-        $ionicLoading.hide();
+
         var userDetails = user.val();
         if (userDetails.contacts) {
-          $scope.chats = userDetails.contacts;
+
+          var chatContacts = []
+          _.forEach(userDetails.contacts, function(eachContact){
+            var eachContactUser = eachContact;
+            UserService.getUserLastLogin(eachContact.contactid).then(function(lastLogin){
+              eachContactUser.lastLogin = lastLogin;
+              chatContacts.push(eachContactUser);
+            });
+          })
+          $ionicLoading.hide();
+          $scope.chats = chatContacts;
+
         }
         else {
+          $ionicLoading.hide();
           $scope.chats = [];
         }
       });
 
     }
 
-    $scope.remove = function (chat) {
+    $scope.remove = function (chatId) {
+      if (user) {
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'Remove Contact',
+          template: 'Are you sure you want to remove this contact?'
+        });
+
+        confirmPopup.then(function(res) {
+          if(res) {
+            UserService.removeContact(user.userID, chatId)
+            $state.transitionTo($state.current, $state.$current.params, { reload: true, inherit: true, notify: true });//reload
+          }
+        });
+      }
       //Chats.remove(chat);
     };
   })

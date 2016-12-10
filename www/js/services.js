@@ -28,9 +28,19 @@ angular.module('starter.services', [])
       firebase.database().ref('users/' + profileInfo.id).update({
         displayName: profileInfo.name,
         token: profileInfo.id,
+        lastLogin: new Date().getTime(),
         status: "active"
       });
       info.resolve();
+      return info.promise;
+    }
+
+    UserService.getUserLastLogin = function(userId){
+      var info = $q.defer();
+       firebase.database().ref('users/' + userId).child('lastLogin').once('value').then(function(res){
+         console.log(res.val())
+         info.resolve(res.val());
+       });
       return info.promise;
     }
 
@@ -41,6 +51,46 @@ angular.module('starter.services', [])
           info.resolve(userQueryRes);
         })
       return info.promise;
+    }
+
+    UserService.removeContact = function(userId, contcatId){
+
+      var userRef = firebase.database().ref('users/' + userId);
+      var contactUserRef = firebase.database().ref('users/' + contcatId);
+
+      userRef.child('contacts').once('value')
+        .then(function (userQueryRes) {
+          var list = userQueryRes.val()
+          _.remove(list, {'contactid': contcatId})
+          userRef.update({
+            contacts: list
+          })
+        })
+
+      contactUserRef.child('contacts').once('value')
+        .then(function (userQueryRes) {
+          var list = userQueryRes.val()
+          _.remove(list, {'contactid': userId})
+          contactUserRef.update({
+            contacts: list
+          })
+        })
+
+      var dbName = ""
+      if (contcatId < userId) {
+        dbName = contcatId + userId
+      }
+      else {
+        dbName = userId + contcatId
+      }
+      var messagesRef = firebase.database().ref(dbName);
+      messagesRef.remove()
+        .then(function() {
+          console.log("Remove succeeded.")
+        })
+        .catch(function(error) {
+          console.log("Remove failed: " + error.message)
+        });
     }
 
     return UserService;
