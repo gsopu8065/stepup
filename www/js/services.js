@@ -22,13 +22,14 @@ angular.module('starter.services', [])
   .factory('UserService', function ($q) {
     var UserService = {};
 
-    UserService.updateUserProfile = function(profileInfo){
+    UserService.updateUserProfile = function(profileInfo, deviceId){
 
       var info = $q.defer();
       firebase.database().ref('users/' + profileInfo.id).update({
         displayName: profileInfo.name,
         token: profileInfo.id,
         lastLogin: new Date().getTime(),
+        deviceId: deviceId,
         status: "active"
       });
       info.resolve();
@@ -117,6 +118,52 @@ angular.module('starter.services', [])
       return info.promise;
     };
     return FacebookCtrl;
+  })
+
+  .factory('PushNotificationCtrl', function ($http, $q) {
+
+    var PushNotificationCtrl = {};
+
+    PushNotificationCtrl.sendPushNotification = function (deviceId, title, text) {
+
+      var req = {
+        method: 'POST',
+        url: 'https://api.ionic.io/push/notifications',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1YTc1YzFjNS1iMDE4LTQ0YWQtYTNiYS00MzVmYTYwOTBjZGQifQ.bsXmG3Bu8xpp6amwpFvtD8kc9mrSY8GlQ1323hPFQdI'
+        },
+        data: {
+          "tokens": [deviceId],
+          "profile": "test",
+          "notification": {
+            "android": {
+              "title": title,
+              "message": text
+            },
+            "ios": {
+              "title": title,
+              "message": text,
+              "badge":1,
+              "sound":"default",
+              "priority": 10
+            }
+          }
+        }
+      }
+
+      var info = $q.defer();
+      $http(req).then(function(success){
+        console.log(success);
+        info.resolve(success);
+      }, function(error){
+        console.log(error);
+        info.reject(error);
+      });
+      return info.promise;
+    };
+
+    return PushNotificationCtrl;
   })
 
   .service('LocalStorage', function() {

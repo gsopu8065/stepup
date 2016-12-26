@@ -3,7 +3,7 @@ angular.module('starter.controllers', [])
   .controller('DashCtrl', function ($scope, $state, $filter, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, $ionicSlideBoxDelegate, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
 
     //this is temporary,later remove it
-    LocalStorage.setUser({userID: $stateParams.profileInfoId});
+    //LocalStorage.setUser({userID: $stateParams.profileInfoId, displayName: 'raj'});
 
     if (!$stateParams.profileInfoId) {
       $state.go("login")
@@ -267,7 +267,7 @@ angular.module('starter.controllers', [])
     };
   })
 
-  .controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $ionicSlideBoxDelegate, $http, UserService, LocalStorage) {
+  .controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $ionicSlideBoxDelegate, $http, UserService, LocalStorage, PushNotificationCtrl) {
 
     //dom start
     var messageList = document.getElementById('messageList');
@@ -311,6 +311,7 @@ angular.module('starter.controllers', [])
                 messageDb: dbName,
                 contactid: $stateParams.chatId,
                 displayName: userQueryRes.val().displayName,
+                deviceId: userQueryRes.val().deviceId,
                 status: userQueryRes.val().status
               }
 
@@ -326,6 +327,7 @@ angular.module('starter.controllers', [])
                   messageDb: dbName,
                   contactid: $scope.user.userID,
                   displayName: currentUserQueryRes.val().displayName,
+                  deviceId: currentUserQueryRes.val().deviceId,
                   status: currentUserQueryRes.val().status
                 }
                 chatUserContacts.push(chatUserContactDetails)
@@ -347,6 +349,14 @@ angular.module('starter.controllers', [])
           }.bind(this)).catch(function (error) {
             console.error('Error writing new message to Firebase Database', error);
           });
+
+          //send push notification
+          firebase.database().ref('users/' + $stateParams.chatId).once('value').then(function (userQueryRes) {
+            PushNotificationCtrl.sendPushNotification(userQueryRes.val().deviceId, $scope.user.displayName, message.text).then(function(sucess){
+              console.log(sucess)
+            })
+
+          })
 
         })
         //save in sender and receiver contacts end
@@ -483,10 +493,19 @@ angular.module('starter.controllers', [])
       console.log(authResponse);
       //get facebook profile
       FacebookCtrl.getFacebookProfileInfo(response.authResponse.authToken).then(function (profileInfo) {
-        //update user info
-        UserService.updateUserProfile(profileInfo);
-        LocalStorage.setUser({userID: profileInfo.id});
-        $state.go('tab.dash', {profileInfoId: profileInfo.id});
+
+        //push notification
+        push.register(function(token) {
+          console.log("My Device token:",token.token);
+          push.saveToken(token);  // persist the token in the Ionic Platform
+
+          //save device id
+          //update user info
+          UserService.updateUserProfile(profileInfo, token.token);
+          LocalStorage.setUser({userID: profileInfo.id, displayName: profileInfo.name });
+          $state.go('tab.dash', {profileInfoId: profileInfo.id});
+
+        });
       })
     };
 
@@ -495,6 +514,18 @@ angular.module('starter.controllers', [])
     var fbLoginError = function (error) {
       console.log('fbLoginError', error);
     };
+
+    var push = new Ionic.Push({
+      "debug": false,
+      "pluginConfig": {
+        "ios": {
+          badge: "true",
+          sound: "true",
+          "alert": "true",
+          "clearBadge": "true"
+        }
+      }
+    });
 
     //This method is executed when the user press the "Login with facebook" button
     $scope.login = function () {
@@ -507,10 +538,18 @@ angular.module('starter.controllers', [])
 
           //get facebook profile
           FacebookCtrl.getFacebookProfileInfo(success.authToken).then(function (profileInfo) {
-            //update user info
-            UserService.updateUserProfile(profileInfo);
-            LocalStorage.setUser({userID: profileInfo.id});
-            $state.go('tab.dash', {profileInfoId: profileInfo.id});
+            //push notification
+            push.register(function(token) {
+              console.log("My Device token:",token.token);
+              push.saveToken(token);  // persist the token in the Ionic Platform
+
+              //save device id
+              //update user info
+              UserService.updateUserProfile(profileInfo, token.token);
+              LocalStorage.setUser({userID: profileInfo.id, displayName: profileInfo.name});
+              $state.go('tab.dash', {profileInfoId: profileInfo.id});
+
+            });
           })
 
         } else {
