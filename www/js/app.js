@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-  .run(function ($ionicPlatform) {
+  .run(function ($ionicPlatform, $cordovaGeolocation) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -21,21 +21,45 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         StatusBar.styleDefault();
       }
       document.addEventListener("deviceready", onDeviceReady, false);
+
+      //background running
+      cordova.plugins.backgroundMode.configure({
+        silent: true
+      })
+
+      // Enable background mode
+      cordova.plugins.backgroundMode.enable();
+
+      // Called when background mode has been activated
+      cordova.plugins.backgroundMode.onactivate = function () {
+
+        var firebaseRef = firebase.database().ref();
+        var geoFire = new GeoFire(firebaseRef);
+        var options = {timeout: 30000, enableHighAccuracy: true};
+
+        var userId = JSON.parse(window.localStorage.starter_facebook_user || '{}')
+        if (userId.userID) {
+          // Set an interval of 3 seconds (3000 milliseconds)
+          setInterval(function () {
+            //update last login
+            firebase.database().ref('users/' + userId.userID).update({
+              lastLogin: new Date().getTime()
+            });
+
+            //update location
+            $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+              geoFire.set(userId.userID, [position.coords.latitude, position.coords.longitude]);
+            });
+
+          }, 3000);
+        }
+
+      }
+
     });
 
     function onDeviceReady() {
-
       console.log('run() -> onDeviceReady');
-
-      document.addEventListener("pause", function (event) {
-        console.log('run() -> cordovaPauseEvent');
-        var userId = JSON.parse(window.localStorage.starter_facebook_user || '{}')
-        if(userId.userID){
-          firebase.database().ref('users/' + userId.userID).update({
-            lastLogin: new Date().getTime()
-          });
-        }
-      });
     }
 
 
