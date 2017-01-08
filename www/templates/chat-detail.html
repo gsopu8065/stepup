@@ -27,6 +27,15 @@
     <ol id="messageList" class="chat">
     </ol>
 
+    <div style="padding-bottom: 20px">
+      <button class="blockButton" ng-click="spamContact()">
+        Spam
+      </button>
+      <button class="blockButton" ng-click="blockContact()">
+        Block
+      </button>
+    </div>
+
     <input ng-model="message.text" placeholder=" Enter message" class="messageText" id="messageText">
     <a class="search-link"  href="" ng-click="saveMessage(message)"><span class="send_icon">Send</span></a>
     </input>

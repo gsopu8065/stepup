@@ -94,6 +94,51 @@ angular.module('starter.services', [])
         });
     }
 
+    UserService.blockContact = function(userId, contcatId){
+      var userRef = firebase.database().ref('users/' + userId);
+      var contactUserRef = firebase.database().ref('users/' + contcatId);
+
+      userRef.child('contacts').once('value')
+        .then(function (userQueryRes) {
+          var list = userQueryRes.val()
+          var contactIndex = _.findIndex(list, {'contactid': contcatId})
+          if(contactIndex != -1){
+            list[contactIndex].status = "blocked"
+          }
+          else{
+            var chatUserContactDetails = {
+              contactid: contcatId,
+              status: "blocked"
+            }
+            list.push(chatUserContactDetails)
+          }
+          userRef.update({
+            contacts: list
+          })
+
+        })
+
+      contactUserRef.child('contacts').once('value')
+        .then(function (userQueryRes) {
+          var list = userQueryRes.val()
+          var contactIndex = _.findIndex(list, {'contactid': userId})
+          if(contactIndex != -1){
+            list[contactIndex].status = "blocked"
+          }
+          else {
+            var chatUserContactDetails = {
+              contactid: userId,
+              status: "blocked"
+            }
+            list.push(chatUserContactDetails)
+          }
+          contactUserRef.update({
+            contacts: list
+          })
+
+        })
+    }
+
     return UserService;
   })
 

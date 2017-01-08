@@ -69,3 +69,15 @@
 .loading-container .loading {
   background-color: rgba(0, 0, 0, 0.7);
 }
+
+
+/*Block ans Spam button css*/
+.blockButton{
+  border: 1px;
+  padding: 5px;
+  background-color: antiquewhite;
+  color: crimson;
+  width: 48%;
+  font-size: 14px;
+  border-radius: 6px;
+}
