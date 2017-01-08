@@ -103,14 +103,15 @@ angular.module('starter.services', [])
 
     FacebookCtrl.getFacebookProfileInfo = function (authToken) {
       var info = $q.defer();
-
-      facebookConnectPlugin.api('/me?fields=email,name&access_token=' + authToken, ["public_profile"],
+//"user_about_me", "user_photos", "user_likes", "user_education_history"
+      facebookConnectPlugin.api('/me?fields=name,email,birthday&access_token=' + authToken, ["user_birthday", "email"],
         function (response) {
           console.log("facebook response");
-          console.log(response);
+          console.log(JSON.stringify(response));
           info.resolve(response);
         },
         function (response) {
+          console.log("facebook error");
           console.log(JSON.stringify(response));
           info.reject(response);
         }
