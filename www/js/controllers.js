@@ -207,6 +207,11 @@ angular.module('starter.controllers', [])
       $scope.modal.hide();
     };
 
+    $scope.blockContact = function () {
+      UserService.removeContact($stateParams.profileInfoId, $scope.chatUserId)
+      $scope.modal.hide();
+    };
+
 
   })
 
@@ -296,6 +301,12 @@ angular.module('starter.controllers', [])
       $state.go('tab.chats')
     }
 
+    //block contact
+    $scope.blockContact = function () {
+      UserService.blockContact($scope.user.userID, $stateParams.chatId)
+      $state.go('tab.chats')
+    }
+
     // Saves a new message on the Firebase DB.
     $scope.saveMessage = function (message) {
       // Add a new message entry to the Firebase Database.
@@ -361,8 +372,8 @@ angular.module('starter.controllers', [])
         var val = data.val();
         displayMessage(val.text, val.timestamp, val.sender, val.imageUrl);
       }.bind(this);
-      messagesRef.limitToLast(12).on('child_added', setMessage);
-      messagesRef.limitToLast(12).on('child_changed', setMessage);
+      messagesRef.on('child_added', setMessage);
+      messagesRef.on('child_changed', setMessage);
     };
 
     var MESSAGE_TEMPLATE =
@@ -480,7 +491,6 @@ angular.module('starter.controllers', [])
     //This is the success callback from the login method
     var fbLoginSuccess = function (response) {
       var authResponse = response.authResponse;
-      console.log(authResponse);
       //get facebook profile
       FacebookCtrl.getFacebookProfileInfo(response.authResponse.authToken).then(function (profileInfo) {
         //update user info
