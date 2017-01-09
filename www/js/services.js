@@ -9,8 +9,8 @@ angular.module('starter.services', [])
 
     var UserGeoService = {};
 
-    var firebaseRef = firebase.database().ref();
-    var geoFire = new GeoFire(firebaseRef);
+    var firebaseRef = firebase.database();
+    var geoFire = new GeoFire(firebaseRef.ref('/locations/'));
 
     UserGeoService.saveUserLocation = function(userId, lat, long){
       return geoFire.set(userId, [lat, long]);
@@ -84,7 +84,7 @@ angular.module('starter.services', [])
       else {
         dbName = userId + contcatId
       }
-      var messagesRef = firebase.database().ref(dbName);
+      var messagesRef = firebase.database().ref('/chat/'+dbName);
       messagesRef.remove()
         .then(function() {
           console.log("Remove succeeded.")

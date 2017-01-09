@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-  .controller('DashCtrl', function ($scope, $state, $filter, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, $ionicSlideBoxDelegate, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
+  .controller('DashCtrl', function ($scope, $state, $filter, $interval, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, $ionicSlideBoxDelegate, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
 
     //this is temporary,later remove it
     LocalStorage.setUser({userID: $stateParams.profileInfoId, displayName: 'raj'});
@@ -14,6 +14,10 @@ angular.module('starter.controllers', [])
     });
 
     var markersList = []
+
+    //Geoquery declaration
+    var firebaseRef = firebase.database();
+    var geoFire = new GeoFire(firebaseRef.ref('/locations/'));
 
     var options = {timeout: 30000, enableHighAccuracy: true};
     $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
@@ -55,41 +59,9 @@ angular.module('starter.controllers', [])
       });
 
       //read map service 
-      var firebaseRef = firebase.database().ref();
-      var geoFire = new GeoFire(firebaseRef);
       var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15})
       var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
-        var result_find = $filter('filter')(markersList, {id: key});
-        if (result_find.length == 0) {
-          markersList.push({id: key})
-          firebase.database().ref('/users/' + $stateParams.profileInfoId).once('value').then(function (user) {
-            var userDetails = user.val();
-            var blockedUserContacts = [];
-            if (userDetails.contacts) {
-              blockedUserContacts = $filter('filter')(userDetails.contacts, {status: "blocked"});
-            }
-            firebase.database().ref('/users/' + key).once('value').then(function (user) {
-              var blockContact = $filter('filter')(blockedUserContacts, {contactid: key})
-              console.log("Bolcked Contact =" + blockContact)
-              if (blockContact.length == 0) {
-                var marker = new google.maps.Marker({
-                  position: new google.maps.LatLng(location[0], location[1]),
-                  map: $scope.map,
-                  icon: {
-                    url: 'https://graph.facebook.com/' + key + '/picture?type=small',
-                    scaledSize: new google.maps.Size(28, 28),
-                    scale: 10
-                  },
-                  optimized: false,
-                  draggable: true
-                });
-                marker.addListener('click', function () {
-                  $scope.openModal(key, marker);
-                });
-              }
-            });
-          });
-        }
+        updateMap(key, location)
       })
       var onReadyRegistration = geoQuery.on("ready", function () {
         geoQuery.cancel();
@@ -101,13 +73,13 @@ angular.module('starter.controllers', [])
       console.log("Could not get location");
       var alertPopup = $ionicPopup.alert({
         title: 'Network Error',
-        template: 'Error in reading current location!'
+        template: 'Error in reading current location! Close and Reopen the App'
       });
 
       console.log(error)
       alertPopup.then(function (res) {
         console.log(error)
-        //$state.transitionTo($state.current, $state.$current.params, { reload: true, inherit: true, notify: true });//reload
+        //$state.transitionTo($state.current, $state.$current.params, { reload: true, inherit: false, notify: true });//reload
       });
 
     });
@@ -127,7 +99,6 @@ angular.module('starter.controllers', [])
           'message: ' + err.message + '\n');
       },
       function (position) {
-        console.log(position)
         $scope.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         $scope.map.setCenter($scope.latLng)
         $scope.circle.setCenter($scope.latLng)
@@ -140,53 +111,51 @@ angular.module('starter.controllers', [])
         });
 
         //update markers
-        var firebaseRef = firebase.database().ref();
-        var geoFire = new GeoFire(firebaseRef);
         var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15})
-        var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
-
-          console.log(key)
-          var result_find = $filter('filter')(markersList, {id: key});
-          if (result_find.length == 0) {
-            markersList.push({id: key})
-            firebase.database().ref('/users/' + $stateParams.profileInfoId).once('value').then(function (user) {
-              var userDetails = user.val();
-              var blockedUserContacts = [];
-              if (userDetails.contacts) {
-                blockedUserContacts = $filter('filter')(userDetails.contacts, {status: "blocked"});
-              }
-              firebase.database().ref('/users/' + key).once('value').then(function (user) {
-                var blockContact = $filter('filter')(blockedUserContacts, {contactid: key})
-                console.log("Bolcked Contact =" + blockContact)
-                if (blockContact.length == 0) {
-                  var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(location[0], location[1]),
-                    map: $scope.map,
-                    icon: {
-                      url: 'https://graph.facebook.com/' + key + '/picture?type=small',
-                      scaledSize: new google.maps.Size(28, 28),
-                      scale: 10
-                    },
-                    optimized: false,
-                    draggable: true
-                  });
-                  marker.addListener('click', function () {
-                    $scope.openModal(key, marker);
-                  });
-                }
-              });
-
-            });
-          }
+        var onKeyEnteredRegistration = geoQuery.on("key_entered", function(key, location){
+          updateMap(key, location)
         })
         var onReadyRegistration = geoQuery.on("ready", function () {
           geoQuery.cancel();
         })
-
-
       }
     );
     //$cordovaGeolocation.clearWatch(watch)
+
+    function updateMap(key, location){
+      var result_find = $filter('filter')(markersList, {id: key});
+      if (result_find.length == 0) {
+        markersList.push({id: key})
+        firebase.database().ref('/users/' + $stateParams.profileInfoId).once('value').then(function (user) {
+          var userDetails = user.val();
+          var blockedUserContacts = [];
+          if (userDetails.contacts) {
+            blockedUserContacts = $filter('filter')(userDetails.contacts, {status: "blocked"});
+          }
+          firebase.database().ref('/users/' + key).once('value').then(function (user) {
+            var blockContact = $filter('filter')(blockedUserContacts, {contactid: key})
+            if (blockContact.length == 0) {
+              var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(location[0], location[1]),
+                map: $scope.map,
+                icon: {
+                  url: 'https://graph.facebook.com/' + key + '/picture?type=small',
+                  scaledSize: new google.maps.Size(28, 28),
+                  scale: 10
+                },
+                optimized: false,
+                draggable: true
+              });
+              marker.addListener('click', function () {
+                $scope.openModal(key, marker);
+              });
+            }
+          });
+
+        });
+      }
+    }
+
 
     //on every tab level
     $scope.$on('$ionicView.enter', function (e) {
@@ -260,7 +229,7 @@ angular.module('starter.controllers', [])
           var chatContacts = []
           _.forEach(userDetails.contacts, function (eachContact) {
             var eachContactUser = eachContact;
-            if(eachContact.status != "blocked"){
+            if (eachContact.status != "blocked") {
               UserService.getUserLastLogin(eachContact.contactid).then(function (lastLogin) {
                 eachContactUser.lastLogin = lastLogin;
                 chatContacts.push(eachContactUser);
@@ -317,7 +286,7 @@ angular.module('starter.controllers', [])
     }
 
 
-    var messagesRef = firebase.database().ref(dbName);
+    var messagesRef = firebase.database().ref('/chat/' + dbName);
     // Make sure we remove all previous listeners.
     messagesRef.off();
 
@@ -389,7 +358,7 @@ angular.module('starter.controllers', [])
           //send push notification
           firebase.database().ref('users/' + $stateParams.chatId).once('value').then(function (userQueryRes) {
             PushNotificationCtrl.sendPushNotification(userQueryRes.val().deviceId, $scope.user.displayName, message.text).then(function (sucess) {
-              console.log(sucess)
+              console.log("push sucess")
             })
 
           })
