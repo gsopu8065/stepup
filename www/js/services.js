@@ -100,7 +100,7 @@ angular.module('starter.services', [])
 
       userRef.child('contacts').once('value')
         .then(function (userQueryRes) {
-          var list = userQueryRes.val()
+          var list = userQueryRes.val() || [];
           var contactIndex = _.findIndex(list, {'contactid': contcatId})
           if(contactIndex != -1){
             list[contactIndex].status = "blocked"
@@ -120,7 +120,7 @@ angular.module('starter.services', [])
 
       contactUserRef.child('contacts').once('value')
         .then(function (userQueryRes) {
-          var list = userQueryRes.val()
+          var list = userQueryRes.val() || [];
           var contactIndex = _.findIndex(list, {'contactid': userId})
           if(contactIndex != -1){
             list[contactIndex].status = "blocked"

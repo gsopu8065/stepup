@@ -22,38 +22,40 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
       document.addEventListener("deviceready", onDeviceReady, false);
 
-      //background running
-      cordova.plugins.backgroundMode.configure({
-        silent: true
-      })
+      if (window.cordova && window.cordova.plugins) {
+        //background running
+        window.cordova.plugins.backgroundMode.configure({
+          silent: true
+        })
 
-      // Enable background mode
-      cordova.plugins.backgroundMode.enable();
+        // Enable background mode
+        window.cordova.plugins.backgroundMode.enable();
 
-      // Called when background mode has been activated
-      cordova.plugins.backgroundMode.onactivate = function () {
+        // Called when background mode has been activated
+        window.cordova.plugins.backgroundMode.onactivate = function () {
 
-        var firebaseRef = firebase.database().ref();
-        var geoFire = new GeoFire(firebaseRef);
-        var options = {timeout: 30000, enableHighAccuracy: true};
+          var firebaseRef = firebase.database().ref();
+          var geoFire = new GeoFire(firebaseRef);
+          var options = {timeout: 30000, enableHighAccuracy: true};
 
-        var userId = JSON.parse(window.localStorage.starter_facebook_user || '{}')
-        if (userId.userID) {
-          // Set an interval of 3 seconds (3000 milliseconds)
-          setInterval(function () {
-            //update last login
-            firebase.database().ref('users/' + userId.userID).update({
-              lastLogin: new Date().getTime()
-            });
+          var userId = JSON.parse(window.localStorage.starter_facebook_user || '{}')
+          if (userId.userID) {
+            // Set an interval of 3 seconds (3000 milliseconds)
+            setInterval(function () {
+              //update last login
+              firebase.database().ref('users/' + userId.userID).update({
+                lastLogin: new Date().getTime()
+              });
 
-            //update location
-            $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-              geoFire.set(userId.userID, [position.coords.latitude, position.coords.longitude]);
-            });
+              //update location
+              $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+                geoFire.set(userId.userID, [position.coords.latitude, position.coords.longitude]);
+              });
 
-          }, 3000);
+            }, 3000);
+          }
+
         }
-
       }
 
     });

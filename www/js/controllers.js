@@ -3,7 +3,7 @@ angular.module('starter.controllers', [])
   .controller('DashCtrl', function ($scope, $state, $filter, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, $ionicSlideBoxDelegate, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
 
     //this is temporary,later remove it
-    //LocalStorage.setUser({userID: $stateParams.profileInfoId, displayName: 'raj'});
+    LocalStorage.setUser({userID: $stateParams.profileInfoId, displayName: 'raj'});
 
     if (!$stateParams.profileInfoId) {
       $state.go("login")
@@ -62,21 +62,31 @@ angular.module('starter.controllers', [])
         var result_find = $filter('filter')(markersList, {id: key});
         if (result_find.length == 0) {
           markersList.push({id: key})
-          firebase.database().ref('/users/' + key).once('value').then(function (user) {
+          firebase.database().ref('/users/' + $stateParams.profileInfoId).once('value').then(function (user) {
             var userDetails = user.val();
-            var marker = new google.maps.Marker({
-              position: new google.maps.LatLng(location[0], location[1]),
-              map: $scope.map,
-              icon: {
-                url: 'https://graph.facebook.com/' + key + '/picture?type=small',
-                scaledSize: new google.maps.Size(28, 28),
-                scale: 10
-              },
-              optimized: false,
-              draggable: true
-            });
-            marker.addListener('click', function () {
-              $scope.openModal(key);
+            var blockedUserContacts = [];
+            if (userDetails.contacts) {
+              blockedUserContacts = $filter('filter')(userDetails.contacts, {status: "blocked"});
+            }
+            firebase.database().ref('/users/' + key).once('value').then(function (user) {
+              var blockContact = $filter('filter')(blockedUserContacts, {contactid: key})
+              console.log("Bolcked Contact =" + blockContact)
+              if (blockContact.length == 0) {
+                var marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(location[0], location[1]),
+                  map: $scope.map,
+                  icon: {
+                    url: 'https://graph.facebook.com/' + key + '/picture?type=small',
+                    scaledSize: new google.maps.Size(28, 28),
+                    scale: 10
+                  },
+                  optimized: false,
+                  draggable: true
+                });
+                marker.addListener('click', function () {
+                  $scope.openModal(key, marker);
+                });
+              }
             });
           });
         }
@@ -139,22 +149,33 @@ angular.module('starter.controllers', [])
           var result_find = $filter('filter')(markersList, {id: key});
           if (result_find.length == 0) {
             markersList.push({id: key})
-            firebase.database().ref('/users/' + key).once('value').then(function (user) {
+            firebase.database().ref('/users/' + $stateParams.profileInfoId).once('value').then(function (user) {
               var userDetails = user.val();
-              var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(location[0], location[1]),
-                map: $scope.map,
-                icon: {
-                  url: 'https://graph.facebook.com/' + key + '/picture?type=small',
-                  scaledSize: new google.maps.Size(28, 28),
-                  scale: 10
-                },
-                optimized: false,
-                draggable: true
+              var blockedUserContacts = [];
+              if (userDetails.contacts) {
+                blockedUserContacts = $filter('filter')(userDetails.contacts, {status: "blocked"});
+              }
+              firebase.database().ref('/users/' + key).once('value').then(function (user) {
+                var blockContact = $filter('filter')(blockedUserContacts, {contactid: key})
+                console.log("Bolcked Contact =" + blockContact)
+                if (blockContact.length == 0) {
+                  var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(location[0], location[1]),
+                    map: $scope.map,
+                    icon: {
+                      url: 'https://graph.facebook.com/' + key + '/picture?type=small',
+                      scaledSize: new google.maps.Size(28, 28),
+                      scale: 10
+                    },
+                    optimized: false,
+                    draggable: true
+                  });
+                  marker.addListener('click', function () {
+                    $scope.openModal(key, marker);
+                  });
+                }
               });
-              marker.addListener('click', function () {
-                $scope.openModal(key);
-              });
+
             });
           }
         })
@@ -183,9 +204,10 @@ angular.module('starter.controllers', [])
     }).then(function (modal) {
       $scope.modal = modal;
     });
-    $scope.openModal = function (userId) {
+    $scope.openModal = function (userId, marker) {
       $scope.chatUserId = userId;
 
+      $scope.currentMarker = marker;
       UserService.getUserProfile(userId).then(function (userQueryRes) {
         $scope.userInfoDisplay = userQueryRes.val();
         if (userId != $stateParams.profileInfoId) {
@@ -208,14 +230,15 @@ angular.module('starter.controllers', [])
     };
 
     $scope.blockContact = function () {
-      UserService.removeContact($stateParams.profileInfoId, $scope.chatUserId)
+      UserService.blockContact($stateParams.profileInfoId, $scope.chatUserId);
+      $scope.currentMarker.setMap(null);
       $scope.modal.hide();
     };
 
 
   })
 
-  .controller('ChatsCtrl', function ($scope,$state, $ionicLoading, $ionicPopup, LocalStorage, UserService) {
+  .controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionicPopup, LocalStorage, UserService) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -235,12 +258,14 @@ angular.module('starter.controllers', [])
         if (userDetails.contacts) {
 
           var chatContacts = []
-          _.forEach(userDetails.contacts, function(eachContact){
+          _.forEach(userDetails.contacts, function (eachContact) {
             var eachContactUser = eachContact;
-            UserService.getUserLastLogin(eachContact.contactid).then(function(lastLogin){
-              eachContactUser.lastLogin = lastLogin;
-              chatContacts.push(eachContactUser);
-            });
+            if(eachContact.status != "blocked"){
+              UserService.getUserLastLogin(eachContact.contactid).then(function (lastLogin) {
+                eachContactUser.lastLogin = lastLogin;
+                chatContacts.push(eachContactUser);
+              });
+            }
           })
           $ionicLoading.hide();
           $scope.chats = chatContacts;
@@ -261,10 +286,10 @@ angular.module('starter.controllers', [])
           template: 'Are you sure you want to remove this contact?'
         });
 
-        confirmPopup.then(function(res) {
-          if(res) {
-            UserService.removeContact(user.userID, chatId)
-            $state.transitionTo($state.current, $state.$current.params, { reload: true, inherit: true, notify: true });//reload
+        confirmPopup.then(function (res) {
+          if (res) {
+            UserService.blockContact(user.userID, chatId)
+            $state.transitionTo($state.current, $state.$current.params, {reload: true, inherit: true, notify: true});//reload
           }
         });
       }
@@ -363,7 +388,7 @@ angular.module('starter.controllers', [])
 
           //send push notification
           firebase.database().ref('users/' + $stateParams.chatId).once('value').then(function (userQueryRes) {
-            PushNotificationCtrl.sendPushNotification(userQueryRes.val().deviceId, $scope.user.displayName, message.text).then(function(sucess){
+            PushNotificationCtrl.sendPushNotification(userQueryRes.val().deviceId, $scope.user.displayName, message.text).then(function (sucess) {
               console.log(sucess)
             })
 
@@ -505,14 +530,14 @@ angular.module('starter.controllers', [])
       FacebookCtrl.getFacebookProfileInfo(response.authResponse.authToken).then(function (profileInfo) {
 
         //push notification
-        push.register(function(token) {
-          console.log("My Device token:",token.token);
+        push.register(function (token) {
+          console.log("My Device token:", token.token);
           push.saveToken(token);  // persist the token in the Ionic Platform
 
           //save device id
           //update user info
           UserService.updateUserProfile(profileInfo, token.token);
-          LocalStorage.setUser({userID: profileInfo.id, displayName: profileInfo.name });
+          LocalStorage.setUser({userID: profileInfo.id, displayName: profileInfo.name});
           $state.go('tab.dash', {profileInfoId: profileInfo.id});
 
         });
@@ -549,8 +574,8 @@ angular.module('starter.controllers', [])
           //get facebook profile
           FacebookCtrl.getFacebookProfileInfo(success.authToken).then(function (profileInfo) {
             //push notification
-            push.register(function(token) {
-              console.log("My Device token:",token.token);
+            push.register(function (token) {
+              console.log("My Device token:", token.token);
               push.saveToken(token);  // persist the token in the Ionic Platform
 
               //save device id
