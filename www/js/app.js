@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-  .run(function ($ionicPlatform, $cordovaGeolocation) {
+  .run(function ($ionicPlatform, $cordovaGeolocation, $state, FacebookCtrl, UserService, LocalStorage) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -20,7 +20,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         // org.apache.cordova.statusbar required
         StatusBar.styleDefault();
       }
-      document.addEventListener("deviceready", onDeviceReady, false);
+      document.addEventListener("deviceready", onDeviceReady(FacebookCtrl, UserService, LocalStorage, $state), false);
 
       if (window.cordova && window.cordova.plugins) {
         //background running
@@ -60,8 +60,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
     });
 
-    function onDeviceReady() {
+    function onDeviceReady(FacebookCtrl, UserService, LocalStorage, $state) {
       console.log('run() -> onDeviceReady');
+      console.log("auto login")
+      facebookConnectPlugin.getLoginStatus(function (success) {
+        if (success.status === 'connected') {
+          //get facebook profile
+          FacebookCtrl.getFacebookProfileInfo(success.authResponse.accessToken).then(function (profileInfo) {
+            UserService.updateUserProfile(profileInfo.data, undefined);
+            LocalStorage.setUser({userID: profileInfo.data.id, displayName: profileInfo.data.name});
+            $state.go('tab.dash', {profileInfoId: profileInfo.data.id});
+
+          })
+
+        }
+      });
+
     }
 
 

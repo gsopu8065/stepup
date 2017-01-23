@@ -492,33 +492,6 @@ angular.module('starter.controllers', [])
 
   .controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserService, LocalStorage) {
 
-    //This is the success callback from the login method
-    var fbLoginSuccess = function (response) {
-      var authResponse = response.authResponse;
-      //get facebook profile
-      FacebookCtrl.getFacebookProfileInfo(response.authResponse.authToken).then(function (profileInfo) {
-
-        //push notification
-        push.register(function (token) {
-          console.log("My Device token:", token.token);
-          push.saveToken(token);  // persist the token in the Ionic Platform
-
-          //save device id
-          //update user info
-          UserService.updateUserProfile(profileInfo, token.token);
-          LocalStorage.setUser({userID: profileInfo.id, displayName: profileInfo.name});
-          $state.go('tab.dash', {profileInfoId: profileInfo.id});
-
-        });
-      })
-    };
-
-
-    //This is the fail callback from the login method
-    var fbLoginError = function (error) {
-      console.log('fbLoginError', error);
-    };
-
     var push = new Ionic.Push({
       "debug": false,
       "pluginConfig": {
@@ -531,38 +504,34 @@ angular.module('starter.controllers', [])
       }
     });
 
-    //This method is executed when the user press the "Login with facebook" button
-    $scope.login = function () {
+    //This is the success callback from the login method
+    var fbLoginSuccess = function (response) {
+      //get facebook profile
+      console.log("login response", response)
+      FacebookCtrl.getFacebookProfileInfo(response.authResponse.accessToken).then(function (profileInfo) {
 
-      console.log("login called")
-      facebookConnectPlugin.getLoginStatus(function (success) {
-        console.log(success)
-        if (success.status === 'connected') {
-          console.log('getLoginStatus', success.status);
-
-          //get facebook profile
-          FacebookCtrl.getFacebookProfileInfo(success.authToken).then(function (profileInfo) {
-            //push notification
-            push.register(function (token) {
-              console.log("My Device token:", token.token);
-              push.saveToken(token);  // persist the token in the Ionic Platform
-
-              //save device id
-              //update user info
-              UserService.updateUserProfile(profileInfo, token.token);
-              LocalStorage.setUser({userID: profileInfo.id, displayName: profileInfo.name});
-              $state.go('tab.dash', {profileInfoId: profileInfo.id});
-
-            });
-          })
-
-        } else {
-          console.log('getLoginStatus', success.status);
-          facebookConnectPlugin.login([], fbLoginSuccess, fbLoginError);
-        }
-      });
+        //push notification
+        push.register(function (token) {
+          console.log("My Device token:", token.token);
+          push.saveToken(token);  // persist the token in the Ionic Platform
+          //save device id
+          //update user info
+          UserService.updateUserProfile(profileInfo.data, token.token);
+          LocalStorage.setUser({userID: profileInfo.data.id, displayName: profileInfo.data.name});
+          $state.go('tab.dash', {profileInfoId: profileInfo.data.id});
+        });
+      })
     };
 
+    //This is the fail callback from the login method
+    var fbLoginError = function (error) {
+      console.log('fbLoginError', error);
+    };
+
+    //This method is executed when the user press the "Login with facebook" button
+    $scope.login = function () {
+      facebookConnectPlugin.login(["user_birthday", "email", "user_about_me", "user_photos", "user_likes", "user_work_history", "user_education_history", "user_location"], fbLoginSuccess, fbLoginError);
+    };
   })
   .filter('escape', function () {
     return window.encodeURIComponent;

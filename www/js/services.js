@@ -25,16 +25,75 @@ angular.module('starter.services', [])
     UserService.updateUserProfile = function(profileInfo, deviceId){
 
       var info = $q.defer();
-      firebase.database().ref('users/' + profileInfo.id).update({
+
+      var userInfo = {
         displayName: profileInfo.name,
+        email: profileInfo.email || "",
+        birthday: profileInfo.birthday || "",
+        photos: getPhotos(profileInfo),
+        likes: getLikes(profileInfo),
+        gender: profileInfo.gender || "",
+        about: profileInfo.about || "",
+        education: getEducation(profileInfo),
+        work: getWork(profileInfo),
+        location: getLocation(profileInfo),
         token: profileInfo.id,
         lastLogin: new Date().getTime(),
-        deviceId: deviceId,
         status: "active"
-      });
+      }
+
+      if(deviceId != undefined){
+        userInfo.deviceId = deviceId;
+      }
+
+      firebase.database().ref('users/' + profileInfo.id).update(userInfo);
       info.resolve();
       return info.promise;
-    }
+    };
+
+    var getLocation = function(profileInfo) {
+      var location = "";
+      if(profileInfo.location != undefined){
+        location = profileInfo.location.name;
+      }
+      return location;
+    };
+
+    var getWork = function(profileInfo) {
+      var work = "";
+      if(profileInfo.work != undefined && profileInfo.work.employer != undefined){
+        work = profileInfo.work.employer.name;
+      }
+      return work;
+    };
+
+    var getEducation = function(profileInfo) {
+      var education = "";
+      if(profileInfo.education != undefined && profileInfo.education.school != undefined){
+        education = profileInfo.education.school.name;
+      }
+      return education;
+    };
+
+    var getPhotos = function(profileInfo) {
+      var photos = [];
+      if(profileInfo.albums != undefined && profileInfo.albums.data != undefined){
+        _.forEach(profileInfo.albums.data, function(photoObj) {
+          photos.push(photoObj.picture.data.url);
+        });
+      }
+      return photos;
+    };
+
+    var getLikes = function(profileInfo) {
+      var likes = [];
+      if(profileInfo.likes != undefined && profileInfo.likes.data !=undefined){
+        _.forEach(profileInfo.likes.data, function(likeObj) {
+          likes.push(likeObj.name);
+        });
+      }
+      return likes;
+    };
 
     UserService.getUserLastLogin = function(userId){
       var info = $q.defer();
@@ -43,16 +102,16 @@ angular.module('starter.services', [])
          info.resolve(res.val());
        });
       return info.promise;
-    }
+    };
 
     UserService.getUserProfile = function(userId){
       var info = $q.defer();
       firebase.database().ref('users/' + userId).once('value')
         .then(function (userQueryRes) {
           info.resolve(userQueryRes);
-        })
+        });
       return info.promise;
-    }
+    };
 
     UserService.removeContact = function(userId, contcatId){
 
@@ -66,7 +125,7 @@ angular.module('starter.services', [])
           userRef.update({
             contacts: list
           })
-        })
+        });
 
       contactUserRef.child('contacts').once('value')
         .then(function (userQueryRes) {
@@ -75,9 +134,9 @@ angular.module('starter.services', [])
           contactUserRef.update({
             contacts: list
           })
-        })
+        });
 
-      var dbName = ""
+      var dbName = "";
       if (contcatId < userId) {
         dbName = contcatId + userId
       }
@@ -92,7 +151,7 @@ angular.module('starter.services', [])
         .catch(function(error) {
           console.log("Remove failed: " + error.message)
         });
-    }
+    };
 
     UserService.blockContact = function(userId, contcatId){
       var userRef = firebase.database().ref('users/' + userId);
@@ -109,14 +168,14 @@ angular.module('starter.services', [])
             var chatUserContactDetails = {
               contactid: contcatId,
               status: "blocked"
-            }
+            };
             list.push(chatUserContactDetails)
           }
           userRef.update({
             contacts: list
           })
 
-        })
+        });
 
       contactUserRef.child('contacts').once('value')
         .then(function (userQueryRes) {
@@ -129,7 +188,7 @@ angular.module('starter.services', [])
             var chatUserContactDetails = {
               contactid: userId,
               status: "blocked"
-            }
+            };
             list.push(chatUserContactDetails)
           }
           contactUserRef.update({
@@ -137,7 +196,7 @@ angular.module('starter.services', [])
           })
 
         })
-    }
+    };
 
     return UserService;
   })
@@ -148,8 +207,21 @@ angular.module('starter.services', [])
 
     FacebookCtrl.getFacebookProfileInfo = function (authToken) {
       var info = $q.defer();
-//"user_about_me", "user_photos", "user_likes", "user_education_history"
-      facebookConnectPlugin.api('/me?fields=name,email,birthday&access_token=' + authToken, ["user_birthday", "email"],
+
+      var req = {
+        method: 'GET',
+        url: 'https://graph.facebook.com/v2.8/me?fields=about,gender,name,email,birthday,likes,albums%7Bpicture%7Burl%7D%7D,work,education,location&access_token='+ authToken,
+      };
+
+      $http(req).then(function(success){
+        console.log(success);
+        info.resolve(success);
+      }, function(error){
+        console.log(error);
+        info.reject(error);
+      });
+
+      /*facebookConnectPlugin.api('/me?fields=about,gender,name,email, birthday,likes,albums%7Bpicture%7Burl%7D%7D&access_token=' + authToken, ["user_birthday", "email", "user_about_me", "user_photos", "user_likes"],
         function (response) {
           console.log("facebook response");
           console.log(JSON.stringify(response));
@@ -160,9 +232,10 @@ angular.module('starter.services', [])
           console.log(JSON.stringify(response));
           info.reject(response);
         }
-      );
+      );*/
       return info.promise;
     };
+
     return FacebookCtrl;
   })
 
