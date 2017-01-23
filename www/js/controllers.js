@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-  .controller('DashCtrl', function ($scope, $state, $filter, $interval, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, $ionicSlideBoxDelegate, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
+  .controller('DashCtrl', function ($scope, $state, $filter, $interval, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
 
     //this is temporary,later remove it
     LocalStorage.setUser({userID: $stateParams.profileInfoId, displayName: 'raj'});
@@ -174,6 +174,7 @@ angular.module('starter.controllers', [])
       $scope.modal = modal;
     });
     $scope.openModal = function (userId, marker) {
+
       $scope.chatUserId = userId;
 
       $scope.currentMarker = marker;
@@ -187,7 +188,20 @@ angular.module('starter.controllers', [])
         }
 
         $scope.modal.show();
-        $ionicSlideBoxDelegate.slide(0);
+        var swiper = new Swiper('.swiper-container', {
+          pagination: '.swiper-pagination',
+          effect: 'coverflow',
+          grabCursor: true,
+          centeredSlides: true,
+          slidesPerView: 'auto',
+          coverflow: {
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows : true
+          }
+        });
       })
     };
     $scope.closeModal = function () {
@@ -266,7 +280,7 @@ angular.module('starter.controllers', [])
     };
   })
 
-  .controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $ionicSlideBoxDelegate, $http, UserService, LocalStorage, PushNotificationCtrl) {
+  .controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $http, UserService, LocalStorage, PushNotificationCtrl) {
 
     //dom start
     var messageList = document.getElementById('messageList');
@@ -447,7 +461,21 @@ angular.module('starter.controllers', [])
           $scope.userInfoDisplay = userQueryRes.val();
           $scope.chatButton = false;
           $scope.modal.show();
-          $ionicSlideBoxDelegate.slide(0);
+          var swiper = new Swiper('.swiper-container', {
+            pagination: '.swiper-pagination',
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            coverflow: {
+              rotate: 50,
+              stretch: 0,
+              depth: 100,
+              modifier: 1,
+              slideShadows : true
+            }
+          });
+
         })
       })
 
@@ -535,6 +563,15 @@ angular.module('starter.controllers', [])
   })
   .filter('escape', function () {
     return window.encodeURIComponent;
+  })
+  .filter('age', function() {
+    return function(birthday){
+      var birthday = new Date(birthday);
+      var today = new Date();
+      var age = ((today - birthday) / (31557600000));
+      var age = Math.floor( age );
+      return age;
+    }
   })
   .constant('GOOGLE_CONFIG', [{
     "featureType": "landscape.natural",

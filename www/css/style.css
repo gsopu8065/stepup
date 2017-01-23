@@ -81,3 +81,67 @@
   font-size: 14px;
   border-radius: 6px;
 }
+
+.swiper-container {
+  width: 100%;
+  height: auto;
+  padding-top: 10px;
+  padding-bottom: 50px;
+}
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 300px;
+  height: 300px;
+}
+
+.closeModal{
+  padding-left: 5%;
+  padding-top: 2%;
+  font-size: 22px;
+  color: #d4cdcc;
+}
+
+.userDetails{
+  padding-left: 20px;
+}
+
+.userName{
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.aboutLabel {
+  padding-top: 20px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.userLike {
+  border: 2px solid #e6550d;
+  padding: 5px;
+  color: #e6550d;
+  font-weight: bold;
+}
+
+.bar-footer {
+  bottom: 15px;
+  background-image: none;
+}
+
+.buttonChat{
+  background-color: white;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  border-radius: 10px;
+}
+
+.redColor{
+  border: 2px solid red;
+  color: red;
+}
+
+.greenColor{
+  border: 2px solid #055012;
+  color: #055012;
+}

@@ -1,14 +1,35 @@
 <ion-modal-view>
+
   <ion-content>
-    <ion-slide-box show-pager="false">
-      <ion-slide ng-repeat="oImage in userInfoDisplay.photos">
-        <img ng-src="{{oImage}}" class="fullscreen-image1" />
-      </ion-slide>
-    </ion-slide-box>
-    <!--<img ng-src="https://graph.facebook.com/{{userInfoDisplay.token}}/picture?type=large" class="fullscreen-image1" /> <br/>-->
-    <div>{{userInfoDisplay.displayName}}</div>
-    <button class = "button" ng-click = "closeModal()">close</button> <br/>
-    <button class = "button" ng-show="chatButton == true" ng-click = "startConversation()">Chat</button>
-    <button class = "button" ng-show="chatButton == true" ng-click = "blockContact()">Block Contact</button>
+    <div class="ion-close closeModal" ng-click="closeModal()"></div>
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" ng-repeat="oImage in userInfoDisplay.photos"
+             style="background-image:url({{oImage}})"></div>
+      </div>
+      <!-- Add Pagination -->
+      <div class="swiper-pagination"></div>
+    </div>
+
+    <div class="userDetails">
+      <div class="userName">{{userInfoDisplay.displayName}}, {{userInfoDisplay.birthday | age}}</div>
+      <div> {{userInfoDisplay.gender}}, {{userInfoDisplay.location}}</div>
+      <div> Works at {{userInfoDisplay.work}}</div>
+      <div> Went to {{userInfoDisplay.school}}</div>
+
+      <div class="aboutLabel"> About {{userInfoDisplay.displayName}}</div>
+      <div>{{userInfoDisplay.about}}</div>
+
+      <div class="aboutLabel"> Interests </div> <div/>
+      <span ng-repeat="like in userInfoDisplay.likes" class="userLike">{{like}}</span>
+
+    </div>
   </ion-content>
+
+  <ion-footer-bar align-title="center">
+    <div class="title">
+      <button class="button buttonChat greenColor" ng-show="chatButton == true"  ng-click="startConversation()">Chat</button>
+      <button class="button buttonChat redColor" ng-show="chatButton == true"  ng-click="blockContact()">Block Contact</button>
+    </div>
+  </ion-footer-bar>
 </ion-modal-view>
