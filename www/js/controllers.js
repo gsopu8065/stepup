@@ -487,9 +487,45 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('AccountCtrl', function ($scope, $state, $ionicActionSheet) {
-    $scope.settings = {
-      enableFriends: true
+  .controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, $ionicModal, LocalStorage, UserService) {
+
+    $scope.user = LocalStorage.getUser();
+
+    //show profile
+    $scope.showProfile = function () {
+      $scope.openModal($scope.user.userID);
+    }
+
+    //modal open
+    $ionicModal.fromTemplateUrl('templates/user-detail.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.modal = modal;
+    });
+    $scope.openModal = function (userId) {
+      UserService.getUserProfile(userId).then(function (userQueryRes) {
+        $scope.userInfoDisplay = userQueryRes.val();
+        $scope.chatButton = false;
+        $scope.modal.show();
+        var swiper = new Swiper('.swiper-container', {
+          pagination: '.swiper-pagination',
+          effect: 'coverflow',
+          grabCursor: true,
+          centeredSlides: true,
+          slidesPerView: 'auto',
+          coverflow: {
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows : true
+          }
+        });
+      })
+    };
+    $scope.closeModal = function () {
+      $scope.modal.hide();
     };
 
     $scope.logout = function () {

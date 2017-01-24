@@ -4,24 +4,30 @@
     <div class="ion-close closeModal" ng-click="closeModal()"></div>
     <div class="swiper-container">
       <div class="swiper-wrapper">
-        <div class="swiper-slide" ng-repeat="oImage in userInfoDisplay.photos"
-             style="background-image:url({{oImage}})"></div>
+        <div class="swiper-slide" ng-repeat="oImage in userInfoDisplay.photos" style="background-image:url({{oImage}})"></div>
+        <div class="swiper-slide" ng-if="userInfoDisplay.photos == undefined && userInfoDisplay.gender === 'female'" style="background-image:url(../img/girl.gif)"></div>
+        <div class="swiper-slide" ng-if="userInfoDisplay.photos == undefined && (userInfoDisplay.gender == undefined || userInfoDisplay.gender === 'male') " style="background-image:url(../img/male.gif)"></div>
       </div>
       <!-- Add Pagination -->
       <div class="swiper-pagination"></div>
     </div>
 
     <div class="userDetails">
-      <div class="userName">{{userInfoDisplay.displayName}}, {{userInfoDisplay.birthday | age}}</div>
-      <div> {{userInfoDisplay.gender}}, {{userInfoDisplay.location}}</div>
-      <div> Works at {{userInfoDisplay.work}}</div>
-      <div> Went to {{userInfoDisplay.school}}</div>
+      <div class="userName">{{userInfoDisplay.displayName}} <span ng-show="userInfoDisplay.birthday != undefined">, {{userInfoDisplay.birthday | age}}</span></div>
+      <div> <span ng-show="userInfoDisplay.gender != undefined"> {{userInfoDisplay.gender}}
+       </span>
+        <span ng-show="userInfoDisplay.location != undefined"> {{userInfoDisplay.location}} </span></div>
+      <div ng-show="userInfoDisplay.work != undefined"> Works at {{userInfoDisplay.work}}</div>
+      <div ng-show="userInfoDisplay.school != undefined"> Went to {{userInfoDisplay.school}}</div>
 
       <div class="aboutLabel"> About {{userInfoDisplay.displayName}}</div>
-      <div>{{userInfoDisplay.about}}</div>
+      <div ng-show="userInfoDisplay.about != undefined">{{userInfoDisplay.about}}</div>
+      <div ng-show="userInfoDisplay.about == undefined"> I will fill this section soon </div>
+
 
       <div class="aboutLabel"> Interests </div> <div/>
       <span ng-repeat="like in userInfoDisplay.likes" class="userLike">{{like}}</span>
+      <div ng-show="userInfoDisplay.likes == undefined"> No Interests Found! </div>
 
     </div>
   </ion-content>

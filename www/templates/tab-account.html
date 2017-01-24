@@ -1,11 +1,13 @@
 <ion-view view-title="Account">
   <ion-content>
+
     <ion-list>
-      <ion-toggle  ng-model="settings.enableFriends">
-        Enable Friends
-      </ion-toggle>
+      <div class="item-avatar item-icon-right viewProfileDiv" type="item-text-wrap">
+        <img ng-src="https://graph.facebook.com/{{user.userID}}/picture?type=small" ng-click="showProfile()">
+        <div class="viewProfileDiv2" ng-click="showProfile()">View Profile</div>
+      </div>
     </ion-list>
 
-    <button ng-click="logout()">Logout</button>
+    <button class="button buttonChat redColor logout" ng-click="logout()">Logout</button>
   </ion-content>
 </ion-view>
