@@ -1,6 +1,6 @@
-angular.module('starter.controllers', [])
+var stepNote = angular.module('starter.controllers', []);
 
-  .controller('DashCtrl', function ($scope, $state, $filter, $interval, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
+stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
 
     //this is temporary,later remove it
     LocalStorage.setUser({userID: $stateParams.profileInfoId, displayName: 'raj'});
@@ -160,9 +160,10 @@ angular.module('starter.controllers', [])
     //on every tab level
     $scope.$on('$ionicView.enter', function (e) {
       if ($scope.map) {
+        google.maps.event.trigger($scope.map, 'resize');
         $scope.map.setZoom(17);
         $scope.map.setCenter($scope.latLng)
-        $scope.circle.setCenter($scope.latLng)
+        $scope.circle.setCenter($scope.latLng);
       }
     });
 
@@ -221,7 +222,7 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionicPopup, LocalStorage, UserService) {
+stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionicPopup, LocalStorage, UserService) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -280,7 +281,7 @@ angular.module('starter.controllers', [])
     };
   })
 
-  .controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $http, UserService, LocalStorage, PushNotificationCtrl) {
+stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $http, UserService, LocalStorage, PushNotificationCtrl) {
 
     //dom start
     var messageList = document.getElementById('messageList');
@@ -487,7 +488,7 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, $ionicModal, LocalStorage, UserService) {
+stepNote.controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, $ionicModal, LocalStorage, UserService) {
 
     $scope.user = LocalStorage.getUser();
 
@@ -554,7 +555,7 @@ angular.module('starter.controllers', [])
 
   })
 
-  .controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserService, LocalStorage) {
+stepNote.controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserService, LocalStorage) {
 
     var push = new Ionic.Push({
       "debug": false,
@@ -597,10 +598,12 @@ angular.module('starter.controllers', [])
       facebookConnectPlugin.login(["user_birthday", "email", "user_about_me", "user_photos", "user_likes", "user_work_history", "user_education_history", "user_location"], fbLoginSuccess, fbLoginError);
     };
   })
-  .filter('escape', function () {
+
+stepNote.filter('escape', function () {
     return window.encodeURIComponent;
   })
-  .filter('age', function() {
+
+stepNote.filter('age', function() {
     return function(birthday){
       var birthday = new Date(birthday);
       var today = new Date();
@@ -609,7 +612,8 @@ angular.module('starter.controllers', [])
       return age;
     }
   })
-  .constant('GOOGLE_CONFIG', [{
+
+stepNote.constant('GOOGLE_CONFIG', [{
     "featureType": "landscape.natural",
     "elementType": "geometry.fill",
     "stylers": [{"visibility": "on"}, {"color": "#e0efef"}]
