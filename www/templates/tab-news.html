@@ -8,24 +8,18 @@
 
       <div class="articleUserName">
         {{article.userName}}
-        <div class="articleTime"> {{article.time}}</div>
+        <div class="articleTime"> {{article.time}}, {{article.location}}</div>
       </div>
 
       <div class="articleText">
         {{article.news}}
       </div>
 
-      <div class="articleVotes">
-        <div class="icon ion-thumbsup upvote green"></div>
-        <div class="font600 green">{{article.emotions}}</div>
-        <div class="emptySpace"></div>
-        <div class="font600 red">{{article.blocks}}</div>
-        <div class="icon ion-thumbsdown downvote red"></div>
-      </div>
-
       <div class="articlebottom">
-        <span class="ion-heart articlebottomitem"></span>
+        <span class="articlebottomitem"> Like</span>
+        <span class="articlebottomitem"> Dislike</span>
         <span class="ion-ios-chatbubble-outline articlebottomitem"></span>
+        <span class="articlebottomitem"> Block</span>
         <span class="ion-share articlebottomitem"></span>
       </div>
     </div>

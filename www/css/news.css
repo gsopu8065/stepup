@@ -32,42 +32,10 @@
 
 .articleText{
   margin-left: 2%;
-  margin-top: 5px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   font-size: larger;
-  width: 83%;
   float: left;
-}
-
-.articleVotes{
-  margin-left: 85%;
-  min-height: 100px;
-  padding-left: 5px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.upvote{
-font-size: 35px;
-}
-
-.downvote{
-  font-size: 35px;
-}
-
-.font600{
-  font-weight: 600;
-}
-
-.green{
-  color: green;
-}
-
-.red{
-  color: red;
-}
-
-.emptySpace{
-  margin-top: 18px;
 }
 
 .articlebottom{
@@ -77,8 +45,7 @@ font-size: 35px;
   padding-right: 10px;
   display: table;
   width: 100%;
-  font-size: 28px;
-  border-top: 1px solid lightblue;
+  /*border-top: 1px solid lightblue;*/
 }
 
 .articlebottomitem{
