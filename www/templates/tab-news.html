@@ -8,11 +8,11 @@
 
       <div class="articleUserName">
         {{article.userName}}
-        <div class="articleTime"> {{article.time}}, {{article.location}}</div>
+        <div class="articleTime"> {{article.timeStamp | date:'shortTime'}} <!--, {{article.location}}--></div>
       </div>
 
       <div class="articleText">
-        {{article.news}}
+        {{article.status}}
       </div>
 
       <div class="articlebottom">

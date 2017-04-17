@@ -36,6 +36,7 @@
   margin-bottom: 15px;
   font-size: larger;
   float: left;
+  min-width: 100%;
 }
 
 .articlebottom{
