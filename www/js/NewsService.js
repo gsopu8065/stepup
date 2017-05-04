@@ -1,13 +1,13 @@
 angular.module('starter.newsservices', [])
 
-  .factory('NewsService', function ($http, $q) {
+  .factory('NewsService', function ($http, $q, SERVER_API) {
     var NewsService = {};
     NewsService.getNews = function(location, radius, userId){
       var info = $q.defer();
 
       var req = {
         method: 'POST',
-        url: 'http://localhost:5000/newsFeed',
+        url: SERVER_API+'/newsFeed',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -30,4 +30,6 @@ angular.module('starter.newsservices', [])
     }
 
     return NewsService;
-  });
+  })
+
+  .constant('SERVER_API',"http://opennotewebservice.herokuapp.com");
