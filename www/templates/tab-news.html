@@ -2,13 +2,10 @@
   <ion-content class="padding">
 
     <div class="article" ng-repeat="article in newsFeed">
-      <div class="articleTop">
-        <img src="../img/i1.jpg">
-      </div>
 
       <div class="articleUserName">
         {{article.userName}}
-        <div class="articleTime"> {{article.timeStamp | date:'shortTime'}} <!--, {{article.location}}--></div>
+
       </div>
 
       <div class="articleText">
@@ -16,11 +13,13 @@
       </div>
 
       <div class="articlebottom">
-        <span class="articlebottomitem"> Like</span>
-        <span class="articlebottomitem"> Dislike</span>
-        <span class="ion-ios-chatbubble-outline articlebottomitem"></span>
-        <span class="articlebottomitem"> Block</span>
-        <span class="ion-share articlebottomitem"></span>
+        <span class="articleTime"> {{article.timeStamp | date:'shortTime'}} </span>
+        <span class="articlebottomitem"> 0 comments</span>
+        <span class="articlebottomitem" ng-click="blockUser(article.userId)"> Block</span>
+        <span class="ion-thumbsup articlebottomitem" ng-if="checkStatus(article, 250)" ng-click="deleteEmotion(article, 250)"></span>
+        <span class="articlebottomitem" ng-if="!checkStatus(article, 250)" ng-click="updateEmotion(article, 250)">like</span>
+        <span class="ion-thumbsdown articlebottomitem" ng-if="checkStatus(article, 251)" ng-click="deleteEmotion(article, 251)"></span>
+        <span class="articlebottomitem" ng-if="!checkStatus(article, 251)" ng-click="updateEmotion(article, 251)">dislike</span>
       </div>
     </div>
   </ion-content>

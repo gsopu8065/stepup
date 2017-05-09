@@ -1,4 +1,4 @@
-stepNote.controller('NewsCtrl', function ($scope, $state, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $state, LocalStorage, NewsService) {
 
 
   /*$scope.newsFeed = [{
@@ -12,8 +12,32 @@ stepNote.controller('NewsCtrl', function ($scope, $state, NewsService) {
    "emotions": 345,
    "blocks": 234
    }];*/
-  NewsService.getNews('','','').then(function (newsQueryRes) {
+  var user = LocalStorage.getUser();
+  NewsService.getNews('','',user.userID).then(function (newsQueryRes) {
+
     $scope.newsFeed = newsQueryRes;
   });
 
-})
+  $scope.updateEmotion = function(status, emotion){
+    NewsService.updateEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
+      console.log("success")
+    });
+  };
+
+  $scope.deleteEmotion = function(status, emotion){
+    NewsService.deleteEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
+      console.log("success")
+    });
+  };
+
+  $scope.blockUser = function(blockUser){
+    NewsService.blockUser( user.userID, blockUser).then(function (updateQueryRes) {
+      console.log("success")
+    });
+  }
+
+  $scope.checkStatus = function(status, emotion){
+    return status.userStatus && status.userStatus.emotion == emotion
+  }
+
+});

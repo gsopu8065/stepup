@@ -15,7 +15,32 @@ angular.module('starter.newsservices', [])
           "location":[-77.18621789486043,
             38.82741811639861],
           "radius":3,
-          "userId":"1234"
+          "userId":userId+""
+        }
+      };
+
+      $http(req).then(function(success){
+        info.resolve(success.data);
+      }, function(error){
+        console.log(error);
+        info.reject(error);
+      });
+      return info.promise;
+    };
+
+    NewsService.updateEmotion = function(statusId, userId, emotion){
+      var info = $q.defer();
+
+      var req = {
+        method: 'POST',
+        url: SERVER_API+'/updateStatusEmotion',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          "statusId" : statusId+"",
+          "userId": userId+"",
+          "emotion":emotion+""
         }
       };
 
@@ -27,7 +52,61 @@ angular.module('starter.newsservices', [])
         info.reject(error);
       });
       return info.promise;
-    }
+
+    };
+
+    NewsService.deleteEmotion = function(statusId, userId, emotion){
+      var info = $q.defer();
+
+      var req = {
+        method: 'POST',
+        url: SERVER_API+'/deleteStatusEmotion',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          "statusId" : statusId+"",
+          "userId": userId+"",
+          "emotion":emotion+""
+        }
+      };
+
+      $http(req).then(function(success){
+        console.log(success);
+        info.resolve(success.data);
+      }, function(error){
+        console.log(error);
+        info.reject(error);
+      });
+      return info.promise;
+
+    };
+
+    NewsService.blockUser = function( userId, blockUserId){
+      var info = $q.defer();
+
+      var req = {
+        method: 'POST',
+        url: SERVER_API+'/blockUser',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          "userId" : userId+"",
+          "blockUserId": blockUserId+""
+        }
+      };
+
+      $http(req).then(function(success){
+        console.log(success);
+        info.resolve(success.data);
+      }, function(error){
+        console.log(error);
+        info.reject(error);
+      });
+      return info.promise;
+
+    };
 
     return NewsService;
   })
