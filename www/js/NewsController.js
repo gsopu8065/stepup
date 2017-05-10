@@ -30,6 +30,12 @@ stepNote.controller('NewsCtrl', function ($scope, $state, LocalStorage, NewsServ
     });
   };
 
+  $scope.saveStatus = function(message){
+    NewsService.saveStatus(message, user.userID, user.displayName, "", "", "text", null,  null).then(function (updateQueryRes) {
+      console.log("success")
+    });
+  };
+
   $scope.blockUser = function(blockUser){
     NewsService.blockUser( user.userID, blockUser).then(function (updateQueryRes) {
       console.log("success")

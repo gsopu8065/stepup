@@ -12,7 +12,6 @@
   float: left;
 }
 
-
 .articleTime{
   font-size: smaller;
   margin-top: -6px;
@@ -41,4 +40,24 @@
 .articlebottomitem{
   display:table-cell;
   text-align:center;
+}
+
+.statusDiv{
+  display: table;
+  width: 100%;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.statusText{
+  border: 1px solid black !important;
+  width: 80%;
+  display: table-cell !important;
+  font-size: 20px;
+}
+
+.sendButton{
+  border: 1px solid black;
+  display: table-cell;
+  margin-left: 15px;
 }
