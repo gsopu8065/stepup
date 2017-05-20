@@ -47,3 +47,7 @@ stepNote.controller('NewsCtrl', function ($scope, $state, LocalStorage, NewsServ
   }
 
 });
+
+stepNote.controller('NewsDetailCtrl', function ($scope, $state,$stateParams, LocalStorage, NewsService) {
+  $scope.statusId = $stateParams.statusId
+});

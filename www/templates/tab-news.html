@@ -6,8 +6,10 @@
       <button ng-click="saveStatus(inputValue)" class="sendButton">Send</button>
     </div>
 
+
     <div class="article" ng-repeat="article in newsFeed">
 
+      <a href="#/tab/news/{{article._id}}">
       <div class="articleUserName">
         {{article.userName}}
 
@@ -16,7 +18,7 @@
       <div class="articleText">
         {{article.status}}
       </div>
-
+      </a>
       <div class="articlebottom">
         <span class="articleTime"> {{article.timeStamp | date:'shortTime'}} </span>
         <span class="articlebottomitem"> 0 comments</span>
@@ -29,5 +31,6 @@
 -->
       </div>
     </div>
+
   </ion-content>
 </ion-view>
