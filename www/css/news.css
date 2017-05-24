@@ -4,6 +4,8 @@
   margin-bottom: 10px;
 }
 
+.articleTextAnchor{ color: inherit; }
+
 .articleUserName{
   margin-top: 8px;
   margin-left: 5px;

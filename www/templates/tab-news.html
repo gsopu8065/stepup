@@ -9,26 +9,25 @@
 
     <div class="article" ng-repeat="article in newsFeed">
 
-      <a href="#/tab/news/{{article._id}}">
+
       <div class="articleUserName">
         {{article.userName}}
-
       </div>
 
-      <div class="articleText">
-        {{article.status}}
-      </div>
+      <a class="articleTextAnchor" href="#/tab/news/{{article._id}}">
+        <div class="articleText">
+          {{article.status}}
+        </div>
       </a>
       <div class="articlebottom">
         <span class="articleTime"> {{article.timeStamp | date:'shortTime'}} </span>
         <span class="articlebottomitem"> 0 comments</span>
         <span class="articlebottomitem" ng-click="blockUser(article.userId)"> Block</span>
 
-        <span class="articlebottomitem" ng-if="checkStatus(article, 250)" ng-click="deleteEmotion(article, 250)">dislike</span>
-        <span class="articlebottomitem" ng-if="!checkStatus(article, 250)" ng-click="updateEmotion(article, 250)">like</span>
-        <!--<span class="ion-thumbsdown articlebottomitem" ng-if="checkStatus(article, 251)" ng-click="deleteEmotion(article, 251)"></span>
-        <span class="articlebottomitem" ng-if="!checkStatus(article, 251)" ng-click="updateEmotion(article, 251)">dislike</span>
--->
+        <span class="articlebottomitem" ng-if="checkStatus(article, 250)"
+              ng-click="deleteEmotion(article, 250)">dislike</span>
+        <span class="articlebottomitem" ng-if="!checkStatus(article, 250)"
+              ng-click="updateEmotion(article, 250)">like</span>
       </div>
     </div>
 

@@ -141,6 +141,23 @@ angular.module('starter.newsservices', [])
 
     };
 
+    NewsService.getStatus = function(statusId){
+      var info = $q.defer();
+
+      var req = {
+        method: 'GET',
+        url: SERVER_API+'/getStatus?statusId='+statusId
+      };
+
+      $http(req).then(function(success){
+        info.resolve(success.data);
+      }, function(error){
+        console.log(error);
+        info.reject(error);
+      });
+      return info.promise;
+    };
+
     return NewsService;
   })
 

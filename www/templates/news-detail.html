@@ -6,26 +6,33 @@
 -->
 <ion-view cache-view="false" view-title="">
 
-  <!--<ion-nav-bar>
-  </ion-nav-bar>-->
-
-  <!--<ion-nav-buttons side="left">
-    <span ng-click="gotoChats()" style="font-size: 18px;margin-top: 13%;">
-      <i class="ion-chevron-left"></i> Chats
-    </span>
-  </ion-nav-buttons>
-
-  <ion-nav-buttons side="right">
-    <img ng-src="{{titleUserDisplayUrl}}" style="
-    max-width: 35px;
-    max-height: 65px;
-    border-radius: 50%;" ng-click="showProfile()">
-  </ion-nav-buttons>-->
-
   <ion-content class="padding">
 
-{{statusId}}
+    <div class="article">
 
+      <div class="articleUserName">
+        {{article.userName}}
+      </div>
+
+      <div class="articleText">
+        {{article.status}}
+      </div>
+
+      <div class="articlebottom">
+        <span class="articleTime"> {{article.timeStamp | date:'shortTime'}} </span>
+        <span class="articlebottomitem"> {{article.replies.length}} comments</span>
+        <span class="articlebottomitem" ng-click="blockUser(article.userId)"> Block</span>
+
+        <span class="articlebottomitem" ng-if="checkStatus(article, 250)"
+              ng-click="deleteEmotion(article, 250)">dislike</span>
+        <span class="articlebottomitem" ng-if="!checkStatus(article, 250)"
+              ng-click="updateEmotion(article, 250)">like</span>
+      </div>
+    </div>
+
+    <div ng-repeat="child in article.replies">
+      <commenttree statusid={{child._id}}></commenttree>
+    </div>
 
   </ion-content>
 </ion-view>

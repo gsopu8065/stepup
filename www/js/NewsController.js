@@ -49,5 +49,45 @@ stepNote.controller('NewsCtrl', function ($scope, $state, LocalStorage, NewsServ
 });
 
 stepNote.controller('NewsDetailCtrl', function ($scope, $state,$stateParams, LocalStorage, NewsService) {
-  $scope.statusId = $stateParams.statusId
+
+  NewsService.getStatus($stateParams.statusId).then(function (statusQueryRes) {
+    $scope.article =statusQueryRes
+  });
+});
+
+stepNote.directive('commenttree', function ($compile, NewsService) {
+  return {
+    restrict: 'E',
+    scope: { commenttree: '@' },
+    template: '<div style="border:1px solid red" ng-click="divClicked(status)">' + 
+          '{{ status.status  }}' +
+          '</div>',
+
+    link: function(scope,elem,attr){
+      NewsService.getStatus(attr.statusid).then(function (statusQueryRes) {
+        scope.status = statusQueryRes;
+      }.bind(scope));
+    },
+
+    controller: function ($scope, $element, $attrs) {
+
+      $scope.divClicked = function(status){
+
+        if(status.active == undefined || !status.active){
+
+          _.forEach(status.replies, function(eachReply){
+            var el = $compile( "<commenttree statusid="+eachReply._id+"></commenttree>" )( $scope );
+            $element.append( el );
+          });
+          status.active = true
+        }
+        else {
+          $element.find("commenttree").remove();
+          status.active = false
+        }
+
+      }
+    }
+
+  };
 });
