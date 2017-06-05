@@ -63,3 +63,17 @@
   display: table-cell;
   margin-left: 15px;
 }
+
+.commentDiv{
+  border: 1px solid #42c3c8;
+}
+
+.commentbottom{
+  display: table;
+  width: 100%;
+}
+
+.bottomText{
+  bottom: 0;
+  position: absolute;
+}

@@ -20,7 +20,7 @@
 
       <div class="articlebottom">
         <span class="articleTime"> {{article.timeStamp | date:'shortTime'}} </span>
-        <span class="articlebottomitem"> {{article.replies.length}} comments</span>
+        <span class="articlebottomitem" ng-click="startReply(article._id)"> Reply </span>
         <span class="articlebottomitem" ng-click="blockUser(article.userId)"> Block</span>
 
         <span class="articlebottomitem" ng-if="checkStatus(article, 250)"
@@ -33,6 +33,9 @@
     <div ng-repeat="child in article.replies">
       <commenttree statusid={{child._id}}></commenttree>
     </div>
-
+    <div class="bottomText">
+      <textarea name="Text1" cols="40" rows="1" id="replyText" ng-model="inputValue" class="statusText"></textarea>
+      <button ng-click="saveComment(inputValue)" class="sendButton">Send</button>
+    </div>
   </ion-content>
 </ion-view>

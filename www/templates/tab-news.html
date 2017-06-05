@@ -21,7 +21,7 @@
       </a>
       <div class="articlebottom">
         <span class="articleTime"> {{article.timeStamp | date:'shortTime'}} </span>
-        <span class="articlebottomitem"> 0 comments</span>
+        <span class="articlebottomitem"> {{article.replies.length}} comments</span>
         <span class="articlebottomitem" ng-click="blockUser(article.userId)"> Block</span>
 
         <span class="articlebottomitem" ng-if="checkStatus(article, 250)"

@@ -40,7 +40,10 @@ angular.module('starter.newsservices', [])
         data: {
           "statusId" : statusId+"",
           "userId": userId+"",
-          "emotion":emotion+""
+          "emotion":emotion+"",
+          "location":[-77.18621789486043,
+            38.82741811639861],
+          "radius":3
         }
       };
 
@@ -67,7 +70,10 @@ angular.module('starter.newsservices', [])
         data: {
           "statusId" : statusId+"",
           "userId": userId+"",
-          "emotion":emotion+""
+          "emotion":emotion+"",
+          "location":[-77.18621789486043,
+            38.82741811639861],
+          "radius":3
         }
       };
 
@@ -93,7 +99,10 @@ angular.module('starter.newsservices', [])
         },
         data: {
           "userId" : userId+"",
-          "blockUserId": blockUserId+""
+          "blockUserId": blockUserId+"",
+          "location":[-77.18621789486043,
+            38.82741811639861],
+          "radius":3
         }
       };
 
