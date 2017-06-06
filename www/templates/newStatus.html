@@ -1,0 +1,15 @@
+<ion-modal-view>
+  <ion-header-bar class="headerCss displayElement">
+    <span class="leftAlign" ng-click="closeModal()">Close</span>
+    <span class="title">Update Status</span>
+    <span class="rightAlign" ng-click="saveStatus(message.text)">POST</span>
+  </ion-header-bar>
+
+  <ion-content>
+    <div class="statusDiv">
+      <textarea ng-model="message.text" cols="40" rows="10" placeholder="Enter Status" class="statusText" id="statusText"></textarea>
+    </div>
+
+  </ion-content>
+
+</ion-modal-view>

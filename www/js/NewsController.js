@@ -4,7 +4,7 @@ stepNote.run(function($rootScope) {
   $rootScope.reply.statusGroupId = '';
 });
 
-stepNote.controller('NewsCtrl', function ($scope, $state, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $state, $ionicModal, LocalStorage, NewsService) {
 
 
   /*$scope.newsFeed = [{
@@ -18,6 +18,8 @@ stepNote.controller('NewsCtrl', function ($scope, $state, LocalStorage, NewsServ
    "emotions": 345,
    "blocks": 234
    }];*/
+
+  $scope.message = { }
   var user = LocalStorage.getUser();
   NewsService.getNews('', '', user.userID).then(function (newsQueryRes) {
     $scope.newsFeed = newsQueryRes;
@@ -25,27 +27,26 @@ stepNote.controller('NewsCtrl', function ($scope, $state, LocalStorage, NewsServ
 
   $scope.updateEmotion = function (status, emotion) {
     NewsService.updateEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
-      console.log("success")
       $scope.newsFeed = updateQueryRes;
     });
   };
 
   $scope.deleteEmotion = function (status, emotion) {
     NewsService.deleteEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
-      console.log("success")
       $scope.newsFeed = updateQueryRes;
     });
   };
 
   $scope.saveStatus = function (message) {
     NewsService.saveStatus(message, user.userID, user.displayName, "", "", "text", null, null).then(function (updateQueryRes) {
-      console.log("success")
+      $scope.newsFeed = updateQueryRes;
+      $scope.modal.hide();
+      $scope.message = { }
     });
   };
 
   $scope.blockUser = function (blockUser) {
     NewsService.blockUser(user.userID, blockUser).then(function (updateQueryRes) {
-      console.log("success")
       $scope.newsFeed = updateQueryRes;
     });
   }
@@ -53,6 +54,21 @@ stepNote.controller('NewsCtrl', function ($scope, $state, LocalStorage, NewsServ
   $scope.checkStatus = function (status, emotion) {
     return status.userStatus && status.userStatus.emotion == emotion
   }
+
+  $scope.openStatus = function () {
+    $scope.modal.show();
+  };
+
+  $scope.closeModal = function () {
+    $scope.modal.hide();
+  };
+
+  $ionicModal.fromTemplateUrl('templates/newStatus.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function (modal) {
+    $scope.modal = modal;
+  });
 
 });
 

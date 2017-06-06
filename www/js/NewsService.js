@@ -133,6 +133,7 @@ angular.module('starter.newsservices', [])
           "isAnnonymous": true,
           "location":[-77.18621789486043,
             38.82741811639861],
+          "radius":3,
           "type": type,
           "parentId" : parentId,
           "statusGroupId" : statusGroupId

@@ -1,3 +1,38 @@
+.headerCss{
+  background-color: lightblue;
+}
+
+.leftIcon{
+  font-size: 32px;
+  margin-left: 15px;
+}
+
+.rightIcon{
+  font-size: 26px;
+  margin-right: 15px;
+  margin-top: 4px;
+}
+
+.displayElement{
+  display: inherit;
+}
+
+.leftAlign{
+  font-size: 16px;
+  margin-left: 10px;
+  line-height: 35px;
+  vertical-align: middle;
+}
+
+.rightAlign{
+  float: right;
+  margin-right: 11px;
+  margin-top: 7px;
+  font-size: 17px;
+  font-weight: bold;
+  color: darkcyan;
+}
+
 .article{
   border: 1px solid lightblue;
   min-height: 100px;
@@ -52,10 +87,11 @@
 }
 
 .statusText{
-  border: 1px solid black !important;
-  width: 80%;
+  border: 1px solid #e6dede !important;
+  width: 90%;
   display: table-cell !important;
   font-size: 20px;
+  margin-left: 5%;
 }
 
 .sendButton{
