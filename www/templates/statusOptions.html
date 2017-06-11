@@ -1,0 +1,18 @@
+<div class="modal optionsModalPopup" ng-style="{'top': optionsModalTop+ 'px', 'left': '45%'}">
+ <!-- <ion-header-bar class="bar bar-header bar-positive optionsModalHeader">
+    <h1 class="title optionsModalHeaderTitle">Status Options</h1>
+  </ion-header-bar>-->
+  <ion-content>
+    <div class="eachOption" ng-if="isOptionsSameUser()">
+      <div class="eachOptionIcon"> <i class="icon ion-edit"></i>Edit Status </div>
+      <div class="eachOptionIcon"> <i class="icon ion-android-delete"></i> Delete Status </div>
+    </div>
+    <div class="eachOption" ng-if="!isOptionsSameUser()" ng-click="blockUser()">
+      <div class="eachOptionIcon"> <i class="icon ion-ios-close-outline"></i>Block User </div>
+    </div>
+
+    <div class="eachOption">
+      <div class="eachOptionIcon"> <i class="icon ion-share"></i>Share Status </div>
+    </div>
+  </ion-content>
+</div>

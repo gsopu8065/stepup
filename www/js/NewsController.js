@@ -21,6 +21,7 @@ stepNote.controller('NewsCtrl', function ($scope, $state, $ionicModal, LocalStor
 
   $scope.message = { }
   var user = LocalStorage.getUser();
+  $scope.user = user;
   NewsService.getNews('', '', user.userID).then(function (newsQueryRes) {
     $scope.newsFeed = newsQueryRes;
   });
@@ -45,8 +46,10 @@ stepNote.controller('NewsCtrl', function ($scope, $state, $ionicModal, LocalStor
     });
   };
 
-  $scope.blockUser = function (blockUser) {
-    NewsService.blockUser(user.userID, blockUser).then(function (updateQueryRes) {
+  $scope.blockUser = function () {
+    console.log($scope.optionsUserId);
+    $scope.optionsModal.hide();
+    NewsService.blockUser(user.userID, $scope.optionsUserId).then(function (updateQueryRes) {
       $scope.newsFeed = updateQueryRes;
     });
   }
@@ -68,6 +71,29 @@ stepNote.controller('NewsCtrl', function ($scope, $state, $ionicModal, LocalStor
     animation: 'slide-in-up'
   }).then(function (modal) {
     $scope.modal = modal;
+  });
+
+  //option menu
+  $scope.isOptionsSameUser = function(){
+    return $scope.optionsUserId == $scope.user.userID;
+  }
+
+  $scope.openOptionsMenu = function (statusUserId, event) {
+    $scope.optionsModalTop = event.pageY;
+    $scope.optionsUserId = statusUserId;
+    $scope.optionsModal.show();
+  };
+
+  $scope.closeOptionsMenu = function () {
+    $scope.optionsModal.hide();
+  };
+
+  $ionicModal.fromTemplateUrl('templates/statusOptions.html', function(optionsModal) {
+    $scope.optionsModal = optionsModal;
+  }, {
+    scope: $scope,
+    animation: 'none',
+    focusFirstInput: true
   });
 
 });
@@ -140,7 +166,6 @@ stepNote.directive('commenttree', function ($compile, NewsService) {
 
       $scope.startReply = function(replyId){
         $rootScope.reply.parentId = replyId;
-        console.log(document.getElementById('replyText'), replyId)
         var element = document.getElementById('replyText')
         if (element) {
           $timeout(function() {element.focus();});

@@ -33,10 +33,15 @@
   color: darkcyan;
 }
 
+.imageIcon{
+  border-radius: 0 !important;
+}
+
 .article{
   border: 1px solid lightblue;
-  min-height: 100px;
   margin-bottom: 10px;
+  padding-bottom: 4px;
+  padding-top: 4px;
 }
 
 .articleTextAnchor{ color: inherit; }
@@ -57,11 +62,11 @@
 
 .articleText{
   margin-left: 2%;
-  margin-top: 15px;
+  margin-top: 8px;
   margin-bottom: 15px;
   font-size: larger;
   float: left;
-  min-width: 100%;
+  width: 93%;
 }
 
 .articlebottom{
@@ -112,4 +117,66 @@
 .bottomText{
   bottom: 0;
   position: absolute;
+}
+
+.dropDownStatus{
+  font-size: 21px;
+  color: black;
+  float: right;
+  margin-right: 10px;
+  margin-top: 2px;
+  font-weight: bolder;
+}
+
+
+.noNewsFeed{
+  color: #4a4646;
+  text-align: center;
+  margin-top: 40%;
+}
+
+.statusButton{
+  border: 1px solid;
+  margin-top: 15px;
+  padding: 8px;
+  background: lightblue;
+  font-size: 15px;
+}
+
+/*options popup css*/
+.optionsModalPopup{
+  width: 50%;
+  /*margin-left: 10%;
+  margin-top: 30%;*/
+  min-height: 20%;
+  background-color: white;
+  border: 1px solid #c4c8cf;
+}
+
+.optionsModalHeader{
+  background-color: lightblue !important;
+}
+
+.optionsModalHeaderTitle{
+  color: black !important;
+}
+
+.eachOption{
+  font-size: 17px;
+  margin-left: 15px;
+  border-top: 1px solid #ddd;
+  margin-right: 15px;
+}
+
+.eachOptionIcon{
+  line-height: 40px;
+}
+
+.eachOptionIcon i{
+  font-size: 25px;
+  margin-right: 20px;
+}
+
+.shareOption{
+
 }

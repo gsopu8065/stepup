@@ -3,7 +3,7 @@ var stepNote = angular.module('starter.controllers', []);
 stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
 
     //this is temporary,later remove it
-    LocalStorage.setUser({userID: $stateParams.profileInfoId, displayName: 'raj'});
+    LocalStorage.setUser({userID: $stateParams.profileInfoId, displayName: 'Raj', location: 'Nashville, TN'});
 
     if (!$stateParams.profileInfoId) {
       $state.go("login")
@@ -582,7 +582,7 @@ stepNote.controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserSer
           //save device id
           //update user info
           UserService.updateUserProfile(profileInfo.data, token.token);
-          LocalStorage.setUser({userID: profileInfo.data.id, displayName: profileInfo.data.name});
+          LocalStorage.setUser({userID: profileInfo.data.id, displayName: profileInfo.data.name, location: profileInfo.data.location.name});
           $state.go('tab.dash', {profileInfoId: profileInfo.data.id});
         });
       })
@@ -605,10 +605,10 @@ stepNote.filter('escape', function () {
 
 stepNote.filter('age', function() {
     return function(birthday){
-      var birthday = new Date(birthday);
+      birthday = new Date(birthday);
       var today = new Date();
       var age = ((today - birthday) / (31557600000));
-      var age = Math.floor( age );
+      age = Math.floor( age );
       return age;
     }
   })

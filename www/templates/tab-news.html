@@ -10,11 +10,20 @@
 
   <ion-content class="padding">
 
+    <div class="noNewsFeed" ng-if="newsFeed.length == 0">
+      No status to show,You can be the first person to post
+      <div>
+      <button class="statusButton" ng-click="openStatus()"> Post Status</button>
+        </div>
+    </div>
+
     <div class="article" ng-repeat="article in newsFeed">
 
-      <div class="articleUserName">
+      <i class="icon ion-android-more-vertical dropDownStatus" ng-click="openOptionsMenu(article.userId, $event)"></i>
+
+      <!--<div class="articleUserName">
         {{article.userName}}
-      </div>
+      </div>-->
 
       <a class="articleTextAnchor" href="#/tab/news/{{article._id}}">
         <div class="articleText">
@@ -24,7 +33,6 @@
       <div class="articlebottom">
         <span class="articleTime"> {{article.timeStamp | date:'shortTime'}} </span>
         <span class="articlebottomitem"> {{article.replies.length}} comments</span>
-        <span class="articlebottomitem" ng-click="blockUser(article.userId)"> Block</span>
 
         <span class="articlebottomitem" ng-if="checkStatus(article, 250)"
               ng-click="deleteEmotion(article, 250)">dislike</span>

@@ -6,8 +6,13 @@
   </ion-header-bar>
 
   <ion-content>
+    <div class="item-avatar item-icon-right viewProfileDiv" type="item-text-wrap">
+      <img class="imageIcon" ng-src="https://graph.facebook.com/{{user.userID}}/picture?type=small">
+      <div style="text-align: left; font-weight: bold;">{{user.displayName}}</div>
+      <div style="text-align: left">{{user.location}}</div>
+    </div>
     <div class="statusDiv">
-      <textarea ng-model="message.text" cols="40" rows="10" placeholder="Enter Status" class="statusText" id="statusText"></textarea>
+      <textarea ng-model="message.text" cols="40" rows="10" placeholder=" Enter Status" class="statusText" id="statusText"></textarea>
     </div>
 
   </ion-content>
