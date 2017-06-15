@@ -84,6 +84,17 @@
   text-align:center;
 }
 
+.eachLikeIcon{
+  font-size: 22px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: darkgray;
+}
+
+.makeLikeIconBold{
+  color: darkcyan;
+}
+
 .statusDiv{
   display: table;
   width: 100%;
@@ -177,6 +188,4 @@
   margin-right: 20px;
 }
 
-.shareOption{
-
-}
+/*options popup end*/

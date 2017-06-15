@@ -48,7 +48,6 @@ angular.module('starter.newsservices', [])
       };
 
       $http(req).then(function(success){
-        console.log(success);
         info.resolve(success.data);
       }, function(error){
         console.log(error);

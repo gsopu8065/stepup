@@ -6,25 +6,19 @@ stepNote.run(function($rootScope) {
 
 stepNote.controller('NewsCtrl', function ($scope, $state, $ionicModal, LocalStorage, NewsService) {
 
-
-  /*$scope.newsFeed = [{
-   "userId": "101",
-   "userName": "ABCD",
-   "status": "Hello world ",
-   "type": "text",
-   "time": "26min",
-   "location": "Nashville, TN",
-   "isAnonymous": true,
-   "emotions": 345,
-   "blocks": 234
-   }];*/
-
   $scope.message = { }
   var user = LocalStorage.getUser();
   $scope.user = user;
   NewsService.getNews('', '', user.userID).then(function (newsQueryRes) {
     $scope.newsFeed = newsQueryRes;
   });
+
+  $scope.getRepliesCount = function(replies){
+    if(replies){
+      return replies.length;
+    }
+    return 0;
+  };
 
   $scope.updateEmotion = function (status, emotion) {
     NewsService.updateEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
@@ -56,6 +50,13 @@ stepNote.controller('NewsCtrl', function ($scope, $state, $ionicModal, LocalStor
 
   $scope.checkStatus = function (status, emotion) {
     return status.userStatus && status.userStatus.emotion == emotion
+  }
+
+  $scope.getEmotionCount = function (status, emotion) {
+    if(status.emotions && status.emotions.hasOwnProperty(emotion)){
+      return status.emotions[emotion];
+    }
+    return 0;
   }
 
   $scope.openStatus = function () {
@@ -106,6 +107,7 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $r
     $rootScope.reply.statusGroupId = $scope.article._id
   });
 
+  $rootScope.reply.parentId = $stateParams.statusId;
   $scope.startReply = function(replyId){
     $rootScope.reply.parentId = replyId;
     console.log(document.getElementById('replyText'), replyId)
