@@ -56,7 +56,7 @@
 
 .articleTime{
   font-size: smaller;
-  margin-top: -6px;
+  margin-left: 6px;
   font-weight: 300;
 }
 
@@ -85,10 +85,9 @@
 }
 
 .eachLikeIcon{
-  font-size: 22px;
-  padding-left: 10px;
-  padding-right: 10px;
   color: darkgray;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .makeLikeIconBold{
@@ -152,6 +151,22 @@
   padding: 8px;
   background: lightblue;
   font-size: 15px;
+}
+
+.likeCount{
+  margin-right: 3px;
+}
+
+.fontOfLike{
+  font-size: 13px;
+}
+
+.fontOfLikeIcon{
+  font-size: 21px;
+}
+
+.blackColor{
+  color: black;
 }
 
 /*options popup css*/

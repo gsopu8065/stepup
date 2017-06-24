@@ -177,3 +177,19 @@ stepNote.directive('commenttree', function ($compile, NewsService) {
 
   };
 });
+
+
+stepNote.filter('formatdate', function($filter) {
+  return function(timestamp) {
+    var currentDate = new Date()
+    var toFormat = new Date(timestamp)
+    if(toFormat.getDate() == currentDate.getDate() && toFormat.getMonth() == currentDate.getMonth() && toFormat.getFullYear() == currentDate.getFullYear() ) {
+      return 'Today ' + $filter('date')(toFormat.getTime(), 'shortTime')
+    }
+    if(toFormat.getDate() == (currentDate.getDate() - 1) && toFormat.getMonth() == currentDate.getMonth() && toFormat.getFullYear() == currentDate.getFullYear()) {
+      return 'Yesterday ' + $filter('date')(toFormat.getTime(), 'shortTime')
+    }
+
+    return $filter('date')(toFormat.getTime(), 'M/d/yy h:mm a')
+  }
+});

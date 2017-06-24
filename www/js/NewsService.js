@@ -170,4 +170,4 @@ angular.module('starter.newsservices', [])
     return NewsService;
   })
 
-  .constant('SERVER_API',"http://opennotewebservice.herokuapp.com");
+  .constant('SERVER_API',"http://localhost:5000");

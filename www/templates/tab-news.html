@@ -25,30 +25,36 @@
         {{article.userName}}
       </div>-->
 
+      <span class="articleTime"> {{article.timeStamp |  formatdate}} </span>
       <a class="articleTextAnchor" href="#/tab/news/{{article._id}}">
         <div class="articleText">
           {{article.status}}
         </div>
       </a>
       <div class="articlebottom">
-        <span class="articleTime"> {{article.timeStamp | date:'shortTime'}} </span>
 
 
-        <span class="articlebottomitem">{{getEmotionCount(article, 250)}}</span>
-        <i class="icon ion-thumbsup articlebottomitem eachLikeIcon" ng-if="!checkStatus(article, 250)" ng-click="updateEmotion(article, 250)"></i>
-        <i class="icon ion-thumbsup articlebottomitem eachLikeIcon makeLikeIconBold" ng-if="checkStatus(article, 250)" ng-click="deleteEmotion(article, 250)"></i>
 
-        <span class="articlebottomitem">{{getEmotionCount(article, 251)}}</span>
-        <i class="icon ion-thumbsdown articlebottomitem eachLikeIcon" ng-if="!checkStatus(article, 251)" ng-click="updateEmotion(article, 251)"></i>
-        <i class="icon ion-thumbsdown articlebottomitem eachLikeIcon makeLikeIconBold" ng-if="checkStatus(article, 251)" ng-click="deleteEmotion(article, 251)"></i>
+        <span class="eachLikeIcon">
+        <span class="fontOfLike likeCount blackColor">{{getEmotionCount(article, 250)}}</span>
+        <span class="icon ion-thumbsup fontOfLikeIcon" ng-if="!checkStatus(article, 250)" ng-click="updateEmotion(article, 250)"></span>
+        <Span class="fontOfLike " ng-if="!checkStatus(article, 250)"> Like</Span>
+          <span class="icon ion-thumbsup fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus(article, 250)" ng-click="deleteEmotion(article, 250)"></span>
+        <Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus(article, 250)"> Like</Span>
+        </span>
 
+         <span class="eachLikeIcon">
+        <span class="fontOfLike likeCount blackColor">{{getEmotionCount(article, 251)}}</span>
+        <span class="icon ion-thumbsdown fontOfLikeIcon" ng-if="!checkStatus(article, 251)" ng-click="updateEmotion(article, 251)"></span>
+        <Span class="fontOfLike " ng-if="!checkStatus(article, 251)"> Like</Span>
+          <span class="icon ion-thumbsdown fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus(article, 251)" ng-click="deleteEmotion(article, 251)"></span>
+        <Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus(article, 251)"> Like</Span>
+        </span>
 
-        <!--<span class="articlebottomitem" ng-if="checkStatus(article, 250)"
-              ng-click="deleteEmotion(article, 250)">dislike</span>
-        <i class="em em-&#45;&#45;1 articlebottomitem" ng-if="!checkStatus(article, 250)"
-           ng-click="updateEmotion(article, 250)"></i>-->
+        <span class="eachLikeIcon blackColor"> {{getRepliesCount(article.replies)}} replies</span>
 
-        <span class="articlebottomitem"> {{getRepliesCount(article.replies)}} replies</span>
+        <span class="eachLikeIcon icon ion-android-share blackColor"> Share</span>
+
       </div>
     </div>
 
