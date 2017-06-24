@@ -17,22 +17,24 @@
         </div>
     </div>
 
-    <div class="article" ng-repeat="article in newsFeed">
+    <div ng-show="loading" class="cssload-loader">
+      <div class="cssload-inner cssload-one"></div>
+      <div class="cssload-inner cssload-two"></div>
+      <div class="cssload-inner cssload-three"></div>
+    </div>
+
+    <div class="article" ng-show="!loading" ng-repeat="article in newsFeed">
 
       <i class="icon ion-android-more-vertical dropDownStatus" ng-click="openOptionsMenu(article.userId, $event)"></i>
 
-      <!--<div class="articleUserName">
-        {{article.userName}}
-      </div>-->
-
       <span class="articleTime"> {{article.timeStamp |  formatdate}} </span>
+      <span class="articleTime"> {{getLocation(article)}} </span>
       <a class="articleTextAnchor" href="#/tab/news/{{article._id}}">
         <div class="articleText">
           {{article.status}}
         </div>
       </a>
       <div class="articlebottom">
-
 
 
         <span class="eachLikeIcon">

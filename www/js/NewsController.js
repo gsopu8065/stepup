@@ -1,16 +1,30 @@
 stepNote.run(function($rootScope) {
+
+  $rootScope.location = [];
   $rootScope.reply = [];
   $rootScope.reply.parentId = '';
   $rootScope.reply.statusGroupId = '';
 });
 
-stepNote.controller('NewsCtrl', function ($scope, $state, $ionicModal, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation, $state, $ionicModal, LocalStorage, NewsService) {
 
-  $scope.message = { }
+  //get User
   var user = LocalStorage.getUser();
   $scope.user = user;
-  NewsService.getNews('', '', user.userID).then(function (newsQueryRes) {
-    $scope.newsFeed = newsQueryRes;
+
+  //get location
+  $scope.loading = true;
+  var options = {timeout: 30000, enableHighAccuracy: true};
+  $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+    $rootScope.location.latitude =  position.coords.latitude;
+    $rootScope.location.longitude =  position.coords.longitude;
+
+    NewsService.getNews([position.coords.latitude, position.coords.longitude], 3, user.userID).then(function (newsQueryRes) {
+      $scope.newsFeed = newsQueryRes;
+      $scope.loading = false
+    });
+
+
   });
 
   $scope.getRepliesCount = function(replies){
@@ -20,20 +34,27 @@ stepNote.controller('NewsCtrl', function ($scope, $state, $ionicModal, LocalStor
     return 0;
   };
 
+  $scope.getLocation = function (status) {
+    if(status.city && status.state){
+      return " "+status.city+", "+status.state;
+    }
+  };
+
   $scope.updateEmotion = function (status, emotion) {
-    NewsService.updateEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
+    NewsService.updateEmotion(status._id, user.userID, emotion, [$rootScope.location.latitude, $rootScope.location.longitude], 3).then(function (updateQueryRes) {
       $scope.newsFeed = updateQueryRes;
     });
   };
 
   $scope.deleteEmotion = function (status, emotion) {
-    NewsService.deleteEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
+    NewsService.deleteEmotion(status._id, user.userID, emotion, [$rootScope.location.latitude, $rootScope.location.longitude], 3).then(function (updateQueryRes) {
       $scope.newsFeed = updateQueryRes;
     });
   };
 
+  $scope.message = { };
   $scope.saveStatus = function (message) {
-    NewsService.saveStatus(message, user.userID, user.displayName, "", "", "text", null, null).then(function (updateQueryRes) {
+    NewsService.saveStatus(message, user.userID, user.displayName, "", [$rootScope.location.latitude, $rootScope.location.longitude], 3, "text", null, null).then(function (updateQueryRes) {
       $scope.newsFeed = updateQueryRes;
       $scope.modal.hide();
       $scope.message = { }
@@ -43,7 +64,7 @@ stepNote.controller('NewsCtrl', function ($scope, $state, $ionicModal, LocalStor
   $scope.blockUser = function () {
     console.log($scope.optionsUserId);
     $scope.optionsModal.hide();
-    NewsService.blockUser(user.userID, $scope.optionsUserId).then(function (updateQueryRes) {
+    NewsService.blockUser(user.userID, $scope.optionsUserId, [$rootScope.location.latitude, $rootScope.location.longitude], 3).then(function (updateQueryRes) {
       $scope.newsFeed = updateQueryRes;
     });
   }
@@ -102,9 +123,11 @@ stepNote.controller('NewsCtrl', function ($scope, $state, $ionicModal, LocalStor
 stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $rootScope,$timeout, LocalStorage, NewsService) {
 
   var user = LocalStorage.getUser();
+  $scope.loading = true;
   NewsService.getStatus($stateParams.statusId).then(function (statusQueryRes) {
     $scope.article = statusQueryRes;
     $rootScope.reply.statusGroupId = $scope.article._id
+    $scope.loading = false;
   });
 
   $rootScope.reply.parentId = $stateParams.statusId;
@@ -112,13 +135,19 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $r
     $rootScope.reply.parentId = replyId;
     console.log(document.getElementById('replyText'), replyId)
     var element = document.getElementById('replyText')
-    if (element) {
+    /*if (element) {
       $timeout(function() {element.focus();});
+    }*/
+  };
+
+  $scope.getLocation = function (status) {
+    if(status.city && status.state){
+      return " "+status.city+", "+status.state;
     }
   };
 
   $scope.saveComment = function (message) {
-    NewsService.saveStatus(message, user.userID, user.displayName, "", "", "commentText", $rootScope.reply.parentId, $rootScope.reply.statusGroupId).then(function (updateQueryRes) {
+    NewsService.saveStatus(message, user.userID, user.displayName, "", [$rootScope.location.latitude, $rootScope.location.longitude],3, "commentText", $rootScope.reply.parentId, $rootScope.reply.statusGroupId).then(function (updateQueryRes) {
       console.log("success")
     });
   };
@@ -169,9 +198,9 @@ stepNote.directive('commenttree', function ($compile, NewsService) {
       $scope.startReply = function(replyId){
         $rootScope.reply.parentId = replyId;
         var element = document.getElementById('replyText')
-        if (element) {
+        /*if (element) {
           $timeout(function() {element.focus();});
-        }
+        }*/
       }
     }
 

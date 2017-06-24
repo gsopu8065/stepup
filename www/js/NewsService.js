@@ -12,9 +12,8 @@ angular.module('starter.newsservices', [])
           'Content-Type': 'application/json'
         },
         data: {
-          "location":[-77.18621789486043,
-            38.82741811639861],
-          "radius":3,
+          "location":location,
+          "radius":radius,
           "userId":userId+""
         }
       };
@@ -28,7 +27,7 @@ angular.module('starter.newsservices', [])
       return info.promise;
     };
 
-    NewsService.updateEmotion = function(statusId, userId, emotion){
+    NewsService.updateEmotion = function(statusId, userId, emotion, location, radius){
       var info = $q.defer();
 
       var req = {
@@ -41,9 +40,8 @@ angular.module('starter.newsservices', [])
           "statusId" : statusId+"",
           "userId": userId+"",
           "emotion":emotion+"",
-          "location":[-77.18621789486043,
-            38.82741811639861],
-          "radius":3
+          "location":location,
+          "radius":radius
         }
       };
 
@@ -57,7 +55,7 @@ angular.module('starter.newsservices', [])
 
     };
 
-    NewsService.deleteEmotion = function(statusId, userId, emotion){
+    NewsService.deleteEmotion = function(statusId, userId, emotion, location, radius){
       var info = $q.defer();
 
       var req = {
@@ -70,9 +68,8 @@ angular.module('starter.newsservices', [])
           "statusId" : statusId+"",
           "userId": userId+"",
           "emotion":emotion+"",
-          "location":[-77.18621789486043,
-            38.82741811639861],
-          "radius":3
+          "location":location,
+          "radius": radius
         }
       };
 
@@ -87,7 +84,7 @@ angular.module('starter.newsservices', [])
 
     };
 
-    NewsService.blockUser = function( userId, blockUserId){
+    NewsService.blockUser = function( userId, blockUserId, location, radius){
       var info = $q.defer();
 
       var req = {
@@ -99,9 +96,8 @@ angular.module('starter.newsservices', [])
         data: {
           "userId" : userId+"",
           "blockUserId": blockUserId+"",
-          "location":[-77.18621789486043,
-            38.82741811639861],
-          "radius":3
+          "location":location,
+          "radius": radius
         }
       };
 
@@ -116,7 +112,7 @@ angular.module('starter.newsservices', [])
 
     };
 
-    NewsService.saveStatus = function(status, userId, userName, isAnnonymous, location, type, parentId,  statusGroupId){
+    NewsService.saveStatus = function(status, userId, userName, isAnnonymous, location, radius, type, parentId,  statusGroupId){
       var info = $q.defer();
 
       var req = {
@@ -130,9 +126,8 @@ angular.module('starter.newsservices', [])
           "userId": userId,
           "userName": userName,
           "isAnnonymous": true,
-          "location":[-77.18621789486043,
-            38.82741811639861],
-          "radius":3,
+          "location":location,
+          "radius": radius,
           "type": type,
           "parentId" : parentId,
           "statusGroupId" : statusGroupId
@@ -170,4 +165,4 @@ angular.module('starter.newsservices', [])
     return NewsService;
   })
 
-  .constant('SERVER_API',"http://localhost:5000");
+  .constant('SERVER_API',"https://opennotewebservice.herokuapp.com");
