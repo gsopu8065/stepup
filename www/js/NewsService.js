@@ -27,7 +27,7 @@ angular.module('starter.newsservices', [])
       return info.promise;
     };
 
-    NewsService.updateEmotion = function(statusId, userId, emotion, location, radius){
+    NewsService.updateEmotion = function(statusId, userId, emotion, location, radius, singleStatus){
       var info = $q.defer();
 
       var req = {
@@ -41,7 +41,8 @@ angular.module('starter.newsservices', [])
           "userId": userId+"",
           "emotion":emotion+"",
           "location":location,
-          "radius":radius
+          "radius":radius,
+          "singleStatus": singleStatus
         }
       };
 
@@ -55,7 +56,7 @@ angular.module('starter.newsservices', [])
 
     };
 
-    NewsService.deleteEmotion = function(statusId, userId, emotion, location, radius){
+    NewsService.deleteEmotion = function(statusId, userId, emotion, location, radius, singleStatus){
       var info = $q.defer();
 
       var req = {
@@ -69,7 +70,8 @@ angular.module('starter.newsservices', [])
           "userId": userId+"",
           "emotion":emotion+"",
           "location":location,
-          "radius": radius
+          "radius": radius,
+          "singleStatus": singleStatus
         }
       };
 
@@ -145,12 +147,12 @@ angular.module('starter.newsservices', [])
 
     };
 
-    NewsService.getStatus = function(statusId){
+    NewsService.getStatus = function(statusId, userId){
       var info = $q.defer();
 
       var req = {
         method: 'GET',
-        url: SERVER_API+'/getStatus?statusId='+statusId
+        url: SERVER_API+'/getStatus?statusId='+statusId+'&userId='+userId
       };
 
       $http(req).then(function(success){
@@ -164,5 +166,5 @@ angular.module('starter.newsservices', [])
 
     return NewsService;
   })
-
+  //.constant('SERVER_API',"https://localhost:5000");
   .constant('SERVER_API',"https://opennotewebservice.herokuapp.com");

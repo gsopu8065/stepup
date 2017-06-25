@@ -40,18 +40,6 @@ stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation
     }
   };
 
-  $scope.updateEmotion = function (status, emotion) {
-    NewsService.updateEmotion(status._id, user.userID, emotion, [$rootScope.location.latitude, $rootScope.location.longitude], 3).then(function (updateQueryRes) {
-      $scope.newsFeed = updateQueryRes;
-    });
-  };
-
-  $scope.deleteEmotion = function (status, emotion) {
-    NewsService.deleteEmotion(status._id, user.userID, emotion, [$rootScope.location.latitude, $rootScope.location.longitude], 3).then(function (updateQueryRes) {
-      $scope.newsFeed = updateQueryRes;
-    });
-  };
-
   $scope.message = { };
   $scope.saveStatus = function (message) {
     NewsService.saveStatus(message, user.userID, user.displayName, "", [$rootScope.location.latitude, $rootScope.location.longitude], 3, "text", null, null).then(function (updateQueryRes) {
@@ -79,6 +67,18 @@ stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation
     }
     return 0;
   }
+
+  $scope.updateEmotion = function (status, emotion) {
+    NewsService.updateEmotion(status._id, user.userID, emotion, [$rootScope.location.latitude, $rootScope.location.longitude], 3, false).then(function (updateQueryRes) {
+      $scope.newsFeed = updateQueryRes;
+    });
+  };
+
+  $scope.deleteEmotion = function (status, emotion) {
+    NewsService.deleteEmotion(status._id, user.userID, emotion, [$rootScope.location.latitude, $rootScope.location.longitude], 3, false).then(function (updateQueryRes) {
+      $scope.newsFeed = updateQueryRes;
+    });
+  };
 
   $scope.openStatus = function () {
     $scope.modal.show();
@@ -124,7 +124,7 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $r
 
   var user = LocalStorage.getUser();
   $scope.loading = true;
-  NewsService.getStatus($stateParams.statusId).then(function (statusQueryRes) {
+  NewsService.getStatus($stateParams.statusId, user.userID).then(function (statusQueryRes) {
     $scope.article = statusQueryRes;
     $rootScope.reply.statusGroupId = $scope.article._id
     $scope.loading = false;
@@ -140,10 +140,36 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $r
     }*/
   };
 
-  $scope.getLocation = function (status) {
-    if(status.city && status.state){
+  $scope.getLocation = function () {
+    var status = $scope.article;
+    if(status && status.city && status.state){
       return " "+status.city+", "+status.state;
     }
+  };
+
+  $scope.checkStatus = function (emotion) {
+    var status = $scope.article;
+    return status && status.userStatus && status.userStatus.emotion == emotion
+  }
+
+  $scope.getEmotionCount = function (emotion) {
+    var status = $scope.article;
+    if(status && status.emotions && status.emotions.hasOwnProperty(emotion)){
+      return status.emotions[emotion];
+    }
+    return 0;
+  }
+
+  $scope.updateEmotion = function (emotion) {
+    NewsService.updateEmotion($scope.article._id, user.userID, emotion, [$rootScope.location.latitude, $rootScope.location.longitude], 3, true).then(function (updateQueryRes) {
+      $scope.article = updateQueryRes;
+    });
+  };
+
+  $scope.deleteEmotion = function (emotion) {
+    NewsService.deleteEmotion($scope.article._id, user.userID, emotion, [$rootScope.location.latitude, $rootScope.location.longitude], 3, true).then(function (updateQueryRes) {
+      $scope.article = updateQueryRes;
+    });
   };
 
   $scope.saveComment = function (message) {
@@ -171,7 +197,8 @@ stepNote.directive('commenttree', function ($compile, NewsService) {
     '</div>',
 
     link: function (scope, elem, attr) {
-      NewsService.getStatus(attr.statusid).then(function (statusQueryRes) {
+      var user = LocalStorage.getUser();
+      NewsService.getStatus(attr.statusid, user.userID).then(function (statusQueryRes) {
         scope.status = statusQueryRes;
       }.bind(scope));
     },
