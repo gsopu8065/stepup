@@ -58,17 +58,21 @@ stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation
   }
 
   $scope.checkStatus = function (status, emotion) {
-    return status.userStatus && status.userStatus.emotion == emotion
+    return status.userstatusEmotion && status.userstatusEmotion == emotion
   }
 
   $scope.getEmotionCount = function (status, emotion) {
-    if(status.emotions && status.emotions.hasOwnProperty(emotion)){
-      return status.emotions[emotion];
+    if(emotion == 'like'){
+      return status.likeCount
+    }
+    else if(emotion == 'dislike'){
+      return status.dislikeCount
     }
     return 0;
   }
 
   $scope.updateEmotion = function (status, emotion) {
+    console.log(emotion)
     NewsService.updateEmotion(status._id, user.userID, emotion, [$rootScope.location.latitude, $rootScope.location.longitude], 3, false).then(function (updateQueryRes) {
       $scope.newsFeed = updateQueryRes;
     });
@@ -180,17 +184,16 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $r
 
 });
 
-stepNote.directive('commenttree', function ($compile, NewsService) {
+stepNote.directive('commenttree', function ($compile, NewsService, LocalStorage) {
   return {
     restrict: 'E',
     scope: {commenttree: '@'},
     template: '<div class="commentDiv">' +
     '<span ng-click="divClicked(status)">{{ status.status  }}</span>' +
     '<div class="commentbottom">' +
-    '<span class="articleTime"> {{status.timeStamp | date:"shortTime"}} </span>' +
+    '<span class="articleTime"> {{status.timeStamp | formatdate}} </span>' +
     '<span class="articlebottomitem" ng-click="startReply(status._id)"> Reply </span>'+
     ' <span class="articlebottomitem" ng-click="divClicked(status)"> {{status.replies.length}} comments</span>' +
-    '<span class="articlebottomitem" ng-click="blockUser(status.userId)"> Block</span>' +
     ' <span class="articlebottomitem" ng-if="checkStatus(status, 250)" ng-click="deleteEmotion(status, 250)">dislike</span>' +
     '<span class="articlebottomitem" ng-if="!checkStatus(status, 250)" ng-click="updateEmotion(status, 250)">like</span>' +
     ' </div>' +
@@ -220,7 +223,7 @@ stepNote.directive('commenttree', function ($compile, NewsService) {
           status.active = false
         }
 
-      }
+      };
 
       $scope.startReply = function(replyId){
         $rootScope.reply.parentId = replyId;
