@@ -6,6 +6,17 @@
 -->
 <ion-view cache-view="false" view-title="">
 
+  <!--<ion-nav-bar>
+  </ion-nav-bar>
+
+  <ion-nav-buttons side="left">
+    <span ng-click="goHome()" style="font-size: 18px;margin-top: 13%;">
+      <i class="ion-chevron-left"></i> Chats
+    </span>
+  </ion-nav-buttons>-->
+
+
+
   <ion-content class="padding">
 
     <div ng-show="loading" class="cssload-loader">
@@ -31,19 +42,19 @@
 
 
         <span class="eachLikeIcon">
-        <span class="fontOfLike likeCount blackColor">{{getEmotionCount(250)}}</span>
-        <span class="icon ion-thumbsup fontOfLikeIcon" ng-if="!checkStatus(250)" ng-click="updateEmotion(250)"></span>
-        <Span class="fontOfLike " ng-if="!checkStatus(250)"> Like</Span>
-          <span class="icon ion-thumbsup fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus(250)" ng-click="deleteEmotion(250)"></span>
-        <Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus(250)"> Like</Span>
+        <span class="fontOfLike likeCount blackColor">{{getEmotionCount('like')}}</span>
+        <span class="icon ion-thumbsup fontOfLikeIcon" ng-if="!checkStatus('like')" ng-click="updateEmotion('like')"></span>
+        <Span class="fontOfLike " ng-if="!checkStatus('like')"> Like</Span>
+          <span class="icon ion-thumbsup fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus('like')" ng-click="deleteEmotion('like')"></span>
+        <Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus('like')"> Like</Span>
         </span>
 
         <span class="eachLikeIcon">
-        <span class="fontOfLike likeCount blackColor">{{getEmotionCount(251)}}</span>
-        <span class="icon ion-thumbsdown fontOfLikeIcon" ng-if="!checkStatus(251)" ng-click="updateEmotion(251)"></span>
-        <Span class="fontOfLike " ng-if="!checkStatus(251)"> Like</Span>
-          <span class="icon ion-thumbsdown fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus(251)" ng-click="deleteEmotion(251)"></span>
-        <Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus(251)"> Like</Span>
+        <span class="fontOfLike likeCount blackColor">{{getEmotionCount('dislike')}}</span>
+        <span class="icon ion-thumbsdown fontOfLikeIcon" ng-if="!checkStatus('dislike')" ng-click="updateEmotion('dislike')"></span>
+        <Span class="fontOfLike " ng-if="!checkStatus('dislike')"> Dislike</Span>
+          <span class="icon ion-thumbsdown fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus('dislike')" ng-click="deleteEmotion('dislike')"></span>
+        <Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus('dislike')"> Dislike</Span>
         </span>
 
         <span class="articlebottomitem" ng-click="startReply(article._id)"> Reply </span>
@@ -58,8 +69,15 @@
       <commenttree statusid={{child._id}}></commenttree>
     </div>
     <div class="bottomText">
-      <textarea name="Text1" cols="40" rows="1" id="replyText" ng-model="inputValue" class="statusText"></textarea>
-      <button ng-click="saveComment(inputValue)" class="sendButton">Send</button>
+
+      <input ng-model="inputValue.message" placeholder=" Enter reply" class="messageText newsMessageText" id="replyText"  ng-model-options='{ debounce: 0 }'>
+      <a class="search-link sendButton"  href="" ng-click="saveComment()"><span class="send_icon">Send</span></a>
+      </input>
+
+
+
+      <!--<textarea name="Text1" cols="40" rows="1" id="replyText" ng-model="inputValue" class="statusText"></textarea>
+      <button ng-click="saveComment(inputValue)" class="sendButton">Send</button>-->
     </div>
   </ion-content>
 </ion-view>

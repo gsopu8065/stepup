@@ -48,9 +48,9 @@
          <span class="eachLikeIcon">
         <span class="fontOfLike likeCount blackColor">{{getEmotionCount(article, 'dislike')}}</span>
         <span class="icon ion-thumbsdown fontOfLikeIcon" ng-if="!checkStatus(article, 'dislike')" ng-click="updateEmotion(article, 'dislike')"></span>
-        <Span class="fontOfLike " ng-if="!checkStatus(article, 'dislike')"> Like</Span>
+        <Span class="fontOfLike " ng-if="!checkStatus(article, 'dislike')"> Dislike</Span>
           <span class="icon ion-thumbsdown fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus(article, 'dislike')" ng-click="deleteEmotion(article, 'dislike')"></span>
-        <Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus(article, 'dislike')"> Like</Span>
+        <Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus(article, 'dislike')"> Dislike</Span>
         </span>
 
         <span class="eachLikeIcon blackColor"> {{getRepliesCount(article.replies)}} replies</span>
