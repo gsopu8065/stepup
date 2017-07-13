@@ -123,7 +123,7 @@ stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation
 
 });
 
-stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $rootScope, $cordovaGeolocation, LocalStorage, NewsService) {
+stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $rootScope,$timeout, $cordovaGeolocation, LocalStorage, NewsService) {
 
   if($rootScope.location.latitude == null || $rootScope.location.latitude == undefined) {
     var options = {timeout: 30000, enableHighAccuracy: true};
@@ -149,11 +149,10 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $r
   $rootScope.reply.parentId = $stateParams.statusId;
   $scope.startReply = function(replyId){
     $rootScope.reply.parentId = replyId;
-    //console.log(document.getElementById('replyText'), replyId)
-    //var element = document.getElementById('replyText')
-    /*if (element) {
+    var element = document.getElementById('replyText')
+    if (element) {
       $timeout(function() {element.focus();});
-    }*/
+    }
   };
 
   $scope.getLocation = function () {
@@ -238,7 +237,7 @@ stepNote.directive('commenttree', function ($compile, NewsService, LocalStorage)
       }.bind(scope));
     },
 
-    controller: function ($scope, $element,$rootScope, $attrs, NewsService, LocalStorage) {
+    controller: function ($scope, $element,$rootScope,$timeout, $attrs, NewsService, LocalStorage) {
 
       var user = LocalStorage.getUser();
       $scope.divClicked = function (status) {
@@ -260,10 +259,11 @@ stepNote.directive('commenttree', function ($compile, NewsService, LocalStorage)
 
       $scope.startReply = function(replyId){
         $rootScope.reply.parentId = replyId;
-        //var element = document.getElementById('replyText')
-        /*if (element) {
+        //console.log(document.getElementById('replyText'), replyId)
+        var element = document.getElementById('replyText')
+        if (element) {
           $timeout(function() {element.focus();});
-        }*/
+        }
       }
 
       $scope.checkStatus = function (status, emotion) {

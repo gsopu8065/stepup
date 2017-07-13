@@ -16,7 +16,6 @@
   </ion-nav-buttons>-->
 
 
-
   <ion-content class="padding">
 
     <div ng-show="loading" class="cssload-loader">
@@ -43,17 +42,21 @@
 
         <span class="eachLikeIcon">
         <span class="fontOfLike likeCount blackColor">{{getEmotionCount('like')}}</span>
-        <span class="icon ion-thumbsup fontOfLikeIcon" ng-if="!checkStatus('like')" ng-click="updateEmotion('like')"></span>
+        <span class="icon ion-thumbsup fontOfLikeIcon" ng-if="!checkStatus('like')"
+              ng-click="updateEmotion('like')"></span>
         <Span class="fontOfLike " ng-if="!checkStatus('like')"> Like</Span>
-          <span class="icon ion-thumbsup fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus('like')" ng-click="deleteEmotion('like')"></span>
+          <span class="icon ion-thumbsup fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus('like')"
+                ng-click="deleteEmotion('like')"></span>
         <Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus('like')"> Like</Span>
         </span>
 
         <span class="eachLikeIcon">
         <span class="fontOfLike likeCount blackColor">{{getEmotionCount('dislike')}}</span>
-        <span class="icon ion-thumbsdown fontOfLikeIcon" ng-if="!checkStatus('dislike')" ng-click="updateEmotion('dislike')"></span>
+        <span class="icon ion-thumbsdown fontOfLikeIcon" ng-if="!checkStatus('dislike')"
+              ng-click="updateEmotion('dislike')"></span>
         <Span class="fontOfLike " ng-if="!checkStatus('dislike')"> Dislike</Span>
-          <span class="icon ion-thumbsdown fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus('dislike')" ng-click="deleteEmotion('dislike')"></span>
+          <span class="icon ion-thumbsdown fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus('dislike')"
+                ng-click="deleteEmotion('dislike')"></span>
         <Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus('dislike')"> Dislike</Span>
         </span>
 
@@ -65,19 +68,16 @@
 
     </div>
 
-    <div ng-repeat="child in article.replies">
+    <div ng-show="!loading" ng-repeat="child in article.replies">
       <commenttree statusid={{child._id}}></commenttree>
     </div>
-    <div class="bottomText">
+    <div ng-show="!loading" class="bottomText">
 
-      <input ng-model="inputValue.message" placeholder=" Enter reply" class="messageText newsMessageText" id="replyText"  ng-model-options='{ debounce: 0 }'>
-      <a class="search-link sendButton"  href="" ng-click="saveComment()"><span class="send_icon">Send</span></a>
+      <input ng-model="inputValue.message" placeholder=" Enter reply" class="messageText newsMessageText" id="replyText"
+             ng-model-options='{ debounce: 0 }'>
+      <a class="search-link sendButton" href="" ng-click="saveComment()"><span class="send_icon">Send</span></a>
       </input>
 
-
-
-      <!--<textarea name="Text1" cols="40" rows="1" id="replyText" ng-model="inputValue" class="statusText"></textarea>
-      <button ng-click="saveComment(inputValue)" class="sendButton">Send</button>-->
     </div>
   </ion-content>
 </ion-view>
