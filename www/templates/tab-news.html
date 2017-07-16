@@ -25,7 +25,7 @@
 
     <div class="article" ng-show="!loading" ng-repeat="article in newsFeed">
 
-      <i class="icon ion-android-more-vertical dropDownStatus" ng-click="openOptionsMenu(article.userId, $event)"></i>
+      <i class="icon ion-android-more-vertical dropDownStatus" ng-click="openOptionsMenu(article.userId, article._id, article.status, $event)"></i>
 
       <span class="articleTime"> {{article.timeStamp |  formatdate}} </span>
       <span class="articleTime"> {{getLocation(article)}} </span>
@@ -53,9 +53,11 @@
         <Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus(article, 'dislike')"> Dislike</Span>
         </span>
 
-        <span class="eachLikeIcon blackColor"> {{getRepliesCount(article.replies)}} replies</span>
+        <a class="articleTextAnchor" href="#/tab/news/{{article._id}}">
+        <span class="eachLikeIcon blackColor"> {{article.replyCount}} replies</span>
+          </a>
 
-        <span class="eachLikeIcon icon ion-android-share blackColor"> Share</span>
+        <span class="eachLikeIcon icon ion-android-share blackColor" ng-click="shareStatus()"> Share</span>
 
       </div>
     </div>

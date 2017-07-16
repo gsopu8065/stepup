@@ -147,6 +147,63 @@ angular.module('starter.newsservices', [])
 
     };
 
+    NewsService.editStatus = function(status, statusId, userId, location, radius){
+      var info = $q.defer();
+
+      var req = {
+        method: 'POST',
+        url: SERVER_API+'/editStatus',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          "statusId": statusId,
+          "status": status,
+          "userId": userId,
+          "location":location,
+          "radius": radius
+        }
+      };
+
+      $http(req).then(function(success){
+        console.log(success);
+        info.resolve(success.data);
+      }, function(error){
+        console.log(error);
+        info.reject(error);
+      });
+      return info.promise;
+
+    };
+
+    NewsService.deleteStatus = function(statusId, userId, location, radius){
+      var info = $q.defer();
+
+      var req = {
+        method: 'POST',
+        url: SERVER_API+'/deleteStatus',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          "statusId": statusId,
+          "userId": userId,
+          "location":location,
+          "radius": radius
+        }
+      };
+
+      $http(req).then(function(success){
+        console.log(success);
+        info.resolve(success.data);
+      }, function(error){
+        console.log(error);
+        info.reject(error);
+      });
+      return info.promise;
+
+    };
+
     NewsService.getStatus = function(statusId, userId){
       var info = $q.defer();
 

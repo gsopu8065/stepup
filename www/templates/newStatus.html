@@ -2,7 +2,8 @@
   <ion-header-bar class="headerCss displayElement">
     <span class="leftAlign" ng-click="closeModal()">Close</span>
     <span class="title">Update Status</span>
-    <span class="rightAlign" ng-click="saveStatus(message.text)">POST</span>
+    <span ng-if="!editWindow" class="rightAlign" ng-click="saveStatus(message.text)">POST</span>
+    <span ng-if="editWindow" class="rightAlign" ng-click="updateStatus(message.text)">UPDATE</span>
   </ion-header-bar>
 
   <ion-content>

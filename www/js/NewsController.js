@@ -6,7 +6,7 @@ stepNote.run(function($rootScope) {
   $rootScope.reply.statusGroupId = '';
 });
 
-stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation, $state, $ionicModal, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, LocalStorage, NewsService) {
 
   //get User
   var user = LocalStorage.getUser();
@@ -27,13 +27,6 @@ stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation
 
   });
 
-  $scope.getRepliesCount = function(replies){
-    if(replies){
-      return replies.length;
-    }
-    return 0;
-  };
-
   $scope.getLocation = function (status) {
     if(status.city && status.state){
       return " "+status.city+", "+status.state;
@@ -44,18 +37,9 @@ stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation
   $scope.saveStatus = function (message) {
     NewsService.saveStatus(message, user.userID, user.displayName, "", [$rootScope.location.latitude, $rootScope.location.longitude], 3, "text", null, null).then(function (updateQueryRes) {
       $scope.newsFeed = updateQueryRes;
-      $scope.modal.hide();
-      $scope.message = { }
+      $scope.closeModal();
     });
   };
-
-  $scope.blockUser = function () {
-    console.log($scope.optionsUserId);
-    $scope.optionsModal.hide();
-    NewsService.blockUser(user.userID, $scope.optionsUserId, [$rootScope.location.latitude, $rootScope.location.longitude], 3).then(function (updateQueryRes) {
-      $scope.newsFeed = updateQueryRes;
-    });
-  }
 
   $scope.checkStatus = function (status, emotion) {
     return status.userstatusEmotion && status.userstatusEmotion == emotion
@@ -88,6 +72,8 @@ stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation
   };
 
   $scope.closeModal = function () {
+    $scope.message = { };
+    $scope.editWindow = false;
     $scope.modal.hide();
   };
 
@@ -103,9 +89,11 @@ stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation
     return $scope.optionsUserId == $scope.user.userID;
   }
 
-  $scope.openOptionsMenu = function (statusUserId, event) {
+  $scope.openOptionsMenu = function (statusUserId, statusId, status, event) {
     $scope.optionsModalTop = event.pageY;
     $scope.optionsUserId = statusUserId;
+    $scope.optionsStatusId = statusId;
+    $scope.optionsStatus = status;
     $scope.optionsModal.show();
   };
 
@@ -120,6 +108,62 @@ stepNote.controller('NewsCtrl', function ($scope,$rootScope, $cordovaGeolocation
     animation: 'none',
     focusFirstInput: true
   });
+
+ /* Edit Status*/
+
+  $scope.editWindow = false;
+  $scope.openEditStatus = function(){
+    console.log("edit status");
+    $scope.editWindow = true;
+    $scope.optionsModal.hide();
+    $scope.message.text = $scope.optionsStatus;
+    $scope.modal.show();
+  }
+
+  $scope.updateStatus = function(message){
+    NewsService.editStatus(message, $scope.optionsStatusId, user.userID, [$rootScope.location.latitude, $rootScope.location.longitude], 3).then(function (updateQueryRes) {
+      $scope.newsFeed = updateQueryRes;
+      $scope.closeModal();
+    });
+  }
+
+  $scope.deleteStatus = function(){
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Delete Status',
+      template: 'Are you sure you want to delete the status?'
+    });
+
+    confirmPopup.then(function (res) {
+      $scope.optionsModal.hide();
+      if (res) {
+        NewsService.deleteStatus($scope.optionsStatusId, user.userID, [$rootScope.location.latitude, $rootScope.location.longitude], 3).then(function (updateQueryRes) {
+          $scope.newsFeed = updateQueryRes;
+        });
+      }
+    });
+  };
+
+  $scope.blockUser = function(){
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Block User',
+      template: 'Are you sure you want to block this user?'
+    });
+
+    confirmPopup.then(function (res) {
+      $scope.optionsModal.hide();
+      if (res) {
+        NewsService.blockUser(user.userID, $scope.optionsUserId, [$rootScope.location.latitude, $rootScope.location.longitude], 3).then(function (updateQueryRes) {
+          $scope.newsFeed = updateQueryRes;
+        });
+      }
+    });
+
+  };
+
+  $scope.shareStatus = function(){
+    console.log("share status ")
+    $scope.optionsModal.hide();
+  }
 
 });
 
