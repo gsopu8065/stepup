@@ -23,7 +23,7 @@
       <div class="cssload-inner cssload-three"></div>
     </div>
 
-    <div class="mytabs" ng-show="!loading">
+    <div class="mytabs" ng-show="!loading && newsFeed.length != 0">
       <a class="mytab" style="border-right: 0" ng-class="{1:'tabBackGroundColored',2:'tabBackGroundWhite'}[sort]"
          ng-click="sortHot()">Hot</a>
       <a class="mytab" ng-class="{2:'tabBackGroundColored',1:'tabBackGroundWhite'}[sort]"
@@ -44,20 +44,18 @@
       </a>
       <div class="articlebottom">
 
-        <span class="eachLikeIcon">
+        <span class="eachLikeIcon" ng-click="updateOrDeleteEmotion(article, 'like')">
         <span class="fontOfLike likeCount blackColor">{{getEmotionCount(article, 'like')}}</span>
           <span class="icon ion-arrow-up-c fontOfLikeIcon"
-                ng-class="{true:'makeLikeIconBold',false:''}[checkStatus(article, 'like')]"
-                ng-click="updateOrDeleteEmotion(article, 'like')"></span>
+                ng-class="{true:'makeLikeIconBold',false:''}[checkStatus(article, 'like')]"></span>
         <Span class="fontOfLike"
               ng-class="{true:'makeLikeIconBold',false:''}[checkStatus(article, 'like')]"> Like</Span>
         </span>
 
-         <span class="eachLikeIcon">
+         <span class="eachLikeIcon" ng-click="updateOrDeleteEmotion(article, 'dislike')">
         <span class="fontOfLike likeCount blackColor">{{getEmotionCount(article, 'dislike')}}</span>
         <span class="icon ion-arrow-down-c fontOfLikeIcon"
-              ng-class="{true:'makeLikeIconBold',false:''}[checkStatus(article, 'dislike')]"
-              ng-click="updateOrDeleteEmotion(article, 'dislike')"></span>
+              ng-class="{true:'makeLikeIconBold',false:''}[checkStatus(article, 'dislike')]"></span>
            <Span class="fontOfLike" ng-class="{true:'makeLikeIconBold',false:''}[checkStatus(article, 'dislike')]"> Dislike</Span>
         </span>
 

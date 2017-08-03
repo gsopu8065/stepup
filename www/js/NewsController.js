@@ -288,7 +288,7 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $r
 
   $scope.saveComment = function () {
     NewsService.saveStatus($scope.inputValue.message, user.userID, user.displayName, "", [$rootScope.location.latitude, $rootScope.location.longitude], 30, "commentText", $rootScope.reply.parentId, $rootScope.reply.statusGroupId).then(function (updateQueryRes) {
-      $scope.article.replies.push(updateQueryRes.ops[0]);
+      $scope.article = updateQueryRes;
       $scope.inputValue.message = ""
     });
   };
@@ -302,26 +302,20 @@ stepNote.directive('commenttree', function ($compile, NewsService, LocalStorage)
     template: '<div class="commentDiv">' +
     '<div class="replyComment" ng-click="divClicked(status)">{{ status.status  }}</div>' +
     '<div class="commentbottom">' +
-      /*'<span class="articleTime"> {{status.timeStamp | formatdate}} </span>' +*/
     '<span class="articlebottomitem" ng-click="startReply(status._id)"> Reply </span>' +
     ' <span class="articlebottomitem" ng-click="divClicked(status)"> {{status.replies.length}} comments</span>' +
 
-    '<span class="eachLikeIcon">' +
+    '<span class="eachLikeIcon" ng-click="updateOrDeleteEmotion(status, \'like\')">' +
     '<span class="fontOfLike likeCount blackColor">{{getEmotionCount(status, \'like\')}}</span>' +
-    '<span class="icon ion-arrow-up-c fontOfLikeIcon" ng-if="!checkStatus(status, \'like\')" ng-click="updateEmotion(status, \'like\')"></span>' +
-    '<Span class="fontOfLike " ng-if="!checkStatus(status, \'like\')"> Like</Span>' +
-    '<span class="icon ion-arrow-up-c fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus(status, \'like\')" ng-click="deleteEmotion(status, \'like\')"></span>' +
-    '<Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus(status, \'like\')"> Like</Span>' +
-    '</span>' +
+  '<span class="icon ion-arrow-up-c fontOfLikeIcon" ng-class="{true:\'makeLikeIconBold\',false:\'\'}[checkStatus(status, \'like\')]"></span>' +
+    '<Span class="fontOfLike" ng-class="{true:\'makeLikeIconBold\',false:\'\'}[checkStatus(status, \'like\')]"> Like</Span>' +
+    '</span>'+
 
-    '<span class="eachLikeIcon">' +
+    '<span class="eachLikeIcon" ng-click="updateOrDeleteEmotion(status, \'dislike\')">' +
     '<span class="fontOfLike likeCount blackColor">{{getEmotionCount(status, \'dislike\')}}</span>' +
-    '<span class="icon ion-arrow-down-c fontOfLikeIcon" ng-if="!checkStatus(status, \'dislike\')" ng-click="updateEmotion(status, \'dislike\')"></span>' +
-    '<Span class="fontOfLike " ng-if="!checkStatus(status, \'dislike\')"> Dislike</Span>' +
-    '<span class="icon ion-arrow-down-c fontOfLikeIcon makeLikeIconBold" ng-if="checkStatus(status, \'dislike\')" ng-click="deleteEmotion(status, \'dislike\')"></span>' +
-    '<Span class="fontOfLike makeLikeIconBold" ng-if="checkStatus(status, \'dislike\')"> Dislike</Span>' +
+  '<span class="icon ion-arrow-down-c fontOfLikeIcon" ng-class="{true:\'makeLikeIconBold\',false:\'\'}[checkStatus(status, \'dislike\')]"></span>' +
+    '<Span class="fontOfLike" ng-class="{true:\'makeLikeIconBold\',false:\'\'}[checkStatus(status, \'dislike\')]"> Dislike</Span>' +
     '</span>' +
-
 
     ' </div>' +
     '</div>',
@@ -376,6 +370,15 @@ stepNote.directive('commenttree', function ($compile, NewsService, LocalStorage)
           return status.dislikeCount
         }
         return 0;
+      }
+
+      $scope.updateOrDeleteEmotion = function(status, emotion){
+        if($scope.checkStatus(status, emotion)){
+          $scope.deleteEmotion(status, emotion)
+        }
+        else{
+          $scope.updateEmotion(status, emotion)
+        }
       }
 
       $scope.updateEmotion = function (status, emotion) {

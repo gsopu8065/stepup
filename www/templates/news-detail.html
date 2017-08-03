@@ -36,21 +36,20 @@
       <div class="articlebottom">
 
 
-        <span class="eachLikeIcon">
+        <span class="eachLikeIcon" ng-click="updateOrDeleteEmotion('like')">
         <span class="fontOfLike likeCount blackColor">{{getEmotionCount('like')}}</span>
        <span class="icon ion-arrow-up-c fontOfLikeIcon"
-             ng-class="{true:'makeLikeIconBold',false:''}[checkStatus('like')]"
-             ng-click="updateOrDeleteEmotion('like')"></span>
+             ng-class="{true:'makeLikeIconBold',false:''}[checkStatus('like')]"></span>
         <Span class="fontOfLike"
               ng-class="{true:'makeLikeIconBold',false:''}[checkStatus('like')]"> Like</Span>
         </span>
 
-        <span class="eachLikeIcon">
+        <span class="eachLikeIcon" ng-click="updateOrDeleteEmotion('dislike')">
         <span class="fontOfLike likeCount blackColor">{{getEmotionCount('dislike')}}</span>
          <span class="icon ion-arrow-down-c fontOfLikeIcon"
-               ng-class="{true:'makeLikeIconBold',false:''}[checkStatus('dislike')]"
-               ng-click="updateOrDeleteEmotion('dislike')"></span>
-           <Span class="fontOfLike" ng-class="{true:'makeLikeIconBold',false:''}[checkStatus('dislike')]"> Dislike</Span>
+               ng-class="{true:'makeLikeIconBold',false:''}[checkStatus('dislike')]"></span>
+           <Span class="fontOfLike"
+                 ng-class="{true:'makeLikeIconBold',false:''}[checkStatus('dislike')]"> Dislike</Span>
         </span>
 
         <span class="articlebottomitem" ng-click="startReply(article._id)"> Reply </span>
