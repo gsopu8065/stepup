@@ -11,6 +11,7 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
   LocalStorage.setUser(user);
   $scope.user = LocalStorage.getUser();
 
+
   if (!$stateParams.profileInfoId) {
     $state.go("login")
   }
@@ -25,13 +26,14 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
   var firebaseRef = firebase.database();
   var geoFire = new GeoFire(firebaseRef.ref('/locations/'));
 
+  //show on map button
+  $scope.userMap = {};
+
   var options = {timeout: 300000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
 
-    $ionicLoading.hide();
-
-    var latitude = position.coords.latitude
-    var longitude = position.coords.longitude
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
     readSucessPosition(latitude, longitude);
 
   }, function (error) {
@@ -42,9 +44,9 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
       template: 'Error in reading current location! Close and Reopen the App'
     });
 
-    console.log(error)
+    console.log(error);
     alertPopup.then(function (res) {
-      console.log(error)
+      console.log(error);
       //$state.transitionTo($state.current, $state.$current.params, { reload: true, inherit: false, notify: true });//reload
     });
 
@@ -81,17 +83,20 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
 
     //update location start
     UserGeoService.saveUserLocation($stateParams.profileInfoId, latitude, longitude)
-
-    //read map service 
-    var geoQuery = geoFire.query({center: [latitude, longitude], radius: 0.15})
-    var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
-      updateMap(key, location)
-    })
-    var onReadyRegistration = geoQuery.on("ready", function () {
-      geoQuery.cancel();
-    })
-    //read map service 
-
+      .then(function (active, err) {
+        console.log(active, "srujan")
+        $scope.userMap.showOnMap = active;
+        $ionicLoading.hide();
+        //read map service 
+        var geoQuery = geoFire.query({center: [latitude, longitude], radius: 0.15});
+        geoQuery.on("key_entered", function (key, location) {
+          updateMap(key, location, active)
+        });
+        geoQuery.on("ready", function () {
+          geoQuery.cancel();
+        });
+        //read map service 
+      });
   }
 
   //update position when moving
@@ -110,17 +115,19 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
     },
     function (position) {
       $scope.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      $scope.map.setCenter($scope.latLng)
-      $scope.circle.setCenter($scope.latLng)
+      $scope.map.setCenter($scope.latLng);
+      $scope.circle.setCenter($scope.latLng);
 
       //update location start
-      UserGeoService.saveUserLocation($stateParams.profileInfoId, position.coords.latitude, position.coords.longitude);
+      UserGeoService.saveUserLocation($stateParams.profileInfoId, position.coords.latitude, position.coords.longitude)
+        .then(function (active, err) {
+        });
 
       //update markers
-      var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15})
+      var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15});
       var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
         updateMap(key, location)
-      })
+      });
       var onReadyRegistration = geoQuery.on("ready", function () {
         geoQuery.cancel();
       })
@@ -128,62 +135,50 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
   );
   //$cordovaGeolocation.clearWatch(watch)
 
-  function updateMap(key, location) {
+  function updateMap(key, location, currentUserActive) {
+
     var result_find = $filter('filter')(markersList, {id: key});
     if (result_find.length == 0) {
-      markersList.push({id: key})
-      firebase.database().ref('/users/' + $stateParams.profileInfoId).once('value').then(function (user) {
-        var userDetails = user.val();
-        var blockedUserContacts = [];
+      markersList.push({id: key});
+      var locationFireDBRef = firebase.database().ref('/locations/' + key);
+      locationFireDBRef
+        .once("value")
+        .then(function (snapshot) {
+          var activeVal = ($stateParams.profileInfoId == key)? currentUserActive : snapshot.child("active").val();
+          console.log(key, activeVal)
+          if (activeVal) {
+            var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(location[0], location[1]),
+              map: $scope.map,
+              icon: {
+                url: 'https://graph.facebook.com/' + key + '/picture?type=small',
+                scaledSize: new google.maps.Size(28, 28),
+                scale: 10
+              },
+              optimized: false,
+              draggable: true
+            });
+            marker.addListener('click', function () {
+              $scope.openModal(key, marker);
+            });
 
-        if (userDetails.contacts) {
-          blockedUserContacts = $filter('filter')(userDetails.contacts, {status: "blocked"});
-        }
-
-        var blockContact = $filter('filter')(blockedUserContacts, {contactid: key})
-        if (blockContact.length == 0) {
-          var locationFireDBRef = firebase.database().ref('/locations/' + key);
-          locationFireDBRef
-            .once("value")
-            .then(function (snapshot) {
-              if (snapshot.child("active").val()) {
-
-                var marker = new google.maps.Marker({
-                  position: new google.maps.LatLng(location[0], location[1]),
-                  map: $scope.map,
-                  icon: {
-                    url: 'https://graph.facebook.com/' + key + '/picture?type=small',
-                    scaledSize: new google.maps.Size(28, 28),
-                    scale: 10
-                  },
-                  optimized: false,
-                  draggable: true
-                });
-                marker.addListener('click', function () {
-                  $scope.openModal(key, marker);
-                });
-
-              }
-            })
-        }
-
-
-      });
+          }
+        })
     }
   }
 
 
-  //on every tab level
+//on every tab level
   $scope.$on('$ionicView.enter', function (e) {
     if ($scope.map) {
       google.maps.event.trigger($scope.map, 'resize');
       $scope.map.setZoom(17);
-      $scope.map.setCenter($scope.latLng)
+      $scope.map.setCenter($scope.latLng);
       $scope.circle.setCenter($scope.latLng);
     }
   });
 
-  //modal open
+//modal open
   $ionicModal.fromTemplateUrl('templates/user-detail.html', {
     scope: $scope,
     animation: 'slide-in-up'
@@ -225,7 +220,7 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
     $scope.modal.hide();
   };
   $scope.startConversation = function () {
-    $state.go('tab.chat-detail', {chatId: $scope.chatUserId, chatName: $scope.userInfoDisplay.displayName})
+    $state.go('tab.chat-detail', {chatId: $scope.chatUserId, chatName: $scope.userInfoDisplay.displayName});
     $scope.modal.hide();
   };
 
@@ -234,15 +229,6 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
     $scope.currentMarker.setMap(null);
     $scope.modal.hide();
   };
-
-  //show on map button
-  $scope.userMap = {}
-  var locationFireDBRef = firebase.database().ref('/locations/' + $stateParams.profileInfoId);
-  locationFireDBRef
-    .once("value")
-    .then(function (snapshot) {
-      $scope.userMap.showOnMap = snapshot.exists() ? snapshot.child("active").val() : true;
-    })
 
   $scope.changeOnMap = function (x) {
     $scope.userMap.showOnMap = x;
@@ -256,7 +242,7 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
     }
   }
 
-})
+});
 
 stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionicPopup, LocalStorage, UserService) {
   // With the new view caching in Ionic, Controllers are only called
@@ -277,7 +263,7 @@ stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionic
       var userDetails = user.val();
       if (userDetails.contacts) {
 
-        var chatContacts = []
+        var chatContacts = [];
         _.forEach(userDetails.contacts, function (eachContact) {
           var eachContactUser = eachContact;
           if (eachContact.status != "blocked") {
@@ -286,7 +272,7 @@ stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionic
               chatContacts.push(eachContactUser);
             });
           }
-        })
+        });
         $ionicLoading.hide();
         $scope.chats = chatContacts;
 
@@ -308,14 +294,14 @@ stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionic
 
       confirmPopup.then(function (res) {
         if (res) {
-          UserService.blockContact(user.userID, chatId)
+          UserService.blockContact(user.userID, chatId);
           $state.transitionTo($state.current, $state.$current.params, {reload: true, inherit: true, notify: true});//reload
         }
       });
     }
     //Chats.remove(chat);
   };
-})
+});
 
 stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $http, UserService, LocalStorage, PushNotificationCtrl) {
 
@@ -324,11 +310,11 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
   var messageText = document.getElementById('messageText');
   //dom end
 
-  $scope.titleUserDisplayName = $stateParams.chatName
-  $scope.titleUserDisplayUrl = 'https://graph.facebook.com/' + $stateParams.chatId + '/picture?type=large'
+  $scope.titleUserDisplayName = $stateParams.chatName;
+  $scope.titleUserDisplayUrl = 'https://graph.facebook.com/' + $stateParams.chatId + '/picture?type=large';
 
   $scope.user = LocalStorage.getUser();
-  var dbName = ""
+  var dbName = "";
   if ($stateParams.chatId < $scope.user.userID) {
     dbName = $stateParams.chatId + $scope.user.userID
   }
@@ -344,13 +330,13 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
 
   $scope.gotoChats = function () {
     $state.go('tab.chats')
-  }
+  };
 
   //block contact
   $scope.blockContact = function () {
-    UserService.blockContact($scope.user.userID, $stateParams.chatId)
+    UserService.blockContact($scope.user.userID, $stateParams.chatId);
     $state.go('tab.chats')
-  }
+  };
 
   // Saves a new message on the Firebase DB.
   $scope.saveMessage = function (message) {
@@ -369,14 +355,14 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
               displayName: userQueryRes.val().displayName,
               deviceId: userQueryRes.val().deviceId,
               status: userQueryRes.val().status
-            }
+            };
 
             firebase.database().ref('users/' + $scope.user.userID).once('value').then(function (currentUserQueryRes) {
               var currentUserContacts = currentUserQueryRes.val().contacts || [];
-              currentUserContacts.push(currentUserContactDetails)
+              currentUserContacts.push(currentUserContactDetails);
               firebase.database().ref('users/' + $scope.user.userID).update({
                 contacts: currentUserContacts
-              })
+              });
 
               var chatUserContacts = userQueryRes.val().contacts || [];
               var chatUserContactDetails = {
@@ -385,8 +371,8 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
                 displayName: currentUserQueryRes.val().displayName,
                 deviceId: currentUserQueryRes.val().deviceId,
                 status: currentUserQueryRes.val().status
-              }
-              chatUserContacts.push(chatUserContactDetails)
+              };
+              chatUserContacts.push(chatUserContactDetails);
               firebase.database().ref('users/' + $stateParams.chatId).update({
                 contacts: chatUserContacts
               })
@@ -414,7 +400,7 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
 
         })
 
-      })
+      });
       //save in sender and receiver contacts end
     }
 
@@ -470,8 +456,8 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
     var hour = date.getHours() - (date.getHours() >= 12 ? 12 : 0);
     var period = date.getHours() >= 12 ? 'PM' : 'AM';
 
-    timeElement.textContent = hour + ':' + date.getMinutes() + ' ' + period
-    pDiv.appendChild(timeElement)
+    timeElement.textContent = hour + ':' + date.getMinutes() + ' ' + period;
+    pDiv.appendChild(timeElement);
     // Show the card fading-in.
     setTimeout(function () {
       container.classList.add('visible')
@@ -482,7 +468,7 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
   //show profile
   $scope.showProfile = function () {
     $scope.openModal($stateParams.chatId);
-  }
+  };
 
   //modal open
   $ionicModal.fromTemplateUrl('templates/user-detail.html', {
@@ -522,7 +508,7 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
   };
   loadMessages()
 
-})
+});
 
 stepNote.controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, $ionicModal, LocalStorage, UserService) {
 
@@ -531,7 +517,7 @@ stepNote.controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, 
   //show profile
   $scope.showProfile = function () {
     $scope.openModal($scope.user.userID);
-  }
+  };
 
   //modal open
   $ionicModal.fromTemplateUrl('templates/user-detail.html', {
@@ -578,7 +564,7 @@ stepNote.controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, 
       destructiveButtonClicked: function () {
         //facebook logout
         facebookConnectPlugin.logout(function () {
-            console.log("logging out")
+            console.log("logging out");
             $scope.authResponse = undefined;
             $state.go('login');
           },
@@ -589,7 +575,7 @@ stepNote.controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, 
     });
   }
 
-})
+});
 
 stepNote.controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserService, LocalStorage) {
 
@@ -608,7 +594,7 @@ stepNote.controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserSer
   //This is the success callback from the login method
   var fbLoginSuccess = function (response) {
     //get facebook profile
-    console.log("login response", response)
+    console.log("login response", response);
     FacebookCtrl.getFacebookProfileInfo(response.authResponse.accessToken).then(function (profileInfo) {
 
       //push notification
@@ -637,11 +623,11 @@ stepNote.controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserSer
   $scope.login = function () {
     facebookConnectPlugin.login(["user_birthday", "email", "user_about_me", "user_photos", "user_likes", "user_work_history", "user_education_history", "user_location"], fbLoginSuccess, fbLoginError);
   };
-})
+});
 
 stepNote.filter('escape', function () {
   return window.encodeURIComponent;
-})
+});
 
 stepNote.filter('age', function () {
   return function (birthday) {
@@ -651,7 +637,7 @@ stepNote.filter('age', function () {
     age = Math.floor(age);
     return age;
   }
-})
+});
 
 stepNote.constant('GOOGLE_CONFIG', [{
   "featureType": "landscape.natural",
