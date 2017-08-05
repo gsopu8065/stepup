@@ -1,8 +1,9 @@
 <ion-view view-title="Dashboard">
   <ion-content class="padding">
     <div id="toggles">
-      <input type="checkbox" name="checkbox1" id="checkbox3" class="ios-toggle" checked/>
-      <label for="checkbox3" class="checkbox-label" data-off="Hide me" data-on="Hide me"></label>
+      <input type="checkbox" name="checkbox1" id="checkbox3" class="ios-toggle" ng-model="userMap.showOnMap"
+             ng-change="changeOnMap(userMap.showOnMap)"/>
+      <label for="checkbox3" class="checkbox-label" data-off="Show me on map" data-on="Show me on map"></label>
     </div>
 
 

@@ -13,7 +13,32 @@ angular.module('starter.services', [])
     var geoFire = new GeoFire(firebaseRef.ref('/locations/'));
 
     UserGeoService.saveUserLocation = function(userId, lat, long){
-      return geoFire.set(userId, [lat, long]);
+      var locationFireDBRef = firebase.database().ref('/locations/' + userId);
+      locationFireDBRef
+        .once("value")
+        .then(function (snapshot) {
+          var active = snapshot.exists() ? snapshot.child("active").val() : true;
+          geoFire.set(userId, [lat, long]).then(function () {
+            console.log("User Location saved to Geo database");
+            locationFireDBRef.update({
+              active: active
+            });
+          }, function (error) {
+            console.log("User Location can't saved to Geo database: " + error);
+          });
+        })
+    }
+
+    UserGeoService.activeUserLocation = function (userId) {
+      firebase.database().ref('/locations/' + userId).update({
+        active: true
+      });
+    }
+
+    UserGeoService.deActiveUserLocation = function (userId) {
+      firebase.database().ref('/locations/' + userId).update({
+        active: false
+      });
     }
 
     return UserGeoService
