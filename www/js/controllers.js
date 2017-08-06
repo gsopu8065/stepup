@@ -31,7 +31,6 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
 
   var options = {timeout: 300000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
     readSucessPosition(latitude, longitude);
@@ -81,92 +80,105 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
     };
     myoverlay.setMap($scope.map);
 
-    //update location start
-    UserGeoService.saveUserLocation($stateParams.profileInfoId, latitude, longitude)
-      .then(function (active, err) {
-        console.log(active, "srujan")
-        $scope.userMap.showOnMap = active;
+    var watchOptions = {
+      timeout: 30000,
+      enableHighAccuracy: false // may cause errors if true
+    };
+
+    $cordovaGeolocation.watchPosition(watchOptions).then(
+      null,
+      function (err) {
+        // error
+        console.log('error in watch');
+        console.log('code: ' + err.code + '\n' +
+          'message: ' + err.message + '\n');
+      },
+      function (position) {
+        $scope.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        $scope.map.setCenter($scope.latLng);
+        $scope.circle.setCenter($scope.latLng);
         $ionicLoading.hide();
-        //read map service 
-        var geoQuery = geoFire.query({center: [latitude, longitude], radius: 0.15});
-        geoQuery.on("key_entered", function (key, location) {
-          updateMap(key, location, active)
-        });
-        geoQuery.on("ready", function () {
-          geoQuery.cancel();
-        });
-        //read map service 
-      });
+
+        //save location
+        UserGeoService.saveUserLocation($stateParams.profileInfoId, position.coords.latitude, position.coords.longitude)
+          .then(function (activeVal, error) {
+            console.log("User Location saved to Geo database", activeVal);
+            $scope.userMap.showOnMap = activeVal;
+            //update markers
+            var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15});
+            geoQuery.on("key_entered", function (key, location, distance, active) {
+              updateMap(key, location, active)
+            });
+            geoQuery.on("ready", function () {
+              geoQuery.cancel();
+            })
+
+          }, function (error) {
+            console.log("User Location can't saved to Geo database: " + error);
+          });
+      }
+    );
+
   }
 
-  //update position when moving
-  var watchOptions = {
-    timeout: 30000,
-    enableHighAccuracy: false // may cause errors if true
-  };
-  var watch = $cordovaGeolocation.watchPosition(watchOptions);
-  watch.then(
-    null,
-    function (err) {
-      // error
-      console.log('error in watch');
-      console.log('code: ' + err.code + '\n' +
-        'message: ' + err.message + '\n');
-    },
-    function (position) {
-      $scope.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      $scope.map.setCenter($scope.latLng);
-      $scope.circle.setCenter($scope.latLng);
-
-      //update location start
-      UserGeoService.saveUserLocation($stateParams.profileInfoId, position.coords.latitude, position.coords.longitude)
-        .then(function (active, err) {
-        });
-
-      //update markers
-      var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15});
-      var onKeyEnteredRegistration = geoQuery.on("key_entered", function (key, location) {
-        updateMap(key, location)
-      });
-      var onReadyRegistration = geoQuery.on("ready", function () {
-        geoQuery.cancel();
-      })
-    }
-  );
-  //$cordovaGeolocation.clearWatch(watch)
-
-  function updateMap(key, location, currentUserActive) {
-
+  function updateMap(key, location, active) {
     var result_find = $filter('filter')(markersList, {id: key});
     if (result_find.length == 0) {
-      markersList.push({id: key});
-      var locationFireDBRef = firebase.database().ref('/locations/' + key);
-      locationFireDBRef
-        .once("value")
-        .then(function (snapshot) {
-          var activeVal = ($stateParams.profileInfoId == key)? currentUserActive : snapshot.child("active").val();
-          console.log(key, activeVal)
-          if (activeVal) {
-            var marker = new google.maps.Marker({
-              position: new google.maps.LatLng(location[0], location[1]),
-              map: $scope.map,
-              icon: {
-                url: 'https://graph.facebook.com/' + key + '/picture?type=small',
-                scaledSize: new google.maps.Size(28, 28),
-                scale: 10
-              },
-              optimized: false,
-              draggable: true
-            });
-            marker.addListener('click', function () {
-              $scope.openModal(key, marker);
-            });
+      if (active) {
+        var marker = new google.maps.Marker({
+          position: new google.maps.LatLng(location[0], location[1]),
+          map: $scope.map,
+          icon: {
+            url: 'https://graph.facebook.com/' + key + '/picture?type=small',
+            scaledSize: new google.maps.Size(28, 28),
+            scale: 10
+          },
+          optimized: false,
+          draggable: true
+        });
+        markersList.push({id: key, active: active, marker: marker});
+        marker.addListener('click', function () {
+          $scope.openModal(key, marker);
+        });
+      }
+      else {
+        markersList.push({id: key, active: active, marker: null});
+      }
+    }
+    else {
+      if (result_find[0].active == false && active == true) {
+        var marker = new google.maps.Marker({
+          position: new google.maps.LatLng(location[0], location[1]),
+          map: $scope.map,
+          icon: {
+            url: 'https://graph.facebook.com/' + key + '/picture?type=small',
+            scaledSize: new google.maps.Size(28, 28),
+            scale: 10
+          },
+          optimized: false,
+          draggable: true
+        });
+        marker.addListener('click', function () {
+          $scope.openModal(key, marker);
+        });
 
+        _.forEach(markersList, function (v) {
+          if (v.id == key) {
+            v.active = true;
+            v.marker = marker;
           }
-        })
+        });
+      }
+      if (result_find[0].active == true && active == false) {
+        _.forEach(markersList, function (v) {
+          if (v.id == key) {
+            v.active = false;
+            v.marker.setMap(null);
+          }
+        });
+      }
     }
   }
-
 
 //on every tab level
   $scope.$on('$ionicView.enter', function (e) {
@@ -185,11 +197,10 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
   }).then(function (modal) {
     $scope.modal = modal;
   });
-  $scope.openModal = function (userId, marker) {
+  $scope.openModal = function (userId) {
 
     $scope.chatUserId = userId;
 
-    $scope.currentMarker = marker;
     UserService.getUserProfile(userId).then(function (userQueryRes) {
       $scope.userInfoDisplay = userQueryRes.val();
       if (userId != $stateParams.profileInfoId) {
@@ -224,20 +235,41 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
     $scope.modal.hide();
   };
 
-  $scope.blockContact = function () {
-    UserService.blockContact($stateParams.profileInfoId, $scope.chatUserId);
-    $scope.currentMarker.setMap(null);
-    $scope.modal.hide();
-  };
-
   $scope.changeOnMap = function (x) {
     $scope.userMap.showOnMap = x;
+    //var currentUserMarker = $filter('filter')(markersList, {id: $stateParams.profileInfoId})[0];
     //update showonmap
     if (x) {
-      //update location start
+      var marker = new google.maps.Marker({
+        position: $scope.latLng,
+        map: $scope.map,
+        icon: {
+          url: 'https://graph.facebook.com/' + $stateParams.profileInfoId + '/picture?type=small',
+          scaledSize: new google.maps.Size(28, 28),
+          scale: 10
+        },
+        optimized: false,
+        draggable: true
+      });
+      marker.addListener('click', function () {
+        $scope.openModal($stateParams.profileInfoId);
+      });
+
+      _.forEach(markersList, function (v) {
+        if (v.id == $stateParams.profileInfoId) {
+          v.active = true;
+          v.marker = marker;
+        }
+      });
       UserGeoService.activeUserLocation($stateParams.profileInfoId);
     }
     else {
+      _.forEach(markersList, function (v) {
+        if (v.id == $stateParams.profileInfoId) {
+          v.active = false;
+          v.marker.setMap(null);
+        }
+      });
       UserGeoService.deActiveUserLocation($stateParams.profileInfoId);
     }
   }
@@ -266,12 +298,10 @@ stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionic
         var chatContacts = [];
         _.forEach(userDetails.contacts, function (eachContact) {
           var eachContactUser = eachContact;
-          if (eachContact.status != "blocked") {
-            UserService.getUserLastLogin(eachContact.contactid).then(function (lastLogin) {
-              eachContactUser.lastLogin = lastLogin;
-              chatContacts.push(eachContactUser);
-            });
-          }
+          UserService.getUserLastLogin(eachContact.contactid).then(function (lastLogin) {
+            eachContactUser.lastLogin = lastLogin;
+            chatContacts.push(eachContactUser);
+          });
         });
         $ionicLoading.hide();
         $scope.chats = chatContacts;
@@ -285,7 +315,7 @@ stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionic
 
   }
 
-  $scope.remove = function (chatId) {
+  $scope.deleteChat = function (chatId) {
     if (user) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Remove Contact',
@@ -294,7 +324,8 @@ stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionic
 
       confirmPopup.then(function (res) {
         if (res) {
-          UserService.blockContact(user.userID, chatId);
+          //delete chat history
+          console.log("delete chat")
           $state.transitionTo($state.current, $state.$current.params, {reload: true, inherit: true, notify: true});//reload
         }
       });
@@ -333,9 +364,8 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
   };
 
   //block contact
-  $scope.blockContact = function () {
-    UserService.blockContact($scope.user.userID, $stateParams.chatId);
-    $state.go('tab.chats')
+  $scope.deleteChat = function () {
+    console.log("delete chat")
   };
 
   // Saves a new message on the Firebase DB.
@@ -479,29 +509,25 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
   });
   $scope.openModal = function (userId) {
     $scope.chatUserId = userId;
-    firebase.database().ref('users/' + $scope.chatUserId).once('value').then(function (userQueryRes) {
-      UserService.getUserProfile(userId).then(function (userQueryRes) {
-        $scope.userInfoDisplay = userQueryRes.val();
-        $scope.chatButton = false;
-        $scope.modal.show();
-        var swiper = new Swiper('.swiper-container', {
-          pagination: '.swiper-pagination',
-          effect: 'coverflow',
-          grabCursor: true,
-          centeredSlides: true,
-          slidesPerView: 'auto',
-          coverflow: {
-            rotate: 50,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: true
-          }
-        });
-
-      })
+    UserService.getUserProfile(userId).then(function (userQueryRes) {
+      $scope.userInfoDisplay = userQueryRes.val();
+      $scope.chatButton = false;
+      $scope.modal.show();
+      var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        coverflow: {
+          rotate: 50,
+          stretch: 0,
+          depth: 100,
+          modifier: 1,
+          slideShadows: true
+        }
+      });
     })
-
   };
   $scope.closeModal = function () {
     $scope.modal.hide();
