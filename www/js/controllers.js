@@ -291,6 +291,7 @@ stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionic
 
   $ionicLoading.show();
   var user = LocalStorage.getUser();
+  console.log(user.userID, "jack")
   if (user.userID) {
     firebase.database().ref('/users/' + user.userID).once('value').then(function (user) {
 
@@ -307,14 +308,14 @@ stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionic
         });
         $ionicLoading.hide();
         $scope.chats = chatContacts;
-
+        $scope.$apply()
       }
       else {
         $ionicLoading.hide();
         $scope.chats = [];
+        $scope.$apply()
       }
     });
-
   }
 
   $scope.deleteChat = function (chatId) {
@@ -327,7 +328,8 @@ stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionic
       confirmPopup.then(function (res) {
         if (res) {
           //delete chat history
-          console.log("delete chat")
+          console.log("delete chat", $state.current)
+          UserService.removeContact(user.userID, chatId);
           $state.transitionTo($state.current, $state.$current.params, {reload: true, inherit: true, notify: true});//reload
         }
       });
@@ -336,7 +338,7 @@ stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionic
   };
 });
 
-stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $http, UserService, LocalStorage, PushNotificationCtrl) {
+stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $ionicPopup, $http, UserService, LocalStorage, PushNotificationCtrl) {
 
   //dom start
   var messageList = document.getElementById('messageList');
@@ -368,6 +370,21 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
   //block contact
   $scope.deleteChat = function () {
     console.log("delete chat")
+
+    if ($scope.user) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Remove Contact',
+        template: 'Are you sure you want to remove this contact?'
+      });
+
+      confirmPopup.then(function (res) {
+        if (res) {
+          //delete chat history
+          UserService.removeContact($scope.user.userID, $stateParams.chatId)
+          $state.go('tab.chats');
+        }
+      });
+    }
   };
 
   // Saves a new message on the Firebase DB.
