@@ -784,7 +784,7 @@ var GeoFire = (function () {
      * When a key is removed from GeoFire or the query, this function will be called with null and performs
      * any necessary cleanup.
      *
-     * @param {string} key The key of the geofire location.
+     * @param {string} key The key of the mylib location.
      * @param {?Array.<number>} location The location as [latitude, longitude] pair.
      */
     function _updateLocation(key, location, active) {

@@ -107,12 +107,14 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
             //update markers
             var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15});
             geoQuery.on("key_entered", function (key, location, distance, active) {
+              console.log("users", key, location, active)
               updateMap(key, location, active)
             });
             geoQuery.on("ready", function () {
               geoQuery.cancel();
             })
 
+            $scope.$apply()
           }, function (error) {
             console.log("User Location can't saved to Geo database: " + error);
           });
