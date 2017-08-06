@@ -6,22 +6,22 @@ stepNote.run(function ($rootScope) {
   $rootScope.reply.statusGroupId = '';
 });
 
-stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, LocalStorage, NewsService) {
 
   //get User
   var user = LocalStorage.getUser();
   $scope.user = user;
 
   //get location
-  $scope.loading = true;
+  $ionicLoading.show();
   var options = {timeout: 30000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
     $rootScope.location.latitude = position.coords.latitude;
     $rootScope.location.longitude = position.coords.longitude;
 
     NewsService.getNews([position.coords.latitude, position.coords.longitude], 30, user.userID).then(function (newsQueryRes) {
-      $scope.loading = false;
-      $scope.newsFeed = newsQueryRes
+      $ionicLoading.hide();
+      $scope.newsFeed = newsQueryRes;
     });
 
   });
@@ -202,7 +202,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
 
 });
 
-stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $rootScope, $timeout, $cordovaGeolocation, LocalStorage, NewsService) {
+stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $stateParams, $rootScope, $timeout, $cordovaGeolocation, LocalStorage, NewsService) {
 
   if ($rootScope.location.latitude == null || $rootScope.location.latitude == undefined) {
     var options = {timeout: 30000, enableHighAccuracy: true};
@@ -218,11 +218,11 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $stateParams, $r
   };
 
 
-  $scope.loading = true;
+  $ionicLoading.show();
   NewsService.getStatus($stateParams.statusId, user.userID).then(function (statusQueryRes) {
     $scope.article = statusQueryRes;
     $rootScope.reply.statusGroupId = $scope.article._id;
-    $scope.loading = false;
+    $ionicLoading.hide();
   });
 
   $rootScope.reply.parentId = $stateParams.statusId;

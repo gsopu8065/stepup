@@ -17,20 +17,14 @@
       </div>
     </div>
 
-    <div ng-show="loading" class="cssload-loader">
-      <div class="cssload-inner cssload-one"></div>
-      <div class="cssload-inner cssload-two"></div>
-      <div class="cssload-inner cssload-three"></div>
-    </div>
-
-    <div class="mytabs" ng-show="!loading && newsFeed.length != 0">
+    <div class="mytabs" ng-show="newsFeed.length != 0">
       <a class="mytab" style="border-right: 0" ng-class="{1:'tabBackGroundColored',2:'tabBackGroundWhite'}[sort]"
          ng-click="sortHot()">Hot</a>
       <a class="mytab" ng-class="{2:'tabBackGroundColored',1:'tabBackGroundWhite'}[sort]"
          ng-click="sortRecent()">Recent</a>
     </div>
 
-    <div class="article" ng-show="!loading" ng-repeat="article in newsFeed | orderBy:(sort==1?orderByHot:'-timeStamp') ">
+    <div class="article" ng-repeat="article in newsFeed | orderBy:(sort==1?orderByHot:'-timeStamp') ">
 
       <i class="icon ion-android-more-vertical dropDownStatus"
          ng-click="openOptionsMenu(article.userId, article._id, article.status, $event)"></i>

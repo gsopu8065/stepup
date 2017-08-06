@@ -18,13 +18,7 @@
 
   <ion-content class="padding">
 
-    <div ng-show="loading" class="cssload-loader">
-      <div class="cssload-inner cssload-one"></div>
-      <div class="cssload-inner cssload-two"></div>
-      <div class="cssload-inner cssload-three"></div>
-    </div>
-
-    <div ng-show="!loading" class="article">
+    <div class="article">
 
       <span class="articleTime"> {{article.timeStamp |  formatdate}} </span>
       <span class="articleTime"> {{getLocation()}} </span>
@@ -60,10 +54,10 @@
 
     </div>
 
-    <div ng-show="!loading" ng-repeat="child in article.replies" class="CommentTree">
+    <div ng-repeat="child in article.replies" class="CommentTree">
       <commenttree statusid={{child._id}}></commenttree>
     </div>
-    <div ng-show="!loading" class="bottomText">
+    <div class="bottomText">
 
       <input ng-model="inputValue.message" placeholder=" Enter reply" class="messageText newsMessageText" id="replyText"
              ng-model-options='{ debounce: 0 }'>

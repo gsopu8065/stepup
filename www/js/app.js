@@ -167,4 +167,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/login');
 
-  });
+  })
+  .config(['$ionicConfigProvider', function ($ionicConfigProvider) {
+
+    $ionicConfigProvider.tabs.position('bottom'); // other values: top
+
+  }]);
