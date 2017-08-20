@@ -192,20 +192,15 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
   };
 
   $scope.sort = 1;
-
   $scope.sortHot = function () {
     $scope.sort = 1;
-
-
   };
 
   $scope.sortRecent = function () {
     $scope.sort = 2;
-
   };
 
   $scope.dynamicOrderFunction = function (status) {
-
     var order = 0;
     switch ($scope.sort) {
       case 1:
@@ -222,8 +217,9 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
 
   //on every tab level
   $scope.$on('$ionicView.enter', function (e) {
-    $ionicLoading.show();
     if ($rootScope.location.latitude) {
+      $ionicLoading.show();
+      //$scope.newsFeed = [];
       NewsService.getNews({
         latitude: $rootScope.location.latitude,
         longitude: $rootScope.location.longitude
@@ -321,14 +317,16 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $
   };
 
   $scope.saveComment = function () {
+    $ionicLoading.show();
+    $scope.article.replies = [];
     NewsService.saveStatus($scope.inputValue.message, user.userID, user.displayName, "", [$rootScope.location.longitude, $rootScope.location.latitude], 30, "commentText", $rootScope.reply.parentId, $rootScope.reply.statusGroupId).then(function (updateQueryRes) {
-      $scope.article = updateQueryRes;
-      $scope.inputValue.message = ""
+      $scope.article.replies = updateQueryRes.replies;
+      $scope.inputValue.message = "";
+      $ionicLoading.hide();
     });
   };
 
   $scope.goBack = function () {
-    console.log("go back")
     $state.go('tab.news')
   }
 

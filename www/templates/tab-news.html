@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div class="article" ng-repeat="article in newsFeed | orderBy:dynamicOrderFunction:true ">
+    <div class="article" ng-repeat="article in newsFeed | orderBy:dynamicOrderFunction:true track by article._id">
 
       <i class="icon ion-android-more-vertical dropDownStatus"
          ng-click="openOptionsMenu(article.userId, article._id, article.status, $event)"></i>
