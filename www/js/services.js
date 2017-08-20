@@ -199,9 +199,11 @@ angular.module('starter.services', [])
       };
 
       $http(req).then(function(success){
+        console.log("login response");
         console.log(success);
         info.resolve(success);
       }, function(error){
+        console.log("login error");
         console.log(error);
         info.reject(error);
       });

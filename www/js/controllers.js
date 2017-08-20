@@ -3,15 +3,15 @@ var stepNote = angular.module('starter.controllers', []);
 stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
 
   //this is temporary,later remove it
-  var user = {
+  /*var user = {
     userID: $stateParams.profileInfoId,
     displayName: 'Raj',
     location: 'Nashville, TN'
   };
-  LocalStorage.setUser(user);
+   LocalStorage.setUser(user);*/
   $scope.user = LocalStorage.getUser();
 
-
+  console.log("go to dash")
   if (!$stateParams.profileInfoId) {
     $state.go("login")
   }
@@ -31,6 +31,7 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
 
   var options = {timeout: 300000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+    $ionicLoading.hide();
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
     readSucessPosition(latitude, longitude);
@@ -80,7 +81,28 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
     };
     myoverlay.setMap($scope.map);
 
-    var watchOptions = {
+    //save location
+    UserGeoService.saveUserLocation($stateParams.profileInfoId, latitude, longitude)
+      .then(function (activeVal, error) {
+        console.log("User Location saved to Geo database", activeVal);
+        $scope.userMap.showOnMap = activeVal;
+        //update markers
+        var geoQuery = geoFire.query({center: [latitude, longitude], radius: 0.15});
+        geoQuery.on("key_entered", function (key, location, distance, active) {
+          console.log("users", key, location, active)
+          updateMap(key, location, active)
+        });
+        geoQuery.on("ready", function () {
+          geoQuery.cancel();
+        })
+        $scope.$apply()
+      }, function (error) {
+        console.log("User Location can't saved to Geo database: " + error);
+      });
+
+    /*  Remove Watch
+
+     var watchOptions = {
       timeout: 30000,
       enableHighAccuracy: false // may cause errors if true
     };
@@ -99,27 +121,9 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
         $scope.circle.setCenter($scope.latLng);
         $ionicLoading.hide();
 
-        //save location
-        UserGeoService.saveUserLocation($stateParams.profileInfoId, position.coords.latitude, position.coords.longitude)
-          .then(function (activeVal, error) {
-            console.log("User Location saved to Geo database", activeVal);
-            $scope.userMap.showOnMap = activeVal;
-            //update markers
-            var geoQuery = geoFire.query({center: [position.coords.latitude, position.coords.longitude], radius: 0.15});
-            geoQuery.on("key_entered", function (key, location, distance, active) {
-              console.log("users", key, location, active)
-              updateMap(key, location, active)
-            });
-            geoQuery.on("ready", function () {
-              geoQuery.cancel();
-            })
 
-            $scope.$apply()
-          }, function (error) {
-            console.log("User Location can't saved to Geo database: " + error);
-          });
       }
-    );
+     );*/
 
   }
 
@@ -644,17 +648,22 @@ stepNote.controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserSer
 
       //push notification
       push.register(function (token) {
-        console.log("My Device token:", token.token);
+        try {
+          console.log("My Device token:", token.token, JSON.stringify(profileInfo));
         push.saveToken(token);  // persist the token in the Ionic Platform
         //save device id
         //update user info
         UserService.updateUserProfile(profileInfo.data, token.token);
         LocalStorage.setUser({
           userID: profileInfo.data.id,
-          displayName: profileInfo.data.name,
-          location: profileInfo.data.location.name
+          displayName: profileInfo.data.name
         });
+          console.log("go to login", profileInfo.data.id)
         $state.go('tab.dash', {profileInfoId: profileInfo.data.id});
+        }
+        catch (err) {
+          console.log("Error " + JSON.stringify(err));
+        }
       });
     })
   };

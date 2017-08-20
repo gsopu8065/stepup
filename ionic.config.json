@@ -1,4 +1,11 @@
 {
   "name": "stepup",
-  "app_id": "1a9ca73b"
+  "app_id": "1a9ca73b",
+  "type": "ionic1",
+  "watchPatterns": [
+    "scss/**/*"
+  ],
+  "integrations": {
+    "cordova": {}
+  }
 }

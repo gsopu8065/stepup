@@ -10,13 +10,6 @@
 
   <ion-content class="padding">
 
-    <div class="noNewsFeed" ng-if="newsFeed.length == 0">
-      No status to show,You can be the first person to post
-      <div>
-        <button class="statusButton" ng-click="openStatus()"> Post Status</button>
-      </div>
-    </div>
-
     <div class="mytabs" ng-show="newsFeed.length != 0">
       <a class="mytab" style="border-right: 0" ng-class="{1:'tabBackGroundColored',2:'tabBackGroundWhite'}[sort]"
          ng-click="sortHot()">Hot</a>
@@ -24,7 +17,14 @@
          ng-click="sortRecent()">Recent</a>
     </div>
 
-    <div class="article" ng-repeat="article in newsFeed | orderBy:(sort==1?orderByHot:'-timeStamp') ">
+    <div class="noNewsFeed" ng-show="newsFeed.length == 0">
+      No status to show,You can be the first person to post
+      <div>
+        <button class="statusButton" ng-click="openStatus()"> Post Status</button>
+      </div>
+    </div>
+
+    <div class="article" ng-repeat="article in newsFeed | orderBy:dynamicOrderFunction:true ">
 
       <i class="icon ion-android-more-vertical dropDownStatus"
          ng-click="openOptionsMenu(article.userId, article._id, article.status, $event)"></i>

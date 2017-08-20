@@ -21,13 +21,14 @@ angular.module('starter.newsservices', [])
       $http(req).then(function(success){
         info.resolve(success.data);
       }, function(error){
+        console.log("Http Error");
         console.log(error);
         info.reject(error);
       });
       return info.promise;
     };
 
-    NewsService.updateEmotion = function(statusId, userId, emotion, location, radius, singleStatus){
+    NewsService.updateEmotion = function (statusId, userId, emotion) {
       var info = $q.defer();
 
       var req = {
@@ -39,10 +40,7 @@ angular.module('starter.newsservices', [])
         data: {
           "statusId" : statusId+"",
           "userId": userId+"",
-          "emotion":emotion+"",
-          "location":location,
-          "radius":radius,
-          "singleStatus": singleStatus
+          "emotion": emotion + ""
         }
       };
 
@@ -56,7 +54,7 @@ angular.module('starter.newsservices', [])
 
     };
 
-    NewsService.deleteEmotion = function(statusId, userId, emotion, location, radius, singleStatus){
+    NewsService.deleteEmotion = function (statusId, userId, emotion) {
       var info = $q.defer();
 
       var req = {
@@ -68,10 +66,7 @@ angular.module('starter.newsservices', [])
         data: {
           "statusId" : statusId+"",
           "userId": userId+"",
-          "emotion":emotion+"",
-          "location":location,
-          "radius": radius,
-          "singleStatus": singleStatus
+          "emotion": emotion + ""
         }
       };
 
@@ -86,7 +81,7 @@ angular.module('starter.newsservices', [])
 
     };
 
-    NewsService.blockUser = function( userId, blockUserId, location, radius){
+    NewsService.blockUser = function (userId, blockUserId) {
       var info = $q.defer();
 
       var req = {
@@ -97,9 +92,7 @@ angular.module('starter.newsservices', [])
         },
         data: {
           "userId" : userId+"",
-          "blockUserId": blockUserId+"",
-          "location":location,
-          "radius": radius
+          "blockUserId": blockUserId + ""
         }
       };
 
@@ -147,7 +140,7 @@ angular.module('starter.newsservices', [])
 
     };
 
-    NewsService.editStatus = function(status, statusId, userId, location, radius){
+    NewsService.editStatus = function (status, statusId, userId) {
       var info = $q.defer();
 
       var req = {
@@ -159,9 +152,7 @@ angular.module('starter.newsservices', [])
         data: {
           "statusId": statusId,
           "status": status,
-          "userId": userId,
-          "location":location,
-          "radius": radius
+          "userId": userId
         }
       };
 
@@ -176,7 +167,7 @@ angular.module('starter.newsservices', [])
 
     };
 
-    NewsService.deleteStatus = function(statusId, userId, location, radius){
+    NewsService.deleteStatus = function (statusId, userId) {
       var info = $q.defer();
 
       var req = {
@@ -187,9 +178,7 @@ angular.module('starter.newsservices', [])
         },
         data: {
           "statusId": statusId,
-          "userId": userId,
-          "location":location,
-          "radius": radius
+          "userId": userId
         }
       };
 
@@ -223,5 +212,5 @@ angular.module('starter.newsservices', [])
 
     return NewsService;
   })
-  // .constant('SERVER_API',"https://opennotewebservice.herokuapp.com");
- .constant('SERVER_API',"http://165.227.73.250:43406");
+  .constant('SERVER_API', "https://opennotewebservice.herokuapp.com");
+//.constant('SERVER_API',"http://165.227.73.250:43406");
