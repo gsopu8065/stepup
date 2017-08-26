@@ -61,18 +61,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
     });
 
     function onDeviceReady(FacebookCtrl, UserService, LocalStorage, $state) {
-      console.log('run() -> onDeviceReady');
-      console.log("auto login")
+
       facebookConnectPlugin.getLoginStatus(function (success) {
         if (success.status === 'connected') {
           //get facebook profile
           FacebookCtrl.getFacebookProfileInfo(success.authResponse.accessToken).then(function (profileInfo) {
             UserService.updateUserProfile(profileInfo.data, undefined);
-            LocalStorage.setUser({userID: profileInfo.data.id, displayName: profileInfo.data.name});
-            $state.go('tab.dash', {profileInfoId: profileInfo.data.id});
-
+            LocalStorage.setUser({
+              userID: profileInfo.data.id,
+              displayName: profileInfo.data.name,
+              location: (profileInfo.data.location) ? profileInfo.data.location.name : ""
+            });
+            $state.go('tab.dash');
           })
-
         }
       });
 
@@ -106,7 +107,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
       // Each tab has its own nav history stack:
 
       .state('tab.dash', {
-        url: '/dash:profileInfoId',
+        url: '/dash',
         views: {
           'tab-dash': {
             templateUrl: 'templates/tab-dash.html',

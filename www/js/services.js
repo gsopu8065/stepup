@@ -91,16 +91,16 @@ angular.module('starter.services', [])
 
     var getWork = function(profileInfo) {
       var work = "";
-      if(profileInfo.work != undefined && profileInfo.work.employer != undefined){
-        work = profileInfo.work.employer.name;
+      if (profileInfo.work[0] != undefined && profileInfo.work[0].employer != undefined) {
+        work = profileInfo.work[0].employer.name;
       }
       return work;
     };
 
     var getEducation = function(profileInfo) {
       var education = "";
-      if(profileInfo.education != undefined && profileInfo.education.school != undefined){
-        education = profileInfo.education.school.name;
+      if (profileInfo.education[0] != undefined && profileInfo.education[0].school != undefined) {
+        education = profileInfo.education[0].school.name;
       }
       return education;
     };
@@ -200,7 +200,6 @@ angular.module('starter.services', [])
 
       $http(req).then(function(success){
         console.log("login response");
-        console.log(success);
         info.resolve(success);
       }, function(error){
         console.log("login error");

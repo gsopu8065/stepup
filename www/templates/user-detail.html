@@ -14,28 +14,34 @@
 
     <div class="userDetails">
       <div class="userName">{{userInfoDisplay.displayName}} <span ng-show="userInfoDisplay.birthday != undefined">, {{userInfoDisplay.birthday | age}}</span></div>
-      <div> <span ng-show="userInfoDisplay.gender != undefined"> {{userInfoDisplay.gender}}
+      <div> <span ng-show="userInfoDisplay.gender != undefined"> <span class="textBold textCaptialize"> {{userInfoDisplay.gender}}</span>
        </span>
-        <span ng-show="userInfoDisplay.location != undefined"> {{userInfoDisplay.location}} </span></div>
-      <div ng-show="userInfoDisplay.work != undefined"> Works at {{userInfoDisplay.work}}</div>
-      <div ng-show="userInfoDisplay.school != undefined"> Went to {{userInfoDisplay.school}}</div>
+        <span ng-show="userInfoDisplay.location != undefined"> <span
+          class="textBold">, {{userInfoDisplay.location}} </span></span></div>
+      <div ng-show="userInfoDisplay.work != undefined"> Works at <span class="textBold">{{userInfoDisplay.work}} </span>
+      </div>
+      <div ng-show="userInfoDisplay.education != undefined"> Went to <span class="textBold">{{userInfoDisplay.education}}</span>
+      </div>
 
       <div class="aboutLabel"> About {{userInfoDisplay.displayName}}</div>
       <div ng-show="userInfoDisplay.about != undefined">{{userInfoDisplay.about}}</div>
       <div ng-show="userInfoDisplay.about == undefined"> I will fill this section soon </div>
 
 
-      <div class="aboutLabel"> Interests </div> <div/>
-      <span ng-repeat="like in userInfoDisplay.likes" class="userLike">{{like}}</span>
+      <div class="aboutLabel" style="padding-bottom: 8px"> Interests</div>
+      <div/>
+      <div ng-repeat="like in userInfoDisplay.likes" class="userLike">{{like}}</div>
       <div ng-show="userInfoDisplay.likes == undefined"> No Interests Found! </div>
 
+      <div style="height: 20px"></div>
     </div>
   </ion-content>
 
-  <ion-footer-bar align-title="center">
+  <ion-footer-bar align-title="center" ng-show="chatButton == true">
     <div class="title">
       <button class="button buttonChat greenColor" ng-show="chatButton == true"  ng-click="startConversation()">Chat</button>
       <button class="button buttonChat redColor" ng-show="chatButton == true" ng-click="closeModal()">Close</button>
     </div>
   </ion-footer-bar>
+
 </ion-modal-view>
