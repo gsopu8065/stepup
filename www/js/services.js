@@ -108,9 +108,17 @@ angular.module('starter.services', [])
     var getPhotos = function(profileInfo) {
       var photos = [];
       if(profileInfo.albums != undefined && profileInfo.albums.data != undefined){
-        _.forEach(profileInfo.albums.data, function(photoObj) {
-          photos.push(photoObj.picture.data.url);
-        });
+
+        var profilePictures = _.filter(profileInfo.albums.data, {"type": "profile"});
+
+        console.log("<---profile pics---->")
+        console.log(profilePictures);
+
+        if (profilePictures.length > 0 && profilePictures[0].photos) {
+          _.forEach(profilePictures[0].photos.data, function (photoImages) {
+            photos.push(photoImages.images[0].source);
+          });
+        }
       }
       return photos;
     };
@@ -195,11 +203,12 @@ angular.module('starter.services', [])
 
       var req = {
         method: 'GET',
-        url: 'https://graph.facebook.com/v2.8/me?fields=about,gender,name,email,birthday,likes,albums%7Bpicture%7Burl%7D%7D,work,education,location&access_token='+ authToken,
+        url: 'https://graph.facebook.com/v2.8/me?fields=about,gender,name,email,birthday,likes,albums%7Bname%2Cphotos%7Bimages%7D%2Ctype%7D,work,education,location&access_token=' + authToken,
       };
 
       $http(req).then(function(success){
         console.log("login response");
+        console.log(success);
         info.resolve(success);
       }, function(error){
         console.log("login error");

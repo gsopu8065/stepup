@@ -41,6 +41,10 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
     });
   };
 
+  $scope.checkMessage = function (message) {
+    return message != undefined && message.trim().length > 0
+  }
+
   $scope.checkStatus = function (status, emotion) {
     return status.userstatusEmotion && status.userstatusEmotion == emotion
   }

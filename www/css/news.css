@@ -15,6 +15,12 @@
 
 .displayElement{
   display: inherit;
+  padding-top: 13px;
+}
+
+.displayElement .title {
+  left: 25% !important;
+  right: 25% !important;
 }
 
 .leftAlign{
@@ -27,9 +33,8 @@
 .rightAlign{
   float: right;
   margin-right: 11px;
-  margin-top: 7px;
-  font-size: 17px;
-  font-weight: bold;
+  font-size: 17px !important;
+  font-weight: bold !important;
   color: darkcyan;
 }
 
@@ -70,6 +75,7 @@
   font-size: larger;
   float: left;
   width: 93%;
+  text-align: justify;
 }
 
 .articlebottom{
@@ -148,10 +154,10 @@
   font-size: 21px;
   color: black;
   float: right;
-  margin-right: 10px;
+  margin-right: 13px;
   margin-top: 2px;
   font-weight: bolder;
-  padding-left: 10px;
+  padding-left: 13px;
 }
 
 

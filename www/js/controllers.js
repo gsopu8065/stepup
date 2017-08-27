@@ -36,7 +36,7 @@ stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $i
 
     alertPopup.then(function (res) {
       console.log(error);
-      //$state.transitionTo($state.current, $state.$current.params, { reload: true, inherit: false, notify: true });//reload
+      $state.go('tab.dash');
     });
 
   });

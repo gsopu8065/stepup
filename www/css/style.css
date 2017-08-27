@@ -87,19 +87,30 @@
   height: auto;
   padding-top: 10px;
   padding-bottom: 50px;
+  background-color: rgba(0, 0, 0, 0.07);
+  margin-bottom: 10px;
 }
 .swiper-slide {
   background-position: center;
   background-size: cover;
   width: 300px;
   height: 300px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.07);
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #e6550d;
 }
 
 .closeModal{
   padding-left: 5%;
   padding-top: 10%;
   font-size: 22px;
-  color: #d4cdcc;
+  color: #e6550d;
+  background-color: rgba(0, 0, 0, 0.07)
 }
 
 .textBold {

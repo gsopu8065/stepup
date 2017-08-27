@@ -1,14 +1,14 @@
 <ion-modal-view>
 
-  <ion-content>
+  <ion-content overflow-scroll="true">
     <div class="ion-close closeModal" ng-click="closeModal()"></div>
     <div class="swiper-container">
       <div class="swiper-wrapper">
-        <div class="swiper-slide" ng-repeat="oImage in userInfoDisplay.photos" style="background-image:url({{oImage}})"></div>
+        <div class="swiper-slide" ng-repeat="oImage in userInfoDisplay.photos"><img src="{{oImage}}"/></div>
         <div class="swiper-slide" ng-if="userInfoDisplay.photos == undefined && userInfoDisplay.gender === 'female'" style="background-image:url(../img/girl.gif)"></div>
         <div class="swiper-slide" ng-if="userInfoDisplay.photos == undefined && (userInfoDisplay.gender == undefined || userInfoDisplay.gender === 'male') " style="background-image:url(../img/male.gif)"></div>
       </div>
-      <!-- Add Pagination -->
+      <!-- Add Pagination style="background-image:url({{oImage}})" -->
       <div class="swiper-pagination"></div>
     </div>
 

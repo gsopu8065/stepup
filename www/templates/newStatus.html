@@ -1,12 +1,22 @@
 <ion-modal-view>
+
+  <!--<ion-header-bar>
+    <h1 class="title">My Modal title</h1>
+  </ion-header-bar>-->
+
   <ion-header-bar class="headerCss displayElement">
     <span class="leftAlign" ng-click="closeModal()">Close</span>
-    <span class="title">Update Status</span>
-    <span ng-if="!editWindow" class="rightAlign" ng-click="saveStatus(message.text)">POST</span>
-    <span ng-if="editWindow" class="rightAlign" ng-click="updateStatus(message.text)">UPDATE</span>
+    <span ng-if="editWindow" class="title">Update Status</span>
+    <span ng-if="!editWindow" class="title">New Status</span>
+    <button ng-if="editWindow && checkMessage(message.text)" class="rightAlign" ng-click="updateStatus(message.text)">
+      UPDATE
+    </button>
+    <button ng-if="!editWindow && checkMessage(message.text)" class="rightAlign" ng-click="saveStatus(message.text)">
+      POST
+    </button>
   </ion-header-bar>
 
-  <ion-content>
+  <ion-content style="top: 43px;">
     <div class="item-avatar item-icon-right viewProfileDiv" type="item-text-wrap">
       <img class="imageIcon" ng-src="https://graph.facebook.com/{{user.userID}}/picture?type=small">
       <div style="text-align: left; font-weight: bold;">{{user.displayName}}</div>
