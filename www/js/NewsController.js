@@ -424,13 +424,17 @@ stepNote.directive('commenttree', function ($compile, NewsService, LocalStorage)
 
       $scope.updateEmotion = function (status, emotion) {
         NewsService.updateEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
-          $scope.status = updateQueryRes;
+          $scope.status.dislikeCount = updateQueryRes.dislikeCount;
+          $scope.status.likeCount = updateQueryRes.likeCount;
+          $scope.status.userstatusEmotion = updateQueryRes.userstatusEmotion;
         });
       };
 
       $scope.deleteEmotion = function (status, emotion) {
         NewsService.deleteEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
-          $scope.status = updateQueryRes;
+          $scope.status.dislikeCount = updateQueryRes.dislikeCount;
+          $scope.status.likeCount = updateQueryRes.likeCount;
+          $scope.status.userstatusEmotion = updateQueryRes.userstatusEmotion;
         });
       };
 
