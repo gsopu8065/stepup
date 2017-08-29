@@ -1,0 +1,33 @@
+<ion-modal-view>
+
+  <ion-header-bar class="headerCss displayElement">
+    <span class="title">Describe the issue</span>
+    <span class="rightAlign" ng-click="closeReportSpam(0)">
+      Cancel
+    </span>
+  </ion-header-bar>
+
+  <ion-content style="top: 43px;">
+    <div class="reportStatement">
+      Help us understand the problem. What is going on with this post?
+    </div>
+    <div ng-click="closeReportSpam(1)" class="reportList">
+      It's spam
+    </div>
+    <div ng-click="closeReportSpam(2)" class="reportList">
+      It displays a sensitive information
+    </div>
+    <div ng-click="closeReportSpam(3)" class="reportList" style="border-bottom: 1px solid gainsboro;">
+      It's a abusive or harmful
+    </div>
+
+    <div class="reportStatement" style="margin-top: 40px;">
+      Block user not to see all his/her posts in future.
+    </div>
+    <div ng-click="closeReportSpam(4)" class="reportList reportBlockUser" style="border: 1px solid indianred;">
+      Block User
+    </div>
+
+  </ion-content>
+
+</ion-modal-view>

@@ -26,8 +26,8 @@
 
     <div class="article" ng-repeat="article in newsFeed | orderBy:dynamicOrderFunction:true track by article._id">
 
-      <i class="icon ion-android-more-vertical dropDownStatus"
-         ng-click="openOptionsMenu(article.userId, article._id, article.status, $event)"></i>
+      <i class="icon ion-ios-arrow-down dropDownStatus"
+         ng-click="openOptionsMenu(article)"></i>
 
       <span class="articleTime"> {{article.timeStamp |  formatdate}} </span>
       <span class="articleTime"> {{getLocation(article)}} </span>
@@ -57,7 +57,7 @@
           <span class="eachLikeIcon blackColor"> {{article.replyCount}} replies</span>
         </a>
 
-        <span class="eachLikeIcon icon ion-android-share blackColor" ng-click="shareStatus()"> Share</span>
+        <span class="eachLikeIcon icon ion-android-share blackColor" ng-click="shareStatus(article)"> Share</span>
 
       </div>
     </div>

@@ -210,6 +210,33 @@ angular.module('starter.newsservices', [])
       return info.promise;
     };
 
+    NewsService.reportIssue = function (statusId, userId, reportType) {
+      var info = $q.defer();
+
+      var req = {
+        method: 'POST',
+        url: SERVER_API + '/reportIssue',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          "statusId": statusId + "",
+          "userId": userId + "",
+          "reportType": reportType + "",
+          "condition": "1"
+        }
+      };
+
+      $http(req).then(function (success) {
+        info.resolve(success.data);
+      }, function (error) {
+        console.log(error);
+        info.reject(error);
+      });
+      return info.promise;
+
+    };
+
     return NewsService;
   })
   .constant('SERVER_API', "https://opennotewebservice.herokuapp.com");

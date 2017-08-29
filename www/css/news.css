@@ -258,3 +258,29 @@
 .tabBackGroundColored{
   background-color: lightblue;
 }
+
+.reportStatement {
+  font-size: 18px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  color: darkgray;
+  padding-left: 20px;
+}
+
+.reportList {
+  border-top: 1px solid gainsboro;
+  font-size: 16px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 25px;
+  font-weight: 400;
+}
+
+.reportBlockUser {
+  border: 2px solid indianred;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: center;
+  padding-left: 0px;
+  border-radius: 10px;
+}

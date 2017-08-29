@@ -6,7 +6,7 @@ stepNote.run(function ($rootScope) {
   $rootScope.reply.statusGroupId = '';
 });
 
-stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, LocalStorage, NewsService) {
 
   //get User
   var user = LocalStorage.getUser();
@@ -108,38 +108,93 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
     $scope.modal = modal;
   });
 
-  //option menu
-  $scope.isOptionsSameUser = function () {
-    return $scope.optionsUserId == $scope.user.userID;
-  }
-
-  $scope.openOptionsMenu = function (statusUserId, statusId, status, event) {
-    $scope.optionsModalTop = event.pageY;
-    $scope.optionsUserId = statusUserId;
-    $scope.optionsStatusId = statusId;
-    $scope.optionsStatus = status;
-    $scope.optionsModal.show();
-  };
-
-  $scope.closeOptionsMenu = function () {
-    $scope.optionsModal.hide();
-  };
-
-  $ionicModal.fromTemplateUrl('templates/statusOptions.html', function (optionsModal) {
-    $scope.optionsModal = optionsModal;
-  }, {
+  $ionicModal.fromTemplateUrl('templates/reportSpam.html', {
     scope: $scope,
-    animation: 'none',
-    focusFirstInput: true
+    animation: 'slide-in-up'
+  }).then(function (modal) {
+    $scope.reportModal = modal;
   });
+
+  $scope.closeReportSpam = function (reportStatus) {
+    console.log("reportStatus ", reportStatus);
+    if (reportStatus == 1 || reportStatus == 2 || reportStatus == 3) {
+      //send report
+      NewsService.reportIssue($scope.reportArticle._id, user.userID, reportStatus).then(function (reportIssue) {
+      })
+    }
+    if (reportStatus == 4) {
+      //block user
+      blockUser($scope.reportArticle.userId)
+    }
+    $scope.reportModal.hide();
+  };
+
+  $scope.openOptionsMenu = function (article) {
+
+    var sameUserEvent = function (index) {
+      switch (index) {
+        case 0 :
+          console.log("share")
+          $scope.shareStatus(article);
+          return true;
+        case 1 :
+          console.log("Edit Status")
+          openEditStatus(article);
+          return true;
+        case 2 :
+          console.log("Delete Status")
+          deleteStatus(article._id);
+          return true;
+      }
+    };
+
+    var differentUserEvent = function (index) {
+      switch (index) {
+        case 0 :
+          console.log("share")
+          $scope.shareStatus(article);
+          return true;
+        case 1 :
+          console.log("Block this user");
+          blockUser(article.userId)
+          return true;
+        case 2 :
+          console.log("Report Status");
+          $scope.reportArticle = article;
+          $scope.reportModal.show();
+          return true;
+      }
+    };
+
+    var actionSheet = {
+      cancelText: 'Cancel'
+    };
+
+    if (article.userId == $scope.user.userID) {
+      actionSheet.buttons = [{text: 'Share Status via...'},
+        {text: 'Edit Status'},
+        {text: 'Delete Status'}
+      ];
+      actionSheet.buttonClicked = sameUserEvent
+    }
+    else {
+      actionSheet.buttons = [
+        {text: 'Share Status via...'},
+        {text: 'Block User'},
+        {text: 'Report Status'}
+      ];
+      actionSheet.buttonClicked = differentUserEvent
+    }
+    $ionicActionSheet.show(actionSheet);
+  };
 
   /* Edit Status*/
 
   $scope.editWindow = false;
-  $scope.openEditStatus = function () {
+  var openEditStatus = function (article) {
     $scope.editWindow = true;
-    $scope.optionsModal.hide();
-    $scope.message.text = $scope.optionsStatus;
+    $scope.optionsStatusId = article._id;
+    $scope.message.text = article.status;
     $scope.modal.show();
   }
 
@@ -155,35 +210,33 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
     });
   }
 
-  $scope.deleteStatus = function () {
+  var deleteStatus = function (optionsStatusId) {
     var confirmPopup = $ionicPopup.confirm({
       title: 'Delete Status',
       template: 'Are you sure you want to delete the status?'
     });
 
     confirmPopup.then(function (res) {
-      $scope.optionsModal.hide();
       if (res) {
-        NewsService.deleteStatus($scope.optionsStatusId, user.userID).then(function (updateQueryRes) {
-          var statusIndex = _.findIndex($scope.newsFeed, {_id: $scope.optionsStatusId});
+        NewsService.deleteStatus(optionsStatusId, user.userID).then(function (updateQueryRes) {
+          var statusIndex = _.findIndex($scope.newsFeed, {_id: optionsStatusId});
           $scope.newsFeed.splice(statusIndex, 1);
         });
       }
     });
   };
 
-  $scope.blockUser = function () {
+  var blockUser = function (optionsUserId) {
     var confirmPopup = $ionicPopup.confirm({
       title: 'Block User',
       template: 'Are you sure you want to block this user?'
     });
 
     confirmPopup.then(function (res) {
-      $scope.optionsModal.hide();
       if (res) {
-        NewsService.blockUser(user.userID, $scope.optionsUserId).then(function (updateQueryRes) {
+        NewsService.blockUser(user.userID, optionsUserId).then(function (updateQueryRes) {
           _.remove($scope.newsFeed, function (eachStatus) {
-            return eachStatus.userId == $scope.optionsUserId;
+            return eachStatus.userId == optionsUserId;
           });
         });
       }
@@ -191,8 +244,8 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
 
   };
 
-  $scope.shareStatus = function () {
-    $scope.optionsModal.hide();
+  $scope.shareStatus = function (article) {
+    console.log("<-------status share---->", article)
   };
 
   $scope.sort = 1;
