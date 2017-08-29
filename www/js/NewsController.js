@@ -6,7 +6,7 @@ stepNote.run(function ($rootScope) {
   $rootScope.reply.statusGroupId = '';
 });
 
-stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, LocalStorage, NewsService) {
 
   //get User
   var user = LocalStorage.getUser();
@@ -245,7 +245,13 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
   };
 
   $scope.shareStatus = function (article) {
-    console.log("<-------status share---->", article)
+    $cordovaSocialSharing
+      .share(article.status, "From: Myna", null, null) // Share via native share sheet
+      .then(function (result) {
+        // Success!
+      }, function (err) {
+        // An error occured. Show a message to the user
+      });
   };
 
   $scope.sort = 1;
