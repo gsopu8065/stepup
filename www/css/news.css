@@ -1,5 +1,5 @@
 .headerCss{
-  background-color: lightblue;
+  background-color: #40a1d2;
 }
 
 .leftIcon{
@@ -14,8 +14,7 @@
 }
 
 .displayElement{
-  display: inherit;
-  padding-top: 13px;
+  display: table;
 }
 
 .displayElement .title {
@@ -35,7 +34,9 @@
   margin-right: 11px;
   font-size: 17px !important;
   font-weight: bold !important;
-  color: darkcyan;
+  color: white;
+  background-color: #40a1d2;
+  border: 0px;
 }
 
 .imageIcon{
@@ -43,7 +44,7 @@
 }
 
 .article{
-  border: 1px solid lightblue;
+  border: 1px solid #40a1d2;
   margin-bottom: 10px;
   padding-bottom: 4px;
   padding-top: 4px;
@@ -100,7 +101,7 @@
 }
 
 .makeLikeIconBold{
-  color: darkcyan;
+  color: #40a1d2;
 }
 
 .statusDiv{
@@ -125,7 +126,16 @@
   text-align: center;
   font-weight: bold;
   border-radius: 7px;
-  color: darkcyan;
+  background-color: #40a1d2;
+  color: white;
+}
+
+.blockUserButton {
+  color: white;
+  padding: 5px;
+  background-color: #40a1d2;
+  border-radius: 5px;
+  margin-left: 15px;
 }
 
 .newsMessageText{
@@ -133,7 +143,7 @@
 }
 
 .commentDiv{
-  border: 1px solid #42c3c8;
+  border: 1px solid #40a1d2;
 }
 
 .commentbottom{
@@ -168,10 +178,11 @@
 }
 
 .statusButton{
-  border: 1px solid;
+  border: 0px solid;
   margin-top: 15px;
   padding: 8px;
-  background: lightblue;
+  background: #40a1d2;
+  color: white;
   font-size: 15px;
 }
 
@@ -190,41 +201,6 @@
 .blackColor{
   color: black;
 }
-
-/*options popup css*/
-.optionsModalPopup{
-  width: 26%;
-  min-height: 6%;
-  background-color: white;
-  border: 1px solid #c4c8cf;
-}
-
-.optionsModalHeader{
-  background-color: lightblue !important;
-}
-
-.optionsModalHeaderTitle{
-  color: black !important;
-}
-
-.eachOption{
-  font-size: 17px;
-  border-top: 1px solid #ddd;
-  text-align: center;
-}
-
-.eachOptionIcon{
-  line-height: 40px;
-}
-
-.eachOptionIcon i{
-  font-size: 25px;
-  padding-right: 10px;
-  margin-left: 10px;
-}
-
-/*options popup end*/
-
 
 .replyComment{
   min-height: 40px;
@@ -245,7 +221,7 @@
   float: left;
   padding: 6px 22px;
   background: white;
-  border: 2px solid lightblue;
+  border: 2px solid #40a1d2;
   color: black;
   text-decoration: none;
   font-size: 15px;
@@ -256,7 +232,7 @@
 }
 
 .tabBackGroundColored{
-  background-color: lightblue;
+  background-color: #40a1d2;
 }
 
 .reportStatement {
@@ -283,4 +259,10 @@
   text-align: center;
   padding-left: 0px;
   border-radius: 10px;
+}
+
+.bar .title {
+  color: white;
+  font-family: sans-serif;
+  font-size: 22px;
 }

@@ -295,7 +295,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
 
 });
 
-stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $stateParams, $rootScope, $timeout, $cordovaGeolocation, LocalStorage, NewsService) {
+stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $stateParams, $ionicPopup, $rootScope, $timeout, $cordovaGeolocation, LocalStorage, NewsService) {
 
   if ($rootScope.location.latitude == null || $rootScope.location.latitude == undefined) {
     var options = {timeout: 30000, enableHighAccuracy: true};
@@ -320,8 +320,9 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $
 
   $rootScope.reply.parentId = $stateParams.statusId;
   $scope.startReply = function (replyId) {
+
     $rootScope.reply.parentId = replyId;
-    var element = document.getElementById('replyText')
+    var element = document.getElementById('replyText');
     if (element) {
       $timeout(function () {
         element.focus();
@@ -350,6 +351,25 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $
       return status.dislikeCount
     }
     return 0;
+  };
+
+  $scope.blockUser = function () {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Block User',
+      template: 'Are you sure you want to block this user?'
+    });
+
+    var status = $scope.article;
+    confirmPopup.then(function (res) {
+      if (res) {
+        NewsService.blockUser(user.userID, status.userId).then(function (updateQueryRes) {
+          _.remove($scope.newsFeed, function (eachStatus) {
+            return eachStatus.userId == optionsUserId;
+          });
+        });
+      }
+    });
+
   };
 
   $scope.updateOrDeleteEmotion = function (emotion) {

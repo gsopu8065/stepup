@@ -10,7 +10,7 @@
 
   <ion-nav-buttons side="left">
     <span ng-click="goBack()" style="font-size: 18px;margin-top: 13%;">
-      <i class="ion-chevron-left"></i> Back
+      <i class="ion-chevron-left"></i> &nbsp; Back
     </span>
   </ion-nav-buttons>
 
@@ -47,7 +47,7 @@
 
         <span class="articlebottomitem" ng-click="startReply(article._id)"> Reply </span>
 
-        <span class="eachLikeIcon icon ion-android-share blackColor"> Share</span>
+        <span class="eachLikeIcon blockUserButton" ng-click="blockUser()"> Block User</span>
 
       </div>
 
@@ -56,13 +56,13 @@
     <div ng-repeat="child in article.replies" class="CommentTree">
       <commenttree statusid={{child._id}}></commenttree>
     </div>
-    <div class="bottomText">
-
-      <input ng-model="inputValue.message" placeholder=" Enter reply" class="messageText newsMessageText" id="replyText"
-             ng-model-options='{ debounce: 0 }'>
-      <a class="search-link sendButton" href="" ng-click="saveComment()"><span class="send_icon">Send</span></a>
-      </input>
-
-    </div>
   </ion-content>
+  <div class="bottomText" style="position: fixed; bottom: 35px; width: 100%">
+
+    <input ng-model="inputValue.message" placeholder=" Enter reply" class="messageText newsMessageText" id="replyText"
+           ng-model-options='{ debounce: 0 }'>
+    <a class="search-link sendButton" href="" ng-click="saveComment()"><span class="send_icon">Send</span></a>
+    </input>
+
+  </div>
 </ion-view>

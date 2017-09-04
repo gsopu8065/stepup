@@ -75,6 +75,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
             $state.go('tab.news');
           })
         }
+        else {
+          $state.go('login');
+        }
       });
 
     }

@@ -239,5 +239,5 @@ angular.module('starter.newsservices', [])
 
     return NewsService;
   })
-  .constant('SERVER_API', "https://opennotewebservice.herokuapp.com");
-//.constant('SERVER_API',"http://165.227.73.250:43406");
+  // .constant('SERVER_API', "https://opennotewebservice.herokuapp.com");
+  .constant('SERVER_API', "http://165.227.73.250:43406");

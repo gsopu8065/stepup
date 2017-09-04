@@ -62,8 +62,9 @@
 .nocontacts-error{
   text-align: center;
   font-size: 16px;
-  color: cadetblue;
+  color: #40a1d2;
   font-weight: 900;
+  margin-top: 20px;
 }
 
 .loading-container .loading {
@@ -291,18 +292,22 @@
 /* BLUE CHECKBOX */
 #checkbox3 + .checkbox-label{
   /*box-shadow*/
-  -webkit-box-shadow:inset 0 0 0 0px #1fc1c8,0 0 0 2px #dddddd;
-  -moz-box-shadow:inset 0 0 0 0px #1fc1c8,0 0 0 2px #dddddd;
-  box-shadow:inset 0 0 0 0px #1fc1c8,0 0 0 2px #dddddd;
+  -webkit-box-shadow: inset 0 0 0 0px #40a1d2, 0 0 0 2px #dddddd;
+  -moz-box-shadow: inset 0 0 0 0px #40a1d2, 0 0 0 2px #dddddd;
+  box-shadow: inset 0 0 0 0px #40a1d2, 0 0 0 2px #dddddd;
 }
 #checkbox3:checked + .checkbox-label{
   /*box-shadow*/
-  -webkit-box-shadow:inset 0 0 0 20px #1fc1c8,0 0 0 2px #1fc1c8;
-  -moz-box-shadow:inset 0 0 0 20px #1fc1c8,0 0 0 2px #1fc1c8;
-  box-shadow:inset 0 0 0 20px #1fc1c8,0 0 0 2px #1fc1c8;
+  -webkit-box-shadow: inset 0 0 0 20px #40a1d2, 0 0 0 2px #40a1d2;
+  -moz-box-shadow: inset 0 0 0 20px #40a1d2, 0 0 0 2px #40a1d2;
+  box-shadow: inset 0 0 0 20px #40a1d2, 0 0 0 2px #40a1d2;
 }
 #checkbox3:checked + .checkbox-label:after{
   color: #17454a;
 }
 
 /*hide me button end*/
+
+ion-tabs.tabs-color-active-positive .tab-item.tab-item-active {
+  color: #40a1d2;
+}

@@ -76,6 +76,7 @@ angular.module('starter.services', [])
         userInfo.deviceId = deviceId;
       }
 
+      console.log(JSON.stringify(userInfo))
       firebase.database().ref('users/' + profileInfo.id).update(userInfo);
       info.resolve();
       return info.promise;
@@ -91,7 +92,7 @@ angular.module('starter.services', [])
 
     var getWork = function(profileInfo) {
       var work = "";
-      if (profileInfo.work[0] != undefined && profileInfo.work[0].employer != undefined) {
+      if (profileInfo.work != undefined && profileInfo.work[0] != undefined && profileInfo.work[0].employer != undefined) {
         work = profileInfo.work[0].employer.name;
       }
       return work;
@@ -99,7 +100,7 @@ angular.module('starter.services', [])
 
     var getEducation = function(profileInfo) {
       var education = "";
-      if (profileInfo.education[0] != undefined && profileInfo.education[0].school != undefined) {
+      if (profileInfo.education != undefined && profileInfo.education[0] != undefined && profileInfo.education[0].school != undefined) {
         education = profileInfo.education[0].school.name;
       }
       return education;
@@ -110,10 +111,6 @@ angular.module('starter.services', [])
       if(profileInfo.albums != undefined && profileInfo.albums.data != undefined){
 
         var profilePictures = _.filter(profileInfo.albums.data, {"type": "profile"});
-
-        console.log("<---profile pics---->")
-        console.log(profilePictures);
-
         if (profilePictures.length > 0 && profilePictures[0].photos) {
           _.forEach(profilePictures[0].photos.data, function (photoImages) {
             photos.push(photoImages.images[0].source);
