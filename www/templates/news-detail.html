@@ -56,13 +56,22 @@
     <div ng-repeat="child in article.replies" class="CommentTree">
       <commenttree statusid={{child._id}}></commenttree>
     </div>
+
+    <div style="height: 20px">
+
+    </div>
   </ion-content>
-  <div class="bottomText" style="position: fixed; bottom: 35px; width: 100%">
 
-    <input ng-model="inputValue.message" placeholder=" Enter reply" class="messageText newsMessageText" id="replyText"
-           ng-model-options='{ debounce: 0 }'>
-    <a class="search-link sendButton" href="" ng-click="saveComment()"><span class="send_icon">Send</span></a>
-    </input>
+  <ion-footer-bar keyboard-attach>
+    <div class="bottomText">
 
-  </div>
+      <input ng-model="inputValue.message" placeholder=" Write a comment" class="messageText newsMessageText"
+             id="replyText"
+             ng-model-options='{ debounce: 0 }'>
+      <a class="search-link sendButton" href="" ng-click="saveComment()"><span class="send_icon">Send</span></a>
+      </input>
+
+    </div>
+  </ion-footer-bar>
+
 </ion-view>
