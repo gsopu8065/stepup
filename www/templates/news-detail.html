@@ -4,7 +4,7 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view cache-view="false" view-title="">
+<ion-view cache-view="false" view-title="Myna">
 
   <ion-nav-bar class="header-wrap headerCss"></ion-nav-bar>
 
@@ -47,7 +47,9 @@
 
         <span class="articlebottomitem" ng-click="startReply(article._id)"> Reply </span>
 
-        <span class="eachLikeIcon blockUserButton" ng-click="blockUser()"> Block User</span>
+        <span ng-show="showBlockUser(article.userId)" class="eachLikeIcon blockUserButton" ng-click="blockUser()"> Block User</span>
+        <span ng-show="!showBlockUser(article.userId)" class="articlebottomitem" ng-click="shareStatus()"> <i
+          class="icon ion-android-share"></i> Share </span>
 
       </div>
 

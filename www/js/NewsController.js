@@ -295,7 +295,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
 
 });
 
-stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $stateParams, $ionicPopup, $rootScope, $timeout, $cordovaGeolocation, LocalStorage, NewsService) {
+stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $cordovaSocialSharing, $stateParams, $ionicPopup, $rootScope, $timeout, $cordovaGeolocation, LocalStorage, NewsService) {
 
   if ($rootScope.location.latitude == null || $rootScope.location.latitude == undefined) {
     var options = {timeout: 30000, enableHighAccuracy: true};
@@ -308,6 +308,20 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $
   var user = LocalStorage.getUser();
   $scope.inputValue = {
     message: ""
+  };
+
+  $scope.showBlockUser = function (articleUserId) {
+    return user.userID != articleUserId
+  };
+
+  $scope.shareStatus = function () {
+    $cordovaSocialSharing
+      .share($scope.article.status, "From: Myna", null, null) // Share via native share sheet
+      .then(function (result) {
+        // Success!
+      }, function (err) {
+        // An error occured. Show a message to the user
+      });
   };
 
 

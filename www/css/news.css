@@ -92,6 +92,7 @@
 .articlebottomitem{
   display:table-cell;
   text-align:center;
+  width: 25%;
 }
 
 .eachLikeIcon{
