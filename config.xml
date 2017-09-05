@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.ionicframework.opennote" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>stepup</name>
+    <name>Myna</name>
     <description>
-        An Ionic Framework and Cordova project.
+        Myna connects people anonymously
     </description>
     <author email="srujanjack@gmail.com" href="http://jacksrujan.com/">
     Srujan Gopu
     </author>
     <content src="index.html" />
     <access origin="*" />
-  <preference name="KeyboardDisplayRequiresUserAction" value="false"/>
+    <preference name="KeyboardDisplayRequiresUserAction" value="false" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
@@ -78,8 +78,8 @@
         <variable name="APP_ID" value="454580491577152" />
         <variable name="APP_NAME" value="opennote" />
     </plugin>
-  <plugin name="cordova-plugin-x-socialsharing"
-          spec="https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git"/>
-  <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
+    <plugin name="cordova-plugin-x-socialsharing" spec="https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git" />
+    <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
+    <allow-navigation href="http://10.0.0.6:8102" />
     <engine name="ios" spec="~4.3.1" />
 </widget>
