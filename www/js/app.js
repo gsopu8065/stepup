@@ -73,11 +73,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
               location: (profileInfo.data.location) ? profileInfo.data.location.name : ""
             });
             $state.go('tab.news');
+          }, function (error) {
+            $state.go('login');
           })
         }
         else {
           $state.go('login');
         }
+      }, function (error) {
+        $state.go('login');
       });
 
     }

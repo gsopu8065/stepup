@@ -270,3 +270,8 @@
 .has-tabs, .bar-footer.has-tabs {
   bottom: 63px;
 }
+
+.fa-spin {
+  -webkit-animation: fa-spin 1s infinite linear;
+  animation: fa-spin 1s infinite linear;
+}

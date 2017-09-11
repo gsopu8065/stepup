@@ -55,6 +55,10 @@
 
     </div>
 
+    <div style="height: 35px;text-align: center;" ng-if="loading">
+      <spinner/>
+    </div>
+
     <div ng-repeat="child in article.replies" class="CommentTree">
       <commenttree statusid={{child._id}}></commenttree>
     </div>

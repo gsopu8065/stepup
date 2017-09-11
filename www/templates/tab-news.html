@@ -10,14 +10,18 @@
 
   <ion-content class="padding" overflow-scroll="true">
 
-    <div class="mytabs" ng-show="newsFeed.length != 0">
+    <div style="height: 35px;text-align: center;" ng-if="loading">
+      <spinner/>
+    </div>
+
+    <div class="mytabs" ng-if="newsFeed.length != 0">
       <a class="mytab" style="border-right: 0" ng-class="{1:'tabBackGroundColored',2:'tabBackGroundWhite'}[sort]"
          ng-click="sortHot()">Hot</a>
       <a class="mytab" ng-class="{2:'tabBackGroundColored',1:'tabBackGroundWhite'}[sort]"
          ng-click="sortRecent()">Recent</a>
     </div>
 
-    <div class="noNewsFeed" ng-show="newsFeed.length == 0">
+    <div class="noNewsFeed" ng-if="newsFeed.length == 0">
       No status to show,You can be the first person to post
       <div>
         <button class="statusButton" ng-click="openStatus()"> Post Status</button>

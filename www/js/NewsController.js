@@ -6,14 +6,14 @@ stepNote.run(function ($rootScope) {
   $rootScope.reply.statusGroupId = '';
 });
 
-stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, LocalStorage, NewsService) {
 
   //get User
   var user = LocalStorage.getUser();
   $scope.user = user;
 
   //get location
-  $ionicLoading.show();
+  $scope.loading = true;
   var options = {timeout: 30000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
     $rootScope.location.latitude = position.coords.latitude;
@@ -22,7 +22,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
       latitude: position.coords.latitude,
       longitude: position.coords.longitude
     }, 30, user.userID).then(function (newsQueryRes) {
-      $ionicLoading.hide();
+      $scope.loading = false;
       $scope.newsFeed = newsQueryRes;
     });
   });
@@ -281,13 +281,13 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
   //on every tab level
   $scope.$on('$ionicView.enter', function (e) {
     if ($rootScope.location.latitude) {
-      $ionicLoading.show();
+      $scope.loading = true;
       //$scope.newsFeed = [];
       NewsService.getNews({
         latitude: $rootScope.location.latitude,
         longitude: $rootScope.location.longitude
       }, 30, user.userID).then(function (newsQueryRes) {
-        $ionicLoading.hide();
+        $scope.loading = false;
         $scope.newsFeed = newsQueryRes;
       });
     }
@@ -295,7 +295,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $ionicLoading, $co
 
 });
 
-stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $cordovaSocialSharing, $stateParams, $ionicPopup, $rootScope, $timeout, $cordovaGeolocation, LocalStorage, NewsService) {
+stepNote.controller('NewsDetailCtrl', function ($scope, $state, $cordovaSocialSharing, $stateParams, $ionicPopup, $rootScope, $timeout, $cordovaGeolocation, LocalStorage, NewsService) {
 
   if ($rootScope.location.latitude == null || $rootScope.location.latitude == undefined) {
     var options = {timeout: 30000, enableHighAccuracy: true};
@@ -325,11 +325,11 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $
   };
 
 
-  $ionicLoading.show();
+  $scope.loading = true;
   NewsService.getStatus($stateParams.statusId, user.userID).then(function (statusQueryRes) {
     $scope.article = statusQueryRes;
     $rootScope.reply.statusGroupId = $scope.article._id;
-    $ionicLoading.hide();
+    $scope.loading = false;
   });
 
   $rootScope.reply.parentId = $stateParams.statusId;
@@ -414,12 +414,12 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $ionicLoading, $
   };
 
   $scope.saveComment = function () {
-    $ionicLoading.show();
+    $scope.loading = true;
     $scope.article.replies = [];
     NewsService.saveStatus($scope.inputValue.message, user.userID, user.displayName, "", [$rootScope.location.longitude, $rootScope.location.latitude], 30, "commentText", $rootScope.reply.parentId, $rootScope.reply.statusGroupId).then(function (updateQueryRes) {
       $scope.article.replies = updateQueryRes.replies;
       $scope.inputValue.message = "";
-      $ionicLoading.hide();
+      $scope.loading = false;
     });
   };
 
@@ -557,3 +557,14 @@ stepNote.filter('orderByHot', function() {
     return item.dislikeCount + item.likeCount + item.replyCount;
   };
 });
+
+stepNote.directive('spinner', function () {
+    return {
+      restrict: 'E',
+      template: '<i class="fa fa-spinner fa-2x fa-spin"></i>',
+      scope: {
+        show: '='
+      }
+    };
+  }
+);
