@@ -1,13 +1,19 @@
 angular.module('starter.newsservices', [])
 
   .factory('NewsService', function ($http, $q, SERVER_API) {
+
+    var userPort = "8001/myna";
+    var statusPort = "8002/myna";
+    var newsPort = "8003/myna";
+    var emotionsPort = "8004/myna";
+
     var NewsService = {};
     NewsService.getNews = function(location, radius, userId){
       var info = $q.defer();
 
       var req = {
         method: 'POST',
-        url: SERVER_API+'/newsFeed',
+        url: SERVER_API+newsPort+'/news/newsFeed',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -33,7 +39,7 @@ angular.module('starter.newsservices', [])
 
       var req = {
         method: 'POST',
-        url: SERVER_API+'/updateStatusEmotion',
+        url: SERVER_API+emotionsPort+'/emotions/updateStatusEmotion',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -59,7 +65,7 @@ angular.module('starter.newsservices', [])
 
       var req = {
         method: 'POST',
-        url: SERVER_API+'/deleteStatusEmotion',
+        url: SERVER_API+emotionsPort+'/emotions/deleteStatusEmotion',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -86,7 +92,7 @@ angular.module('starter.newsservices', [])
 
       var req = {
         method: 'POST',
-        url: SERVER_API+'/blockUser',
+        url: SERVER_API+userPort+'/user/blockUser',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -110,23 +116,28 @@ angular.module('starter.newsservices', [])
     NewsService.saveStatus = function(status, userId, userName, isAnnonymous, location, radius, type, parentId,  statusGroupId){
       var info = $q.defer();
 
+      var inputData = {
+        "status": status,
+        "userId": userId,
+        "userName": userName,
+        "isAnnonymous": true,
+        "location":location,
+        "radius": radius,
+        "type": type,
+        "parentId" : parentId,
+        "statusGroupId" : statusGroupId,
+        "count": 0
+      };
+      var formData = new FormData();
+      formData.append('data', JSON.stringify(inputData));
       var req = {
         method: 'POST',
-        url: SERVER_API+'/saveStatus',
+        url: SERVER_API+statusPort+'/status/saveStatus',
+        transformRequest: angular.identity,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': undefined
         },
-        data: {
-          "status": status,
-          "userId": userId,
-          "userName": userName,
-          "isAnnonymous": true,
-          "location":location,
-          "radius": radius,
-          "type": type,
-          "parentId" : parentId,
-          "statusGroupId" : statusGroupId
-        }
+        data: formData
       };
 
       $http(req).then(function(success){
@@ -145,7 +156,7 @@ angular.module('starter.newsservices', [])
 
       var req = {
         method: 'POST',
-        url: SERVER_API+'/editStatus',
+        url: SERVER_API+statusPort+'/status/editStatus',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -172,7 +183,7 @@ angular.module('starter.newsservices', [])
 
       var req = {
         method: 'POST',
-        url: SERVER_API+'/deleteStatus',
+        url: SERVER_API+statusPort+'/status/deleteStatus',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -198,7 +209,7 @@ angular.module('starter.newsservices', [])
 
       var req = {
         method: 'GET',
-        url: SERVER_API+'/getStatus?statusId='+statusId+'&userId='+userId
+        url: SERVER_API+statusPort+'/status/getStatus?statusId='+statusId+'&userId='+userId
       };
 
       $http(req).then(function(success){
@@ -215,7 +226,7 @@ angular.module('starter.newsservices', [])
 
       var req = {
         method: 'POST',
-        url: SERVER_API + '/reportIssue',
+        url: SERVER_API + userPort+ '/user/reportIssue',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -240,4 +251,4 @@ angular.module('starter.newsservices', [])
     return NewsService;
   })
   // .constant('SERVER_API', "https://opennotewebservice.herokuapp.com");
-  .constant('SERVER_API', "http://165.227.73.250:43406");
+  .constant('SERVER_API', "http://54.76.147.242:");

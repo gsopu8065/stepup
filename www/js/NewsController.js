@@ -166,6 +166,15 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
       }
     };
 
+    var globalUserEvent = function (index) {
+      switch (index) {
+        case 0 :
+          console.log("share")
+          $scope.shareStatus(article);
+          return true;
+      }
+    };
+
     var actionSheet = {
       cancelText: 'Cancel'
     };
@@ -176,6 +185,10 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
         {text: 'Delete Status'}
       ];
       actionSheet.buttonClicked = sameUserEvent
+    }
+    else if (article.isGlobal && article.isGlobal == true) {
+      actionSheet.buttons = [{text: 'Share Status via...'}];
+      actionSheet.buttonClicked = globalUserEvent
     }
     else {
       actionSheet.buttons = [
