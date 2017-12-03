@@ -12,19 +12,33 @@
     <button ng-if="editWindow && checkMessage(message.text)" class="rightAlign" ng-click="updateStatus(message.text)">
       UPDATE
     </button>
-    <button ng-if="!editWindow && checkMessage(message.text)" class="rightAlign" ng-click="saveStatus(message.text)">
+    <button ng-if="!editWindow && checkMessage(message.text)" class="rightAlign" ng-click="saveStatus(message)">
       POST
     </button>
   </ion-header-bar>
 
   <ion-content style="top: 58px;">
-    <div class="item-avatar item-icon-right viewProfileDiv" type="item-text-wrap">
-      <img class="imageIcon" ng-src="https://graph.facebook.com/{{user.userID}}/picture?type=small">
-      <div style="text-align: left; font-weight: bold;">{{user.displayName}}</div>
-      <div style="text-align: left">{{user.location}}</div>
+    <div class="viewProfileDiv" type="item-text-wrap">
+      <span>Location: </span><span style="font-weight: bold;">{{user.location}}</span>
     </div>
+
+    <div class="viewProfileDiv">
+      <span style="">Media: </span>
+      <input type="file" ng-file-model="message.files" multiple />
+    </div>
+
+    <div>
+      <p ng-repeat="file in message.files">
+        <img ng-src="{{file.url}}" width="50px" height="50px"/>
+      </p>
+    </div>
+
     <div class="statusDiv">
       <textarea ng-model="message.text" cols="40" rows="10" placeholder=" Enter Status" class="statusText" id="statusText"></textarea>
+    </div>
+
+    <div style="position:fixed;bottom:0px; background-color: red; width: 100%">
+      This is bottom
     </div>
 
   </ion-content>

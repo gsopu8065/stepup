@@ -33,11 +33,12 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
     }
   };
 
+
   $scope.message = {};
   $scope.saveStatus = function (message) {
+    $scope.closeModal();
     NewsService.saveStatus(message, user.userID, user.displayName, "", [$rootScope.location.longitude, $rootScope.location.latitude], 30, "text", null, null).then(function (updateQueryRes) {
-      $scope.newsFeed.push(updateQueryRes.ops[0]);
-      $scope.closeModal();
+      $scope.newsFeed.unshift(updateQueryRes.ops[0]);
     });
   };
 
@@ -148,6 +149,19 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
       }
     };
 
+    var sameUserMediaEvent = function (index) {
+      switch (index) {
+        case 0 :
+          console.log("share")
+          $scope.shareStatus(article);
+          return true;
+        case 1 :
+          console.log("Delete Status")
+          deleteStatus(article._id);
+          return true;
+      }
+    };
+
     var differentUserEvent = function (index) {
       switch (index) {
         case 0 :
@@ -180,11 +194,20 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
     };
 
     if (article.userId == $scope.user.userID) {
-      actionSheet.buttons = [{text: 'Share Status via...'},
-        {text: 'Edit Status'},
-        {text: 'Delete Status'}
-      ];
-      actionSheet.buttonClicked = sameUserEvent
+
+      if(article.media.length > 0){
+        actionSheet.buttons = [{text: 'Share Status via...'},
+          {text: 'Delete Status'}
+        ];
+        actionSheet.buttonClicked = sameUserMediaEvent
+      }
+      else {
+        actionSheet.buttons = [{text: 'Share Status via...'},
+          {text: 'Edit Status'},
+          {text: 'Delete Status'}
+        ];
+        actionSheet.buttonClicked = sameUserEvent
+      }
     }
     else if (article.isGlobal && article.isGlobal == true) {
       actionSheet.buttons = [{text: 'Share Status via...'}];
@@ -581,3 +604,37 @@ stepNote.directive('spinner', function () {
     };
   }
 );
+
+stepNote.directive('ngFileModel', ['$parse', function ($parse) {
+  return {
+    restrict: 'A',
+    link: function (scope, element, attrs) {
+      var model = $parse(attrs.ngFileModel);
+      var isMultiple = attrs.multiple;
+      var modelSetter = model.assign;
+      element.bind('change', function () {
+        var values = [];
+        angular.forEach(element[0].files, function (item) {
+          var value = {
+            // File Name
+            name: item.name,
+            //File Size
+            size: item.size,
+            //File URL to view
+            url: URL.createObjectURL(item),
+            // File Input Value
+            _file: item
+          };
+          values.push(value);
+        });
+        scope.$apply(function () {
+          if (isMultiple) {
+            modelSetter(scope, values);
+          } else {
+            modelSetter(scope, values[0]);
+          }
+        });
+      });
+    }
+  };
+}]);

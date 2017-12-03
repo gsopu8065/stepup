@@ -30,14 +30,19 @@
 
     <div class="article" ng-repeat="article in newsFeed | orderBy:dynamicOrderFunction:true track by article._id">
 
-      <i class="icon ion-ios-arrow-down dropDownStatus"
-         ng-click="openOptionsMenu(article)"></i>
+      <i class="icon ion-ios-arrow-down dropDownStatus" ng-click="openOptionsMenu(article)"></i>
 
       <span class="articleTime"> {{article.timeStamp |  formatdate}} </span>
       <span class="articleTime"> {{getLocation(article)}} </span>
       <a class="articleTextAnchor" href="#/tab/news/{{article._id}}">
         <div class="articleText">
           {{article.status}}
+        </div>
+        <div class="swiper-container" ng-if="article.media.length > 0">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" ng-repeat="oImage in article.media"><img src="{{oImage}}"/></div>
+          </div>
+          <div class="swiper-pagination"></div>
         </div>
       </a>
       <div class="articlebottom">
