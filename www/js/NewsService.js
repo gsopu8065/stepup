@@ -116,6 +116,9 @@ angular.module('starter.newsservices', [])
     NewsService.saveStatus = function(status, userId, userName, isAnnonymous, location, radius, type, parentId,  statusGroupId){
       var info = $q.defer();
 
+      console.log("srujan");
+
+
       var inputData = {
         "status": status.text || "",
         "userId": userId,
@@ -136,7 +139,7 @@ angular.module('starter.newsservices', [])
         reqData[index] = eachFile._file;
       });
 
-
+      console.log(reqData);
       $http({
         method: 'POST',
         url: SERVER_API+statusPort+'/status/saveStatus',
@@ -158,11 +161,13 @@ angular.module('starter.newsservices', [])
       }).then(function(success){
         info.resolve(success.data);
       }, function(error){
+        console.log(error);
         info.reject(error);
       });
       return info.promise;
 
     };
+
 
     NewsService.editStatus = function (status, statusId, userId) {
       var info = $q.defer();

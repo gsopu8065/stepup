@@ -173,7 +173,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
       });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/news');
+    $urlRouterProvider.otherwise('/tab/news');
 
   })
   .config(['$ionicConfigProvider', function ($ionicConfigProvider) {

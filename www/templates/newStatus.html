@@ -18,27 +18,36 @@
   </ion-header-bar>
 
   <ion-content style="top: 58px;">
-    <div class="viewProfileDiv" type="item-text-wrap">
+    <!--<div class="viewProfileDiv" type="item-text-wrap">
       <span>Location: </span><span style="font-weight: bold;">{{user.location}}</span>
     </div>
 
     <div class="viewProfileDiv">
       <span style="">Media: </span>
-      <input type="file" ng-file-model="message.files" multiple />
+      <input type="file" ng-file-model="message.files" accept="image/*" multiple />
+    </div>-->
+
+    <div class="statusDiv">
+      <textarea ng-model="message.text" cols="40" rows="10" placeholder=" Enter Status" class="statusText"
+                id="statusText"></textarea>
     </div>
 
     <div>
       <p ng-repeat="file in message.files">
-        <img ng-src="{{file.url}}" width="50px" height="50px"/>
+        <img ng-src="{{file.url}}" width="150px" height="150px"/>
       </p>
     </div>
 
-    <div class="statusDiv">
-      <textarea ng-model="message.text" cols="40" rows="10" placeholder=" Enter Status" class="statusText" id="statusText"></textarea>
-    </div>
+
 
     <div style="position:fixed;bottom:0px; background-color: red; width: 100%">
       This is bottom
+      <button ng-click="imageClick()">
+        image
+      </button>
+      <button ng-click="takePhoto()">
+        camera
+      </button>
     </div>
 
   </ion-content>
