@@ -6,7 +6,7 @@ stepNote.run(function ($rootScope) {
   $rootScope.reply.statusGroupId = '';
 });
 
-stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, $cordovaCamera, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, $cordovaImagePicker, $cordovaCamera, LocalStorage, NewsService) {
 
   //get User
   var user = LocalStorage.getUser();
@@ -34,37 +34,37 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
   };
 
   $scope.imageClick = function () {
-    /*var options = {
-     maximumImagesCount: 1, // Max number of selected images, I'm using only one for this example
+    var options = {
+      maximumImagesCount: 5, // Max number of selected images, I'm using only one for this example
      width: 800,
      height: 800,
-     quality: 80            // Higher is better
+      quality: 80,            // Higher is better,
+      outputType: 1
      };
 
-     $cordovaImagePicker.getPictures(options).then(function (results) {
+    $cordovaImagePicker.getPictures(options).then(function (imagePaths) {
      // Loop through acquired images
-     for (var i = 0; i < results.length; i++) {
-     console.log('Image URI: ' + results[i]);   // Print image URI
-     }
+      _.forEach(imagePaths, function (imagePath) {
+        var value = {
+          url: "data:image/jpeg;base64," + imagePath,
+          _file: b64toBlob(imagePath, "data:image/jpeg;base64")
+        };
+        $scope.message.files.push(value);
+      });
+
      }, function(error) {
      console.log('Error: ' + JSON.stringify(error));    // In case of error
-     });*/
+    });
 
-    uploadPicture(Camera.PictureSourceType.PHOTOLIBRARY);
   };
+
 
   $scope.takePhoto = function () {
-    uploadPicture(Camera.PictureSourceType.CAMERA);
-  };
-
-
-  //$scope.uploadedImage = [];
-  function uploadPicture(sourceType) {
 
     var options = {
       quality: 100,
       destinationType: Camera.DestinationType.DATA_URL,
-      sourceType: sourceType,
+      sourceType: Camera.PictureSourceType.CAMERA,
       allowEdit: false,
       encodingType: Camera.EncodingType.JPEG,
       mediaType: 0,
@@ -82,7 +82,6 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
         _file: b64toBlob(dataURL, "data:image/jpeg;base64")
       };
       $scope.message.files.push(value);
-      $scope.$apply();
     }, function (err) {
       console.log(err);
     });
@@ -108,8 +107,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
       byteArrays.push(byteArray);
     }
 
-    var blob = new Blob(byteArrays, {type: contentType});
-    return blob;
+    return new Blob(byteArrays, {type: contentType});
   }
 
 
