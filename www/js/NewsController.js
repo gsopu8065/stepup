@@ -112,7 +112,12 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
 
 
   $scope.message = {
-    files: []
+    files: [{
+      url: "http://placehold.it/300x150"
+    },
+      {
+        url: "http://placehold.it/300x150"
+      }]
   };
   $scope.saveStatus = function (message) {
     $scope.closeModal();
@@ -122,7 +127,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
   };
 
   $scope.checkMessage = function (message) {
-    return message != undefined && message.trim().length > 0
+    return (message.text != undefined && message.text.trim().length > 0) || message.files.length > 0
   }
 
   $scope.checkStatus = function (status, emotion) {
@@ -185,6 +190,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
 
   $ionicModal.fromTemplateUrl('templates/newStatus.html', {
     scope: $scope,
+    focusFirstInput: true,
     animation: 'slide-in-up'
   }).then(function (modal) {
     $scope.modal = modal;
@@ -214,23 +220,6 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
   $scope.openOptionsMenu = function (article) {
 
     var sameUserEvent = function (index) {
-      switch (index) {
-        case 0 :
-          console.log("share")
-          $scope.shareStatus(article);
-          return true;
-        case 1 :
-          console.log("Edit Status")
-          openEditStatus(article);
-          return true;
-        case 2 :
-          console.log("Delete Status")
-          deleteStatus(article._id);
-          return true;
-      }
-    };
-
-    var sameUserMediaEvent = function (index) {
       switch (index) {
         case 0 :
           console.log("share")
@@ -276,19 +265,11 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
 
     if (article.userId == $scope.user.userID) {
 
-      if(article.media.length > 0){
-        actionSheet.buttons = [{text: 'Share Status via...'},
-          {text: 'Delete Status'}
-        ];
-        actionSheet.buttonClicked = sameUserMediaEvent
-      }
-      else {
-        actionSheet.buttons = [{text: 'Share Status via...'},
-          {text: 'Edit Status'},
-          {text: 'Delete Status'}
-        ];
-        actionSheet.buttonClicked = sameUserEvent
-      }
+      actionSheet.buttons = [{text: 'Share Status via...'},
+        {text: 'Edit Status'},
+        {text: 'Delete Status'}
+      ];
+      actionSheet.buttonClicked = sameUserEvent
     }
     else if (article.isGlobal && article.isGlobal == true) {
       actionSheet.buttons = [{text: 'Share Status via...'}];

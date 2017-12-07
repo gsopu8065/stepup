@@ -14,12 +14,45 @@
 }
 
 .displayElement{
-  display: table;
+  background-color: white;
+  height: auto;
 }
 
-.displayElement .title {
-  left: 25% !important;
-  right: 25% !important;
+.displayElement .button-right {
+  display: block !important;
+  width: 96% !important;
+  text-align: right !important;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.newStatusBottom {
+  position: fixed;
+  bottom: 0px;
+  background-color: white;
+  width: 100%;
+  border-top: 1px solid #e8e6e6;
+  padding-top: 3%;
+  padding-bottom: 3%;
+}
+
+.newStatusBottomRight {
+  width: 30%;
+  float: right;
+  margin-right: 5%;
+}
+
+.newStatusBottomLeft {
+  width: 50%;
+  float: left;
+  margin-left: 10%;
+}
+
+.newStatusBottomLeft i {
+  font-size: 25px;
+  color: #0088cc;
+  width: 30%;
+  float: left;
 }
 
 .leftAlign{
@@ -37,6 +70,9 @@
   color: white;
   background-color: #40a1d2;
   border: 0px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 6px;
 }
 
 .imageIcon{
@@ -106,18 +142,22 @@
 }
 
 .statusDiv{
-  display: table;
+  display: flex;
   width: 100%;
   margin-bottom: 20px;
   margin-top: 10px;
+  height: 80%;
+  overflow-y: hidden;
 }
 
 .statusText{
-  border: 1px solid #e6dede !important;
-  width: 90%;
+  border: 0 !important;
   display: table-cell !important;
   font-size: 20px;
-  margin-left: 5%;
+  margin-left: 3%;
+  color: rgba(0, 0, 0, 0.52);
+  min-height: 50%;
+  width: 95%;
 }
 
 .sendButton{
