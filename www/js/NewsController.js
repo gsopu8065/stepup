@@ -6,7 +6,7 @@ stepNote.run(function ($rootScope) {
   $rootScope.reply.statusGroupId = '';
 });
 
-stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, $cordovaImagePicker, $cordovaCamera, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, $cordovaImagePicker, $cordovaCamera, LocalStorage, NewsService) {
 
   //get User
   var user = LocalStorage.getUser();
@@ -52,8 +52,10 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
         $scope.message.files.push(value);
       });
 
+      focusMessageBox();
+
      }, function(error) {
-     console.log('Error: ' + JSON.stringify(error));    // In case of error
+      focusMessageBox();
     });
 
   };
@@ -82,10 +84,20 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
         _file: b64toBlob(dataURL, "data:image/jpeg;base64")
       };
       $scope.message.files.push(value);
+      focusMessageBox();
     }, function (err) {
-      console.log(err);
+      focusMessageBox();
     });
   };
+
+  function focusMessageBox() {
+    var element = document.getElementById('statusText');
+    if (element) {
+      $timeout(function () {
+        element.focus();
+      });
+    }
+  }
 
   function b64toBlob(b64Data, contentType, sliceSize) {
     contentType = contentType || '';
@@ -113,11 +125,8 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
 
   $scope.message = {
     files: [{
-      url: "http://placehold.it/300x150"
-    },
-      {
-        url: "http://placehold.it/300x150"
-      }]
+      url: "https://www.planwallpaper.com/static/images/desktop-year-of-the-tiger-images-wallpaper.jpg"
+    }]
   };
   $scope.saveStatus = function (message) {
     $scope.closeModal();
@@ -126,9 +135,13 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
     });
   };
 
+  $scope.deleteFile = function (index) {
+    $scope.message.files.splice(index, 1);
+  };
+
   $scope.checkMessage = function (message) {
     return (message.text != undefined && message.text.trim().length > 0) || message.files.length > 0
-  }
+  };
 
   $scope.checkStatus = function (status, emotion) {
     return status.userstatusEmotion && status.userstatusEmotion == emotion
@@ -177,24 +190,25 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
   };
 
   $scope.openStatus = function () {
-    $scope.modal.show();
+    $ionicModal.fromTemplateUrl('templates/newStatus.html', {
+      scope: $scope,
+      focusFirstInput: true,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.modal = modal;
+      $scope.modal.show();
+    });
   };
 
   $scope.closeModal = function () {
     $scope.message = {
       files: []
     };
-    $scope.editWindow = false;
-    $scope.modal.hide();
+    //$scope.editWindow = false;
+    $scope.modal.remove();
   };
 
-  $ionicModal.fromTemplateUrl('templates/newStatus.html', {
-    scope: $scope,
-    focusFirstInput: true,
-    animation: 'slide-in-up'
-  }).then(function (modal) {
-    $scope.modal = modal;
-  });
+
 
   $ionicModal.fromTemplateUrl('templates/reportSpam.html', {
     scope: $scope,
@@ -214,7 +228,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
       //block user
       blockUser($scope.reportArticle.userId)
     }
-    $scope.reportModal.hide();
+    $scope.reportModal.remove();
   };
 
   $scope.openOptionsMenu = function (article) {
@@ -288,13 +302,13 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
 
   /* Edit Status*/
 
-  $scope.editWindow = false;
+  /* $scope.editWindow = false;
   var openEditStatus = function (article) {
     $scope.editWindow = true;
     $scope.optionsStatusId = article._id;
     $scope.message.text = article.status;
     $scope.modal.show();
-  }
+   }*/
 
   $scope.updateStatus = function (message) {
     NewsService.editStatus(message, $scope.optionsStatusId, user.userID).then(function (updateQueryRes) {

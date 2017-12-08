@@ -32,8 +32,8 @@
   background-color: white;
   width: 100%;
   border-top: 1px solid #e8e6e6;
-  padding-top: 3%;
-  padding-bottom: 3%;
+  padding-top: 2%;
+  padding-bottom: 2%;
 }
 
 .newStatusBottomRight {
@@ -73,6 +73,8 @@
   padding-left: 12px;
   padding-right: 12px;
   border-radius: 6px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 .imageIcon{
@@ -142,12 +144,12 @@
 }
 
 .statusDiv{
-  display: flex;
   width: 100%;
   margin-bottom: 20px;
   margin-top: 10px;
   height: 80%;
   overflow-y: hidden;
+  display: block;
 }
 
 .statusText{
@@ -158,6 +160,38 @@
   color: rgba(0, 0, 0, 0.52);
   min-height: 50%;
   width: 95%;
+  margin-bottom: 15px;
+}
+
+.statusTextHeight90 {
+  height: 90%;
+}
+
+.statusTextHeight50 {
+  height: 50%;
+}
+
+.imagesSlide {
+  height: 48%;
+  margin-left: 12px;
+  margin-right: 5px;
+}
+
+.imagesSlide .slide {
+  height: 100%;
+  display: inline-grid;
+}
+
+.slide .imageDelete {
+  background-color: #676161;
+  color: white;
+  position: absolute;
+  font-size: 14px;
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  text-align: center;
+  right: 40px;
 }
 
 .sendButton{

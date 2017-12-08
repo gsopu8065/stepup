@@ -1,6 +1,6 @@
-<ion-modal-view style="margin-top: 15px;">
+<ion-modal-view style="margin-top: 1px;">
 
-  <ion-content style="top: 3%;">
+  <ion-content style="top: 4%;">
 
     <div class="displayElement">
     <span class="ion-close button-right" style="background-color: white; color: #40a1d2;"
@@ -9,12 +9,14 @@
 
     <div class="statusDiv">
       <textarea ng-model="message.text" cols="40" rows="8" placeholder=" What's happening" class="statusText"
+                ng-class="{statusTextHeight90: message.files.length == 0, statusTextHeight50: message.files.length > 0}"
                 id="statusText"></textarea>
 
-      <div id="carousel">
-        <div class="slide" ng-repeat="file in message.files">
-          <img ng-src="{{file.url}}" height="150px"/>
-        </div>
+      <div class="imagesSlide">
+        <span class="slide" ng-repeat="file in message.files">
+          <img ng-src="{{file.url}}" height="100%"/>
+          <span class="ion-close imageDelete" ng-click="deleteFile($index)"></span>
+        </span>
       </div>
     </div>
 

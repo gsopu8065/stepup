@@ -1,7 +1,392 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2779b5b2-8faf-4fd7-8f3c-3abed954d7a3" name="Default" comment="" />
+    <list default="true" id="2779b5b2-8faf-4fd7-8f3c-3abed954d7a3" name="Default" comment="all updates and error fixes">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-land-hdpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-land-ldpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-land-mdpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-land-xhdpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-land-xxhdpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-land-xxxhdpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-port-hdpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-port-ldpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-port-mdpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-port-xhdpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-port-xxhdpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-port-xxxhdpi/screen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/mipmap-hdpi/icon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/mipmap-ldpi/icon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/mipmap-mdpi/icon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/mipmap-xhdpi/icon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/mipmap-xxxhdpi/icon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/ios/icon/icon-1024.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/ios/icon/icon-167.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/ios/icon/icon-40@3x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/ios/icon/icon-50.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/ios/icon/icon-50@2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/ios/icon/icon-60@3x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/ios/icon/icon-83.5@2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/ios/icon/icon-small.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/ios/icon/icon@2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular/angular.min.js.gzip" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/blank.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/buttonBg.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/buttonBgHover.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/detach.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/detachHover.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/disable.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/disable.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/disableHover.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/disableHover.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/down.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/downActive.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/downHover.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/errorIcon-sm.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/errorIcon.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/errorIcon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/firebug.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/group.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/infoIcon.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/infoIcon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/loading_16.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/min.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/minHover.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/off.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/offHover.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/pixel_transparent.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/search.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/search.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/shadow.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/shadow2.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/shadowAlpha.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/sprite.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tabHoverLeft.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tabHoverMid.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tabHoverRight.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tabLeft.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tabMenuCheckbox.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tabMenuPin.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tabMenuRadio.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tabMenuTarget.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tabMenuTargetHover.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tabMid.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tabRight.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/textEditorBorders.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/textEditorBorders.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/textEditorCorners.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/textEditorCorners.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/titlebarMid.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/toolbarMid.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tree_close.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/tree_open.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/twistyClosed.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/twistyOpen.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/up.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/upActive.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/upHover.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/warningIcon.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/warningIcon.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/stepup_node_modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/stepup.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/icon.png.md5" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-animate/.bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-animate/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-animate/angular-animate.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-animate/angular-animate.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-animate/angular-animate.min.js.map" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-animate/bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-animate/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-animate/package.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-sanitize/.bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-sanitize/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-sanitize/angular-sanitize.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-sanitize/angular-sanitize.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-sanitize/angular-sanitize.min.js.map" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-sanitize/bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-sanitize/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-sanitize/package.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/.bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/CHANGELOG.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/CONTRIBUTING.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/api/angular-ui-router.d.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/release/angular-ui-router.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/release/angular-ui-router.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/src/common.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/src/resolve.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/src/state.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/src/stateDirectives.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/src/stateFilters.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/src/templateFactory.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/src/urlMatcherFactory.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/src/urlRouter.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/src/view.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/src/viewDirective.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular-ui-router/src/viewScroll.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular/.bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular/angular-csp.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular/angular.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular/angular.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular/angular.min.js.map" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular/bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular/index.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/angular/package.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/.bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-app-externs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-app.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-app.js.map" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-auth-externs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-auth.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-database-externs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-database.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-database.js.map" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-messaging-externs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-messaging.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-messaging.js.map" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-storage-externs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-storage.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase-storage.js.map" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase.d.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/firebase/firebase.js.map" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/.bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/CHANGELOG.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/build/config.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/dist/ionic.io.bundle.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/dist/ionic.io.bundle.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/gulpfile.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/package.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/analytics/analytics.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/analytics/angular.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/analytics/es5.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/analytics/serializers.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/analytics/storage.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/auth/angular.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/auth/auth.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/auth/es5.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/angular.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/app.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/core.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/data-types.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/es5.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/events.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/logger.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/promise.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/request.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/settings.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/storage.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/core/user.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/deploy/angular.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/deploy/deploy.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/deploy/es5.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/push/angular.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/push/es5.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/push/push-dev.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/push/push-message.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/push/push-token.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/push/push.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ionic-platform-web-client/src/util/util.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/.bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/.editorconfig" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/.gitattributes" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/.github/CONTRIBUTING.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/.gitignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/.jscsrc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/.markdown-doctest-setup.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/.travis.yml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/CHANGELOG" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/dist/lodash.core.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/dist/lodash.core.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/dist/lodash.fp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/dist/lodash.fp.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/dist/lodash.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/dist/lodash.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/dist/mapping.fp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/doc/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/fp/_baseConvert.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/fp/_convertBrowser.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/fp/_mapping.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/fp/placeholder.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/common/file.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/common/mapping.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/common/minify.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/common/uglify.options.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/common/util.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/build-dist.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/build-doc.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/build-modules.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/template/doc/wiki.jst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/template/modules/_falseOptions.jst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/template/modules/_util.jst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/template/modules/alias.jst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/template/modules/category.jst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/template/modules/convert.jst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/template/modules/fp.jst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/template/modules/module.jst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/fp/template/modules/thru.jst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/main/build-dist.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/main/build-doc.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/main/build-modules.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lib/main/build-site.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/lodash.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/package.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/perf/asset/perf-ui.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/perf/index.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/perf/perf.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/test/asset/test-ui.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/test/asset/worker.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/test/backbone.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/test/fp.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/test/index.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/test/remove.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/test/saucelabs.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/test/test-fp.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/test/test.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/test/underscore.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/backbone/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/backbone/backbone.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/backbone/test/collection.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/backbone/test/events.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/backbone/test/model.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/backbone/test/noconflict.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/backbone/test/router.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/backbone/test/setup/dom-setup.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/backbone/test/setup/environment.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/backbone/test/sync.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/backbone/test/view.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/license.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/debugger.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/firebug-1.3a2.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/firebug.IE6.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/firebug.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/firebug.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/html.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/skin/xp/roundCorner.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/firebug-lite/src/firebug-lite-debug.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/json-js/json2.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/underscore/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/underscore/test/arrays.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/underscore/test/chaining.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/underscore/test/collections.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/underscore/test/cross-document.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/underscore/test/functions.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/underscore/test/objects.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/underscore/test/utility.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/underscore/underscore-min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/vendor/underscore/underscore.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/lodash/yarn.lock" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ngCordova/.bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ngCordova/CHANGELOG.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ngCordova/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ngCordova/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ngCordova/bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ngCordova/dist/ng-cordova-mocks.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ngCordova/dist/ng-cordova-mocks.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ngCordova/dist/ng-cordova.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ngCordova/dist/ng-cordova.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/ngCordova/package.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/.bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/CHANGELOG.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/LICENSE" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/README.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/bower.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/component.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/dist/css/swiper.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/dist/css/swiper.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/dist/js/maps/swiper.jquery.min.js.map" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/dist/js/maps/swiper.jquery.umd.min.js.map" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/dist/js/maps/swiper.min.js.map" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/dist/js/swiper.jquery.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/dist/js/swiper.jquery.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/dist/js/swiper.jquery.umd.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/dist/js/swiper.jquery.umd.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/dist/js/swiper.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/dist/js/swiper.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/gulpfile.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/modules.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/package.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/a11y.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/amd.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/controller.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/core.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/dom-plugins.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/dom.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/effects.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/emitter.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/get-dom-lib.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/get-jquery.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/hashnav.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/history.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/init.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/keyboard.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/lazy-load.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/mousewheel.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/parallax.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/plugins.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/scrollbar.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/swiper-intro-f7.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/swiper-intro.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/swiper-outro.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/swiper-proto.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/wrap-end-umd.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/wrap-end.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/wrap-start-umd.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/wrap-start.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/js/zoom.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/less/core.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/less/effects.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/less/mixins.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/less/navigation-f7.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/less/navigation.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/less/preloader-f7.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/less/preloader.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/less/scrollbar.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/less/swiper.less" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/lib/swiper/src/less/zoom.less" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/ios/splash/Default-1242@3x~iphone6s-landscape_2208x1242.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/ios/splash/Default-1242@3x~iphone6s-portrait_1242x2208.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/ios/splash/Default-568h@2x~iphone.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/ios/splash/Default-667h.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/ios/splash/Default-736h.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/ios/splash/Default-750@2x~iphone6-landscape_1334x750.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/ios/splash/Default-750@2x~iphone6-portrait_750x1334.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/ios/splash/Default-Landscape-736h.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/ios/splash/Default.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/ios/splash/Default@2x~iphone.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/ios/splash/Default~iphone.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/resources/splash.png" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/ios/icon/Icon-40.png" afterPath="$PROJECT_DIR$/resources/ios/icon/Icon-40.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/ios/icon/Icon-40@2x.png" afterPath="$PROJECT_DIR$/resources/ios/icon/Icon-40@2x.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/ios/icon/Icon-60.png" afterPath="$PROJECT_DIR$/resources/ios/icon/Icon-60.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/ios/icon/Icon-60@2x.png" afterPath="$PROJECT_DIR$/resources/ios/icon/Icon-60@2x.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/ios/icon/Icon-72.png" afterPath="$PROJECT_DIR$/resources/ios/icon/Icon-72.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/ios/icon/Icon-72@2x.png" afterPath="$PROJECT_DIR$/resources/ios/icon/Icon-72@2x.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/ios/icon/Icon-76.png" afterPath="$PROJECT_DIR$/resources/ios/icon/Icon-76.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/ios/icon/Icon-76@2x.png" afterPath="$PROJECT_DIR$/resources/ios/icon/Icon-76@2x.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/ios/icon/Icon-small@2x.png" afterPath="$PROJECT_DIR$/resources/ios/icon/Icon-small@2x.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/ios/icon/Icon-small@3x.png" afterPath="$PROJECT_DIR$/resources/ios/icon/Icon-small@3x.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/ios/icon/Icon.png" afterPath="$PROJECT_DIR$/resources/ios/icon/Icon.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/css/news.css" afterPath="$PROJECT_DIR$/www/css/news.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/NewsController.js" afterPath="$PROJECT_DIR$/www/js/NewsController.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/templates/newStatus.html" afterPath="$PROJECT_DIR$/www/templates/newStatus.html" />
+    </list>
     <ignored path="stepup.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -13,14 +398,106 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CreatePatchCommitExecutor">
-    <option name="PATCH_PATH" value="" />
+    <option name="PATCH_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="stepup" />
   </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="newStatus.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/www/templates/newStatus.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.5212766">
+              <caret line="19" column="12" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
+              <folding>
+                <element signature="n#style#0;n#ion-modal-view#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#ion-content#0;n#ion-modal-view#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#div#0;n#ion-content#0;n#ion-modal-view#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NewsController.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/www/js/NewsController.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-9.444445">
+              <caret line="138" column="24" selection-start-line="138" selection-start-column="24" selection-end-line="138" selection-end-column="24" />
+              <folding>
+                <marker date="1512705718000" expanded="true" signature="16435:17761" placeholder="..." />
+                <marker date="1512705718000" expanded="true" signature="16562:17746" placeholder="..." />
+                <marker date="1512705718000" expanded="true" signature="18361:18378" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="news.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/www/css/news.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-2.4313726">
+              <caret line="181" column="23" selection-start-line="181" selection-start-column="23" selection-end-line="181" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/www/templates/statusOptions.html" />
+        <option value="$PROJECT_DIR$/www/lib/geofire/dist/geofire.js" />
+        <option value="$PROJECT_DIR$/bower.json" />
+        <option value="$PROJECT_DIR$/www/js/mylib/dist/geofire.js" />
+        <option value="$PROJECT_DIR$/platforms/platforms.json" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/www/js/controllers.js" />
+        <option value="$PROJECT_DIR$/www/templates/user-detail.html" />
+        <option value="$PROJECT_DIR$/www/templates/tab-chats.html" />
+        <option value="$PROJECT_DIR$/www/templates/chat-detail.html" />
+        <option value="$PROJECT_DIR$/www/templates/reportSpam.html" />
+        <option value="$PROJECT_DIR$/www/js/services.js" />
+        <option value="$PROJECT_DIR$/www/templates/tabs.html" />
+        <option value="$PROJECT_DIR$/www/templates/tab-dash.html" />
+        <option value="$PROJECT_DIR$/www/templates/tab-account.html" />
+        <option value="$PROJECT_DIR$/www/css/style.css" />
+        <option value="$PROJECT_DIR$/www/css/chat.css" />
+        <option value="$PROJECT_DIR$/www/templates/news-detail.html" />
+        <option value="$PROJECT_DIR$/www/templates/tab-news.html" />
+        <option value="$PROJECT_DIR$/www/css/phone/iphone4.css" />
+        <option value="$PROJECT_DIR$/www/css/phone/iphone5.css" />
+        <option value="$PROJECT_DIR$/www/css/phone/iphone6.css" />
+        <option value="$PROJECT_DIR$/www/css/phone/iphone6Plus.css" />
+        <option value="$PROJECT_DIR$/www/css/phone/iphone7.css" />
+        <option value="$PROJECT_DIR$/www/css/phone/phone.css" />
+        <option value="$PROJECT_DIR$/www/css/phone/phone1.css" />
+        <option value="$PROJECT_DIR$/www/css/phone/phone2.css" />
+        <option value="$PROJECT_DIR$/www/css/phone/phone3.css" />
+        <option value="$PROJECT_DIR$/www/index.html" />
+        <option value="$PROJECT_DIR$/config.xml" />
+        <option value="$PROJECT_DIR$/www/js/app.js" />
+        <option value="$PROJECT_DIR$/plugins/ios.json" />
+        <option value="$PROJECT_DIR$/plugins/fetch.json" />
+        <option value="$PROJECT_DIR$/www/js/NewsService.js" />
+        <option value="$PROJECT_DIR$/www/js/NewsController.js" />
+        <option value="$PROJECT_DIR$/www/css/news.css" />
+        <option value="$PROJECT_DIR$/www/templates/newStatus.html" />
+      </list>
+    </option>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" />
   <component name="JsBuildToolPackageJson" detection-done="true" />
@@ -30,7 +507,7 @@
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1280" />
-    <option name="height" value="724" />
+    <option name="height" value="706" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -57,6 +534,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -75,10 +554,22 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="stepup" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="stepup" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="platforms" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -89,6 +580,40 @@
     <property name="javascript.nodejs.core.library.configured.version" value="0.12.5" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
+    <property name="SearchEverywhereHistoryKey" value="user-detail&#9;FILE&#9;file:///Users/srujangopu/WebstormProjects/stepup/www/templates/user-detail.html&#10;app.js&#9;FILE&#9;file:///Users/srujangopu/WebstormProjects/stepup/www/js/app.js" />
+    <property name="editor.config.accepted" value="true" />
+    <property name="jsx.switch.disabled" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="101" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="111" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="116" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="901" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="101" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="111" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="116" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="901" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/ios/splash" />
+      <recent name="$PROJECT_DIR$/resources" />
+      <recent name="$PROJECT_DIR$/www/js" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/ios/icon" />
+      <recent name="$PROJECT_DIR$/resources" />
+      <recent name="$PROJECT_DIR$/resources/ios/splash" />
+      <recent name="$PROJECT_DIR$/resources/ios" />
+      <recent name="$PROJECT_DIR$/www/img" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
@@ -114,6 +639,11 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -146,35 +676,646 @@
       <option name="number" value="Default" />
       <updated>1480791395727</updated>
     </task>
+    <task id="LOCAL-00001" summary="blocked contacts">
+      <created>1483920392340</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1483920392340</updated>
+    </task>
+    <task id="LOCAL-00002" summary="all updates and error fixes">
+      <created>1483924097045</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1483924097045</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Login work&#10;Auto login&#10;fb api access&#10;user profile using">
+      <created>1485137976148</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1485137976148</updated>
+    </task>
+    <task id="LOCAL-00004" summary="account, logout and view profile">
+      <created>1485230857935</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1485230857935</updated>
+    </task>
+    <task id="LOCAL-00005" summary="started dashboard work">
+      <created>1490552187077</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1490552187077</updated>
+    </task>
+    <task id="LOCAL-00006" summary="all updates and error fixes">
+      <created>1491680450516</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1491680450516</updated>
+    </task>
+    <task id="LOCAL-00007" summary="all updates and error fixes">
+      <created>1492388214219</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1492388214220</updated>
+    </task>
+    <task id="LOCAL-00008" summary="news init">
+      <created>1493867188336</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1493867188336</updated>
+    </task>
+    <task id="LOCAL-00009" summary="ran services">
+      <created>1494303330491</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1494303330491</updated>
+    </task>
+    <task id="LOCAL-00010" summary="status save feature">
+      <created>1494389386962</created>
+      <option name="number" value="00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1494389386962</updated>
+    </task>
+    <task id="LOCAL-00011" summary="comment replies">
+      <created>1495596243256</created>
+      <option name="number" value="00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1495596243256</updated>
+    </task>
+    <task id="LOCAL-00012" summary="all updates and error fixes">
+      <created>1496626746518</created>
+      <option name="number" value="00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1496626746518</updated>
+    </task>
+    <task id="LOCAL-00013" summary="new status popup">
+      <created>1496728348535</created>
+      <option name="number" value="00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1496728348536</updated>
+    </task>
+    <task id="LOCAL-00014" summary="css work for status">
+      <created>1497225104713</created>
+      <option name="number" value="00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1497225104713</updated>
+    </task>
+    <task id="LOCAL-00015" summary="all updates and error fixes">
+      <created>1497498149447</created>
+      <option name="number" value="00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1497498149447</updated>
+    </task>
+    <task id="LOCAL-00016" summary="all updates and error fixes">
+      <created>1498321172138</created>
+      <option name="number" value="00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1498321172138</updated>
+    </task>
+    <task id="LOCAL-00017" summary="all updates and error fixes">
+      <created>1498622146556</created>
+      <option name="number" value="00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1498622146556</updated>
+    </task>
+    <task id="LOCAL-00018" summary="all updates and error fixes">
+      <created>1499832621882</created>
+      <option name="number" value="00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1499832621882</updated>
+    </task>
+    <task id="LOCAL-00019" summary="all updates and error fixes">
+      <created>1499914311513</created>
+      <option name="number" value="00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1499914311513</updated>
+    </task>
+    <task id="LOCAL-00020" summary="all updates and error fixes">
+      <created>1500174479083</created>
+      <option name="number" value="00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1500174479083</updated>
+    </task>
+    <task id="LOCAL-00021" summary="all updates and error fixes">
+      <created>1500859841569</created>
+      <option name="number" value="00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1500859841570</updated>
+    </task>
+    <task id="LOCAL-00022" summary="all updates and error fixes">
+      <created>1501732526151</created>
+      <option name="number" value="00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1501732526151</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Some changes.">
+      <created>1501891263722</created>
+      <option name="number" value="00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1501891263722</updated>
+    </task>
+    <task id="LOCAL-00024" summary="all updates and error fixes">
+      <created>1502054648257</created>
+      <option name="number" value="00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1502054648257</updated>
+    </task>
+    <task id="LOCAL-00025" summary="map fixes">
+      <created>1502055436081</created>
+      <option name="number" value="00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1502055436081</updated>
+    </task>
+    <task id="LOCAL-00026" summary="geofire changed to local">
+      <created>1502056925724</created>
+      <option name="number" value="00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1502056925724</updated>
+    </task>
+    <task id="LOCAL-00027" summary="block contact">
+      <created>1502059008366</created>
+      <option name="number" value="00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1502059008366</updated>
+    </task>
+    <task id="LOCAL-00028" summary="loading icon fixed">
+      <created>1502059764999</created>
+      <option name="number" value="00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1502059764999</updated>
+    </task>
+    <task id="LOCAL-00029" summary="code clean up for location">
+      <created>1503252944967</created>
+      <option name="number" value="00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1503252944968</updated>
+    </task>
+    <task id="LOCAL-00030" summary="ui problems fixed">
+      <created>1503254818704</created>
+      <option name="number" value="00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1503254818704</updated>
+    </task>
+    <task id="LOCAL-00031" summary="all updates and error fixes">
+      <created>1503783903153</created>
+      <option name="number" value="00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1503783903153</updated>
+    </task>
+    <task id="LOCAL-00032" summary="all updates and error fixes">
+      <created>1503865645820</created>
+      <option name="number" value="00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1503865645820</updated>
+    </task>
+    <task id="LOCAL-00033" summary="all updates and error fixes">
+      <created>1503936965359</created>
+      <option name="number" value="00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1503936965359</updated>
+    </task>
+    <task id="LOCAL-00034" summary="each status options including report issue">
+      <created>1503969592675</created>
+      <option name="number" value="00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1503969592675</updated>
+    </task>
+    <task id="LOCAL-00035" summary="social sharing">
+      <created>1503971211557</created>
+      <option name="number" value="00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1503971211557</updated>
+    </task>
+    <task id="LOCAL-00036" summary="all updates and error fixes">
+      <created>1504505733400</created>
+      <option name="number" value="00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1504505733400</updated>
+    </task>
+    <task id="LOCAL-00037" summary="keyboard fixed">
+      <created>1504545769140</created>
+      <option name="number" value="00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1504545769140</updated>
+    </task>
+    <task id="LOCAL-00038" summary="news details ui fix">
+      <created>1504583003256</created>
+      <option name="number" value="00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1504583003257</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Changed app name">
+      <created>1504651139332</created>
+      <option name="number" value="00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1504651139332</updated>
+    </task>
+    <task id="LOCAL-00040" summary="all updates and error fixes">
+      <created>1505163008012</created>
+      <option name="number" value="00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1505163008012</updated>
+    </task>
+    <task id="LOCAL-00041" summary="app icon">
+      <created>1505163058069</created>
+      <option name="number" value="00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1505163058069</updated>
+    </task>
+    <task id="LOCAL-00042" summary="all updates and error fixes">
+      <created>1505163078485</created>
+      <option name="number" value="00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1505163078485</updated>
+    </task>
+    <task id="LOCAL-00043" summary="all updates and error fixes">
+      <created>1505163137342</created>
+      <option name="number" value="00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1505163137342</updated>
+    </task>
+    <task id="LOCAL-00044" summary="camera fixes">
+      <created>1512445722372</created>
+      <option name="number" value="00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1512445722372</updated>
+    </task>
+    <task id="LOCAL-00045" summary="camera fix">
+      <created>1512537524284</created>
+      <option name="number" value="00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1512537524284</updated>
+    </task>
+    <task id="LOCAL-00046" summary="all updates and error fixes">
+      <created>1512624525770</created>
+      <option name="number" value="00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1512624525770</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="724" extended-state="6" />
+    <frame x="0" y="23" width="1280" height="706" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32977098" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27799842" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32899022" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32792208" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2494043" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3029316" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3355049" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="started dashboard work" />
+    <MESSAGE value="news init" />
+    <MESSAGE value="ran services" />
+    <MESSAGE value="status save feature" />
+    <MESSAGE value="comment replies" />
+    <MESSAGE value="new status popup" />
+    <MESSAGE value="css work for status" />
+    <MESSAGE value="Some changes." />
+    <MESSAGE value="map fixes" />
+    <MESSAGE value="geofire changed to local" />
+    <MESSAGE value="block contact" />
+    <MESSAGE value="loading icon fixed" />
+    <MESSAGE value="code clean up for location" />
+    <MESSAGE value="ui problems fixed" />
+    <MESSAGE value="each status options including report issue" />
+    <MESSAGE value="social sharing" />
+    <MESSAGE value="keyboard fixed" />
+    <MESSAGE value="news details ui fix" />
+    <MESSAGE value="Changed app name" />
+    <MESSAGE value="app icons" />
+    <MESSAGE value="all icons" />
+    <MESSAGE value="app icon" />
+    <MESSAGE value="camera fixes" />
+    <MESSAGE value="camera fix" />
+    <MESSAGE value="all updates and error fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="all updates and error fixes" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
     <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/www/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/NewsController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1512705718000" expanded="true" signature="16435:17761" placeholder="..." />
+            <marker date="1512705718000" expanded="true" signature="16562:17746" placeholder="..." />
+            <marker date="1512705718000" expanded="true" signature="18361:18378" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/newStatus.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#ion-modal-view#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#ion-content#0;n#ion-modal-view#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#ion-content#0;n#ion-modal-view#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/mylib/geofire/geofire.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3339012">
+          <caret line="933" column="32" selection-start-line="933" selection-start-column="32" selection-end-line="933" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package-lock.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/drawable-port-mdpi/screen.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/tab-chats.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.22727273">
+          <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/chat-detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.375">
+          <caret line="15" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/reportSpam.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.57253885">
+          <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/tabs.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4105263">
+          <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/tab-account.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="29" selection-start-line="0" selection-start-column="29" selection-end-line="0" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/tab-dash.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.0">
+          <caret line="0" column="26" selection-start-line="0" selection-start-column="26" selection-end-line="0" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.7916665">
+          <caret line="290" column="3" selection-start-line="290" selection-start-column="3" selection-end-line="290" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.47368422">
+          <caret line="9" column="11" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/css/chat.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6315789">
+          <caret line="126" column="27" selection-start-line="126" selection-start-column="27" selection-end-line="126" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/user-detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.034802783">
+          <caret line="3" column="37" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.6569767">
+          <caret line="38" column="20" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/manifest.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/service-worker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/icon.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/controllers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.5925927">
+          <caret line="604" column="48" selection-start-line="604" selection-start-column="42" selection-end-line="604" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/services.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.67">
+          <caret line="209" column="25" selection-start-line="209" selection-start-column="7" selection-end-line="209" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/drawable-land-hdpi/screen.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/HTML5.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3325">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/platforms/platforms.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.07978723">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ionic.config.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.3962766">
+          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="52" selection-start-line="9" selection-start-column="33" selection-end-line="9" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/fetch.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8710602">
+          <caret line="122" column="37" selection-start-line="122" selection-start-column="13" selection-end-line="122" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/tab-news.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39893618">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/NewsService.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4075">
+          <caret line="159" column="25" selection-start-line="159" selection-start-column="25" selection-end-line="159" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.5904255">
+          <caret line="90" column="0" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/news-detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40159574">
+          <caret line="72" column="26" selection-start-line="72" selection-start-column="17" selection-end-line="72" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/NewsController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.444445">
+          <caret line="138" column="24" selection-start-line="138" selection-start-column="24" selection-end-line="138" selection-end-column="24" />
+          <folding>
+            <marker date="1512705718000" expanded="true" signature="16435:17761" placeholder="..." />
+            <marker date="1512705718000" expanded="true" signature="16562:17746" placeholder="..." />
+            <marker date="1512705718000" expanded="true" signature="18361:18378" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/css/news.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.4313726">
+          <caret line="181" column="23" selection-start-line="181" selection-start-column="23" selection-end-line="181" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/templates/newStatus.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5212766">
+          <caret line="19" column="12" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
+          <folding>
+            <element signature="n#style#0;n#ion-modal-view#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#ion-content#0;n#ion-modal-view#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#ion-content#0;n#ion-modal-view#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
