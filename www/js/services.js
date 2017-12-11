@@ -213,18 +213,6 @@ angular.module('starter.services', [])
         info.reject(error);
       });
 
-      /*facebookConnectPlugin.api('/me?fields=about,gender,name,email, birthday,likes,albums%7Bpicture%7Burl%7D%7D&access_token=' + authToken, ["user_birthday", "email", "user_about_me", "user_photos", "user_likes"],
-        function (response) {
-          console.log("facebook response");
-          console.log(JSON.stringify(response));
-          info.resolve(response);
-        },
-        function (response) {
-          console.log("facebook error");
-          console.log(JSON.stringify(response));
-          info.reject(response);
-        }
-      );*/
       return info.promise;
     };
 

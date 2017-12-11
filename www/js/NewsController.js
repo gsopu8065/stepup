@@ -1,11 +1,3 @@
-stepNote.run(function ($rootScope) {
-
-  $rootScope.location = [];
-  $rootScope.reply = [];
-  $rootScope.reply.parentId = '';
-  $rootScope.reply.statusGroupId = '';
-});
-
 stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, LocalStorage, NewsService) {
 
   //get User

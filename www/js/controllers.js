@@ -1,12 +1,24 @@
 var stepNote = angular.module('starter.controllers', []);
+/*stepNote.run(function ($rootScope) {
 
-stepNote.controller('DashCtrl', function ($scope, $state, $filter, $interval, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
+  $rootScope.userID = undefined;
+  $rootScope.displayName = undefined;
+  $rootScope.location = [];
+  $rootScope.reply = [];
+  $rootScope.reply.parentId = '';
+  $rootScope.reply.statusGroupId = '';
+});*/
 
-  $scope.user = LocalStorage.getUser();
-  if (!$scope.user.userID) {
+stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $interval, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
+
+  $scope.user = {userID : $rootScope.userID,
+    displayName: $rootScope.displayName
+  };
+  console.log("srujan", JSON.stringify($rootScope))
+  if (!$rootScope.userID) {
     $state.go("login")
   }
-
+  console.log("srujan", JSON.stringify($rootScope))
   $ionicLoading.show({
     template: '<ion-spinner></ion-spinner> <br/> Current Location'
   });
@@ -520,7 +532,7 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
 
 });
 
-stepNote.controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, $ionicModal, LocalStorage, UserService) {
+stepNote.controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, $ionicModal, $firebaseAuth, LocalStorage, UserService) {
 
   $scope.user = LocalStorage.getUser();
 
@@ -573,15 +585,18 @@ stepNote.controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, 
         return true;
       },
       destructiveButtonClicked: function () {
+
+        $firebaseAuth(firebase.auth()).$signOut();
+        $state.go('login');
         //facebook logout
-        facebookConnectPlugin.logout(function () {
+        /*facebookConnectPlugin.logout(function () {
             console.log("logging out");
             $scope.authResponse = undefined;
             $state.go('login');
           },
           function (fail) {
             console.log("logging out error")
-          });
+          });*/
       }
     });
   }
@@ -638,6 +653,73 @@ stepNote.controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserSer
   $scope.login = function () {
     facebookConnectPlugin.login(["user_birthday", "email", "user_about_me", "user_photos", "user_likes", "user_work_history", "user_education_history", "user_location"], fbLoginSuccess, fbLoginError);
   };
+});
+
+stepNote.controller('LoginCtrl2', function ($scope,$rootScope, $state, $firebaseAuth, $cordovaOauth, $ionicModal, LocalStorage){
+
+  var auth = $firebaseAuth(firebase.auth());
+  $scope.log = "message";
+  $scope.fbLogin = function () {
+    $cordovaOauth.facebook("454580491577152", ["user_birthday", "email", "user_about_me", "user_photos", "user_likes", "user_work_history", "user_education_history", "user_location"]).then(function(result) {
+      var credential = firebase.auth.FacebookAuthProvider.credential(
+        result.access_token
+      );
+      auth.$signInWithCredential(credential).then(successLogin).catch(errorLogin);
+    }, errorLogin);
+  };
+  $scope.gmailLogin = function () {
+
+    $cordovaOauth.google("666075061271-h83tsb3cdqcieq6cek63eb9lrke8f1df.apps.googleusercontent.com", ["email", "profile"]).then(function(result) {
+      var credential = firebase.auth.GoogleAuthProvider.credential(null,
+        result.access_token
+      );
+      console.log(JSON.stringify(result));
+      auth.$signInWithCredential(credential).then(successLogin).catch(errorLogin);
+    },errorLogin);
+  };
+  $scope.phoneLogin = function () {
+    $ionicModal.fromTemplateUrl('templates/loginWithPhone.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.loginModal = modal;
+      $scope.loginModal.show();
+      window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+    });
+
+  };
+
+  $scope.sendPhoneCode = function(phone){
+    var appVerifier = window.recaptchaVerifier;
+    console.log(phone, appVerifier);
+    firebase.auth().signInWithPhoneNumber("+19407821708", appVerifier)
+      .then(function (confirmationResult) {
+        console.log(JSON.stringify(confirmationResult))
+        window.confirmationResult = confirmationResult;
+      }).catch(errorLogin);
+  };
+
+  $scope.validateCode = function(code){
+    var credential = firebase.auth.PhoneAuthProvider.credential(window.confirmationResult.verificationId, code);
+    auth.$signInWithCredential(credential).then(successLogin).catch(errorLogin);
+  };
+
+  $scope.cancelPhoneLogin = function(){
+    $scope.loginModal.remove();
+  };
+
+  var successLogin = function(firebaseUser){
+    $rootScope.userID = firebaseUser.providerData.uid;
+    $rootScope.displayName = firebaseUser.providerData.displayName;
+    $state.go('tab.account');
+  };
+
+  var errorLogin = function(error){
+    console.log(JSON.stringify(error));
+    $scope.log = error;
+    $state.go('login');
+  }
+
 });
 
 stepNote.filter('escape', function () {

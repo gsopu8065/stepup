@@ -1,0 +1,22 @@
+<ion-modal-view style="margin-top: 1px;">
+
+  <ion-content style="">
+
+    <div style="margin-top: 30px">
+      Enter Phone Number:
+      <input type="text" id="phoneNo" style="border: 1px solid" ng-model="phone"/>
+      <button type="button" id="sendCode" ng-click="sendPhoneCode(phone)">Send Code</button>
+    </div>
+
+    <div id="recaptcha-container"></div>
+
+    <div style="margin-top: 50px">
+      Enter Code:
+      <input type="text" style="border: 1px solid" ng-model="code"/>
+      <button type="button" ng-click="validateCode(code)">Login</button>
+    </div>
+
+    <button type="button" ng-click="cancelPhoneLogin()">Cancel</button>
+  </ion-content>
+
+</ion-modal-view>

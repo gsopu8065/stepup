@@ -5,10 +5,12 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','starter.newsservices', 'ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','starter.newsservices', 'ngCordova', 'firebase', 'ngCordovaOauth'])
 
-  .run(function ($ionicPlatform, $cordovaGeolocation, $state, FacebookCtrl, UserService, LocalStorage) {
+  .run(function ($ionicPlatform, $cordovaGeolocation, $state, $rootScope, $firebaseAuth, FacebookCtrl, UserService, LocalStorage) {
     $ionicPlatform.ready(function () {
+
+
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -20,9 +22,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
         // org.apache.cordova.statusbar required
         StatusBar.styleDefault();
       }
-      document.addEventListener("deviceready", onDeviceReady(FacebookCtrl, UserService, LocalStorage, $state), false);
 
-      if (window.cordova && window.cordova.plugins) {
+      $rootScope.userID = undefined;
+      $rootScope.displayName = undefined;
+      $rootScope.location = [];
+      $rootScope.reply = [];
+      $rootScope.reply.parentId = '';
+      $rootScope.reply.statusGroupId = '';
+      //document.addEventListener("deviceready", onDeviceReady($state, $rootScope), false);
+
+      $firebaseAuth(firebase.auth()).$onAuthStateChanged(function(firebaseUser) {
+        if (firebaseUser) {
+          $rootScope.userID = firebaseUser.providerData.uid;
+          $rootScope.displayName = firebaseUser.providerData.displayName;
+          $state.go('tab.account');
+        } else {
+          $state.go('login');
+        }
+      });
+
+      /*if (window.cordova && window.cordova.plugins) {
         //background running
         window.cordova.plugins.backgroundMode.configure({
           silent: true
@@ -34,7 +53,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
         // Called when background mode has been activated
         window.cordova.plugins.backgroundMode.onactivate = function () {
 
-          var firebaseRef = firebase.database().ref();
+          /!*var firebaseRef = firebase.database().ref();
           var geoFire = new GeoFire(firebaseRef);
           var options = {timeout: 30000, enableHighAccuracy: true};
 
@@ -53,16 +72,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
               });
 
             }, 3000);
-          }
+          }*!/
 
         }
-      }
+      }*/
 
     });
 
-    function onDeviceReady(FacebookCtrl, UserService, LocalStorage, $state) {
+    function onDeviceReady($state, $rootScope) {
 
-      facebookConnectPlugin.getLoginStatus(function (success) {
+      /*facebookConnectPlugin.getLoginStatus(function (success) {
         if (success.status === 'connected') {
           //get facebook profile
           FacebookCtrl.getFacebookProfileInfo(success.authResponse.accessToken).then(function (profileInfo) {
@@ -82,7 +101,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
         }
       }, function (error) {
         $state.go('login');
-      });
+      });*/
 
     }
 
@@ -90,6 +109,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
   })
 
   .config(function ($stateProvider, $urlRouterProvider) {
+
 
     // Ionic uses AngularUI Router which uses the concept of states
     // Learn more here: https://github.com/angular-ui/ui-router
@@ -101,7 +121,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
         url: '/login',
         abstract: false,
         templateUrl: 'templates/login.html',
-        controller: 'LoginCtrl'
+        controller: 'LoginCtrl2'
       })
 
       // setup an abstract state for the tabs directive
@@ -173,7 +193,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
       });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/news');
+    $urlRouterProvider.otherwise('/login');
 
   })
   .config(['$ionicConfigProvider', function ($ionicConfigProvider) {
