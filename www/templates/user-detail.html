@@ -5,8 +5,7 @@
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <div class="swiper-slide" ng-repeat="oImage in userInfoDisplay.photos"><img src="{{oImage}}"/></div>
-        <div class="swiper-slide" ng-if="userInfoDisplay.photos == undefined && userInfoDisplay.gender === 'female'" style="background-image:url(../img/girl.gif)"></div>
-        <div class="swiper-slide" ng-if="userInfoDisplay.photos == undefined && (userInfoDisplay.gender == undefined || userInfoDisplay.gender === 'male') " style="background-image:url(../img/male.gif)"></div>
+        <div class="swiper-slide" ng-if="userInfoDisplay.photos == undefined"><img src="./img/userPhoto.jpg"/></div>
       </div>
       <!-- Add Pagination style="background-image:url({{oImage}})" -->
       <div class="swiper-pagination"></div>

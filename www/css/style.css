@@ -311,3 +311,66 @@
 ion-tabs.tabs-color-active-positive .tab-item.tab-item-active {
   color: #40a1d2;
 }
+
+.input-phone{
+  display: block;
+  margin-top: 18px;
+  border: 1px solid #c7c2c2 !important;
+  border-radius: 0.2em;
+  font-size: 1.5em;
+  text-align: center;
+  width: 65%;
+  margin-bottom: 18px;
+}
+
+.phone-nextButton{
+  width: 80%;
+  padding: 0.5em;
+  background-color: #40a1d2;
+  margin-top: 15px;
+  font-size: 20px;
+  font-weight: bolder;
+  color: white;
+}
+
+
+.countryCode {
+  /*for firefox*/
+  -moz-appearance: none;
+  /*for chrome*/
+  -webkit-appearance:none;
+  width: 25%;
+  margin-right: 5px;
+  height: 30px;
+  margin-top: 20px;
+  border: 1px solid #c7c2c2;
+  background: white;
+}
+
+/*for IE10*/
+.countryCode::-ms-expand {
+  display: none;
+}
+
+.errorMsg{
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+
+.threeDots {
+  display: table-cell;
+  width: 1px;
+  vertical-align: middle;
+  /* padding-top: 6px; */
+  font-size: 26px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.threeDots:after {
+  /*content: '\2807';*/
+  font-size: 30px;
+  font-weight: bolder;
+  margin-top: 6px;
+  padding-left: 6px;
+}

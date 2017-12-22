@@ -9,16 +9,18 @@
   <ion-nav-bar class="header-wrap headerCss"></ion-nav-bar>
 
   <ion-nav-buttons side="left">
-    <span ng-click="gotoChats()" style="font-size: 18px;margin-top: 13%;">
+    <span ng-click="gotoChats()" style="font-size: 18px;margin-top: 35%;">
       <i class="ion-chevron-left"></i> Chats
     </span>
   </ion-nav-buttons>
 
   <ion-nav-buttons side="right">
+
     <img ng-src="{{titleUserDisplayUrl}}" style="
-    max-width: 35px;
-    max-height: 65px;
-    border-radius: 50%;" ng-click="showProfile()">
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-top: 15px;" ng-click="showProfile()">
   </ion-nav-buttons>
 
   <ion-content class="padding">
@@ -27,18 +29,23 @@
     </ol>
 
     <div style="padding-bottom: 20px">
-      <button class="blockButton" ng-click="deleteChat()">
+      <!--<button class="blockButton" ng-click="deleteChat()">
         Spam
       </button>
       <button class="blockButton" ng-click="deleteChat()">
         Block
-      </button>
+      </button>-->
     </div>
-
-    <input ng-model="message.text" placeholder=" Enter message" class="messageText" id="messageText">
-    <a class="search-link" href="" ng-click="saveMessage(message)"><span class="send_icon">Send</span></a>
-    </input>
-
-
   </ion-content>
+  <ion-footer-bar keyboard-attach>
+    <div class="bottomText" style="position: absolute;display: table;">
+      <span class="icon ion-ios-trash-outline threeDots" ng-click="deleteChat()"></span>
+      <!--<div class="threeDots"></div>-->
+      <input ng-model="message.text" placeholder=" Enter message" class="messageText newsMessageText"
+             ng-focus="scrollDown()" ng-blur="scrollDown()" id="messageText">
+      <a class="search-link sendButton" href="" ng-click="saveMessage(message)"><span class="send_icon">Send</span></a>
+      </input>
+
+    </div>
+  </ion-footer-bar>
 </ion-view>

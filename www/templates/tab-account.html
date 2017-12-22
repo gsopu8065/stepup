@@ -4,7 +4,7 @@
 
     <ion-list>
       <div class="item-avatar item-icon-right viewProfileDiv" type="item-text-wrap">
-        <img ng-src="https://graph.facebook.com/{{user.userID}}/picture?type=small" ng-click="showProfile()">
+        <img ng-src="{{getPhotoURL()}}" ng-click="showProfile()">
         <div class="viewProfileDiv2" ng-click="showProfile()">View Profile</div>
       </div>
     </ion-list>
