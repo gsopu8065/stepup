@@ -1,4 +1,4 @@
-stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, $cordovaImagePicker, $cordovaCamera, $ionicScrollDelegate, LocalStorage, NewsService) {
 
   //get User
   var user = LocalStorage.getUser();
@@ -15,23 +15,126 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
     $scope.newsFeed = newsQueryRes;
   });
 
+  $scope.doRefresh = function (status) {
+    console.log("refresh")
+    $scope.$broadcast('scroll.refreshComplete');
+  };
+
   $scope.getLocation = function (status) {
     if (status.city && status.state) {
       return " " + status.city + ", " + status.state;
     }
   };
 
-  $scope.message = {};
-  $scope.saveStatus = function (message) {
-    NewsService.saveStatus(message, user.userID, user.displayName, "", [$rootScope.location.longitude, $rootScope.location.latitude], 30, "text", null, null).then(function (updateQueryRes) {
-      $scope.newsFeed.push(updateQueryRes.ops[0]);
-      $scope.closeModal();
+  $scope.imageClick = function () {
+    var options = {
+      maximumImagesCount: 5, // Max number of selected images, I'm using only one for this example
+     width: 800,
+     height: 800,
+      quality: 80,            // Higher is better,
+      outputType: 1
+     };
+
+    $cordovaImagePicker.getPictures(options).then(function (imagePaths) {
+     // Loop through acquired images
+      _.forEach(imagePaths, function (imagePath) {
+        var value = {
+          url: "data:image/jpeg;base64," + imagePath,
+          _file: b64toBlob(imagePath, "data:image/jpeg;base64")
+        };
+        $scope.message.files.push(value);
+      });
+
+      focusMessageBox();
+
+     }, function(error) {
+      focusMessageBox();
+    });
+
+  };
+
+
+  $scope.takePhoto = function () {
+
+    var options = {
+      quality: 100,
+      destinationType: Camera.DestinationType.DATA_URL,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: false,
+      encodingType: Camera.EncodingType.JPEG,
+      mediaType: 0,
+      targetWidth: 1024,
+      targetHeight: 768,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false,
+      correctOrientation: true
+    };
+
+    $cordovaCamera.getPicture(options).then(function (dataURL) {
+
+      var value = {
+        url: "data:image/jpeg;base64," + dataURL,
+        _file: b64toBlob(dataURL, "data:image/jpeg;base64")
+      };
+      $scope.message.files.push(value);
+      focusMessageBox();
+    }, function (err) {
+      focusMessageBox();
     });
   };
 
-  $scope.checkMessage = function (message) {
-    return message != undefined && message.trim().length > 0
+  function focusMessageBox() {
+    var element = document.getElementById('statusText');
+    if (element) {
+      $timeout(function () {
+        element.focus();
+      });
+    }
   }
+
+  function b64toBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+
+    var byteCharacters = atob(b64Data);
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      var byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    return new Blob(byteArrays, {type: contentType});
+  }
+
+
+  $scope.message = {
+    files: [{
+      url: "https://www.planwallpaper.com/static/images/desktop-year-of-the-tiger-images-wallpaper.jpg"
+    }]
+  };
+  $scope.saveStatus = function (message) {
+    $scope.closeModal();
+    NewsService.saveStatus(message, user.userID, user.displayName, "", [$rootScope.location.longitude, $rootScope.location.latitude], 30, "text", null, null).then(function (updateQueryRes) {
+      $scope.newsFeed.push(updateQueryRes.ops[0]);
+    });
+  };
+
+  $scope.deleteFile = function (index) {
+    $scope.message.files.splice(index, 1);
+  };
+
+  $scope.checkMessage = function (message) {
+    return (message.text != undefined && message.text.trim().length > 0) || message.files.length > 0
+  };
 
   $scope.checkStatus = function (status, emotion) {
     return status.userstatusEmotion && status.userstatusEmotion == emotion
@@ -80,21 +183,25 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
   };
 
   $scope.openStatus = function () {
-    $scope.modal.show();
+    $ionicModal.fromTemplateUrl('templates/newStatus.html', {
+      scope: $scope,
+      focusFirstInput: true,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.modal = modal;
+      $scope.modal.show();
+    });
   };
 
   $scope.closeModal = function () {
-    $scope.message = {};
-    $scope.editWindow = false;
-    $scope.modal.hide();
+    $scope.message = {
+      files: []
+    };
+    //$scope.editWindow = false;
+    $scope.modal.remove();
   };
 
-  $ionicModal.fromTemplateUrl('templates/newStatus.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function (modal) {
-    $scope.modal = modal;
-  });
+
 
   $ionicModal.fromTemplateUrl('templates/reportSpam.html', {
     scope: $scope,
@@ -114,7 +221,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
       //block user
       blockUser($scope.reportArticle.userId)
     }
-    $scope.reportModal.hide();
+    $scope.reportModal.remove();
   };
 
   $scope.openOptionsMenu = function (article) {
@@ -126,10 +233,6 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
           $scope.shareStatus(article);
           return true;
         case 1 :
-          console.log("Edit Status")
-          openEditStatus(article);
-          return true;
-        case 2 :
           console.log("Delete Status")
           deleteStatus(article._id);
           return true;
@@ -168,6 +271,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
     };
 
     if (article.userId == $scope.user.userID) {
+
       actionSheet.buttons = [{text: 'Share Status via...'},
         {text: 'Edit Status'},
         {text: 'Delete Status'}
@@ -191,13 +295,13 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
 
   /* Edit Status*/
 
-  $scope.editWindow = false;
+  /* $scope.editWindow = false;
   var openEditStatus = function (article) {
     $scope.editWindow = true;
     $scope.optionsStatusId = article._id;
     $scope.message.text = article.status;
     $scope.modal.show();
-  }
+   }*/
 
   $scope.updateStatus = function (message) {
     NewsService.editStatus(message, $scope.optionsStatusId, user.userID).then(function (updateQueryRes) {
@@ -569,3 +673,37 @@ stepNote.directive('spinner', function () {
     };
   }
 );
+
+stepNote.directive('ngFileModel', ['$parse', function ($parse) {
+  return {
+    restrict: 'A',
+    link: function (scope, element, attrs) {
+      var model = $parse(attrs.ngFileModel);
+      var isMultiple = attrs.multiple;
+      var modelSetter = model.assign;
+      element.bind('change', function () {
+        var values = [];
+        angular.forEach(element[0].files, function (item) {
+          var value = {
+            // File Name
+            name: item.name,
+            //File Size
+            size: item.size,
+            //File URL to view
+            url: URL.createObjectURL(item),
+            // File Input Value
+            _file: item
+          };
+          values.push(value);
+        });
+        scope.$apply(function () {
+          if (isMultiple) {
+            modelSetter(scope, values);
+          } else {
+            modelSetter(scope, values[0]);
+          }
+        });
+      });
+    }
+  };
+}]);

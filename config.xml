@@ -84,7 +84,8 @@
     </plugin>
     <plugin name="cordova-plugin-x-socialsharing" spec="https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
+    <allow-navigation href="*" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
     <plugin name="cordova-plugin-firebase-messaging" spec="~0.12.0" />
     <engine name="ios" spec="~4.1.1" />
-    <allow-navigation href="*" />
 </widget>

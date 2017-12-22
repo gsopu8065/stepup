@@ -117,7 +117,7 @@ angular.module('starter.newsservices', [])
       var info = $q.defer();
 
       var inputData = {
-        "status": status,
+        "status": status.text || "",
         "userId": userId,
         "userName": userName,
         "isAnnonymous": true,
@@ -126,30 +126,44 @@ angular.module('starter.newsservices', [])
         "type": type,
         "parentId" : parentId,
         "statusGroupId" : statusGroupId,
-        "count": 0
+        "count": status.files.length
       };
-      var formData = new FormData();
-      formData.append('data', JSON.stringify(inputData));
-      var req = {
+      var reqData = {
+        data: JSON.stringify(inputData)
+      }
+
+      _.each(status.files, function (eachFile, index) {
+        reqData[index] = eachFile._file;
+      });
+
+      console.log(reqData);
+      $http({
         method: 'POST',
         url: SERVER_API+statusPort+'/status/saveStatus',
-        transformRequest: angular.identity,
         headers: {
           'Content-Type': undefined
         },
-        data: formData
-      };
+        data: reqData,
+        transformRequest: function (data, headersGetter) {
+          var formData = new FormData();
+          angular.forEach(data, function (value, key) {
+            formData.append(key, value);
+          });
 
-      $http(req).then(function(success){
-        console.log(success);
+          var headers = headersGetter();
+          delete headers['Content-Type'];
+
+          return formData;
+        }
+      }).then(function(success){
         info.resolve(success.data);
       }, function(error){
-        console.log(error);
         info.reject(error);
       });
       return info.promise;
 
     };
+
 
     NewsService.editStatus = function (status, statusId, userId) {
       var info = $q.defer();
@@ -168,10 +182,8 @@ angular.module('starter.newsservices', [])
       };
 
       $http(req).then(function(success){
-        console.log(success);
         info.resolve(success.data);
       }, function(error){
-        console.log(error);
         info.reject(error);
       });
       return info.promise;

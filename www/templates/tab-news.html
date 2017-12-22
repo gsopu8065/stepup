@@ -1,4 +1,5 @@
 <ion-view view-title="Myna">
+
   <ion-nav-bar class="header-wrap headerCss">
     <ion-nav-buttons side="right">
       <!--<i class="ion-ios-search-strong rightIcon" ></i>-->
@@ -9,6 +10,8 @@
   </ion-nav-bar>
 
   <ion-content class="padding" overflow-scroll="true">
+
+    <ion-refresher on-refresh="doRefresh()"></ion-refresher>
 
     <div style="height: 35px;text-align: center;" ng-if="loading">
       <spinner/>
@@ -30,8 +33,7 @@
 
     <div class="article" ng-repeat="article in newsFeed | orderBy:dynamicOrderFunction:true track by article._id">
 
-      <i class="icon ion-ios-arrow-down dropDownStatus"
-         ng-click="openOptionsMenu(article)"></i>
+      <i class="icon ion-ios-arrow-down dropDownStatus" ng-click="openOptionsMenu(article)"></i>
 
       <span class="articleTime"> {{article.timeStamp |  formatdate}} </span>
       <span class="articleTime"> {{getLocation(article)}} </span>
@@ -39,7 +41,26 @@
         <div class="articleText">
           {{article.status}}
         </div>
+        <!--<div class="swiper-container" ng-if="article.media.length > 0">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" ng-repeat="oImage in article.media"><img src="{{oImage}}"/></div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>-->
+        <a class="item item-list-detail" ng-if="article.media.length > 0" style=" height: 200px;
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 1px solid #40a1d2;
+    border-right: 1px solid #40a1d2;
+    padding-top: 0;
+    padding-bottom: 0;">
+          <ion-scroll direction="x" style="display: flex">
+            <img ng-repeat="image in article.media" ng-src="{{image}}" ng-click="showImages($index)"
+                 class="image-list-thumb"/>
+          </ion-scroll>
+        </a>
       </a>
+
       <div class="articlebottom">
 
         <span class="eachLikeIcon" ng-click="updateOrDeleteEmotion(article, 'like')">
