@@ -6,7 +6,7 @@ stepNote.run(function ($rootScope) {
   $rootScope.reply.statusGroupId = '';
 });
 
-stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, $cordovaImagePicker, $cordovaCamera, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, $cordovaImagePicker, $cordovaCamera, $ionicScrollDelegate, LocalStorage, NewsService) {
 
   //get User
   var user = LocalStorage.getUser();
@@ -26,6 +26,11 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
       $scope.newsFeed = newsQueryRes;
     });
   });
+
+  $scope.doRefresh = function (status) {
+    console.log("refresh")
+    $scope.$broadcast('scroll.refreshComplete');
+  };
 
   $scope.getLocation = function (status) {
     if (status.city && status.state) {
