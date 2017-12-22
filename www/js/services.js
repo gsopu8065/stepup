@@ -12,7 +12,7 @@ angular.module('starter.services', [])
     var firebaseRef = firebase.database();
     var geoFire = new GeoFire(firebaseRef.ref('/locations/'));
 
-    UserGeoService.saveUserLocation = function(userId, lat, long){
+    UserGeoService.saveUserLocation = function(userId, photoURL, lat, long){
       var locationFireDBRef = firebase.database().ref('/locations/' + userId);
       return new Promise(function (resolve, reject) {
         locationFireDBRef
@@ -22,7 +22,8 @@ angular.module('starter.services', [])
             geoFire.set(userId, [lat, long]).then(function () {
               console.log("User Location saved to Geo database");
               locationFireDBRef.update({
-                active: active
+                active: active,
+                photoURL: photoURL
               });
               resolve(active);
             }, function (error) {
@@ -76,7 +77,6 @@ angular.module('starter.services', [])
         userInfo.deviceId = deviceId;
       }
 
-      console.log(JSON.stringify(userInfo))
       firebase.database().ref('users/' + profileInfo.id).update(userInfo);
       info.resolve();
       return info.promise;
@@ -133,7 +133,6 @@ angular.module('starter.services', [])
     UserService.getUserLastLogin = function(userId){
       var info = $q.defer();
        firebase.database().ref('users/' + userId).child('lastLogin').once('value').then(function(res){
-         console.log(res.val())
          info.resolve(res.val());
        });
       return info.promise;
@@ -181,21 +180,101 @@ angular.module('starter.services', [])
       var messagesRef = firebase.database().ref('/chat/'+dbName);
       messagesRef.remove()
         .then(function() {
-          console.log("Remove succeeded.")
         })
         .catch(function(error) {
-          console.log("Remove failed: " + error.message)
         });
     };
 
     return UserService;
   })
 
-  .factory('FacebookCtrl', function ($http, $q) {
+  .factory('FirebaseUserCtrl', function ($http, $q) {
 
-    var FacebookCtrl = {};
+    var FirebaseUserCtrl = {};
 
-    FacebookCtrl.getFacebookProfileInfo = function (authToken) {
+    FirebaseUserCtrl.updateFirebaseUser = function (firebaseUser) {
+      var info = $q.defer();
+      cordova.exec(function(token) {
+        updateFirebaseUser(token, firebaseUser, info)
+      }, function(error) {
+         updateFirebaseUser(null, firebaseUser, info)
+      }, "FirebasePlugin", "getToken", []);
+
+      return info.promise;
+    };
+
+    var updateFirebaseUser = function(token, firebaseUser, promise){
+
+      if(firebaseUser.providerData[0].providerId == "facebook.com"){
+
+        var acces_token = firebaseUser.providerAccessToken;
+        getFacebookProfileInfo(acces_token)
+          .then(function (profileInfo) {
+            var userInfo = {
+              displayName: profileInfo.name,
+              email: profileInfo.email || "",
+              birthday: profileInfo.birthday || "",
+              photos: getFacebookPhotos(profileInfo),
+              likes: getFacebookLikes(profileInfo),
+              gender: profileInfo.gender || "",
+              about: profileInfo.about || "",
+              education: getFacebookEducation(profileInfo),
+              work: getFacebookWork(profileInfo),
+              lastLogin: new Date().getTime(),
+              status: "active"
+            };
+
+            if(token != null){
+              userInfo.deviceId = token;
+            }
+
+            updateUserProfile(firebaseUser.uid,userInfo);
+            promise.resolve();
+          }, function(error){
+            promise.reject();
+          })
+      }
+      else if(firebaseUser.providerData[0].providerId == "google.com"){
+        var googleUserInfo = {
+          displayName: firebaseUser.displayName,
+          email: firebaseUser.email || "",
+          photos: [firebaseUser.photoURL],
+          lastLogin: new Date().getTime(),
+          status: "active"
+        };
+
+        if(token != null){
+          googleUserInfo.deviceId = token;
+        }
+
+        updateUserProfile(firebaseUser.uid,googleUserInfo);
+        promise.resolve();
+      }
+      else if(firebaseUser.providerData[0].providerId == "phone"){
+        var userInfo = {
+          displayName: firebaseUser.myDisplayName,
+          lastLogin: new Date().getTime(),
+          status: "active"
+        };
+
+        if(token != null){
+          userInfo.deviceId = token;
+        }
+
+        updateUserProfile(firebaseUser.uid,userInfo);
+        promise.resolve();
+      }
+      else {
+        info.reject();
+      }
+
+    };
+
+    var updateUserProfile = function(userId, userInfo){
+      firebase.database().ref('users/' + userId).update(userInfo);
+    };
+
+    var getFacebookProfileInfo = function (authToken) {
       var info = $q.defer();
 
       var req = {
@@ -204,71 +283,85 @@ angular.module('starter.services', [])
       };
 
       $http(req).then(function(success){
-        console.log("login response");
-        console.log(success);
-        info.resolve(success);
+        console.log(JSON.stringify(success));
+        info.resolve(success.data);
       }, function(error){
-        console.log("login error");
-        console.log(error);
         info.reject(error);
       });
 
-      /*facebookConnectPlugin.api('/me?fields=about,gender,name,email, birthday,likes,albums%7Bpicture%7Burl%7D%7D&access_token=' + authToken, ["user_birthday", "email", "user_about_me", "user_photos", "user_likes"],
-        function (response) {
-          console.log("facebook response");
-          console.log(JSON.stringify(response));
-          info.resolve(response);
-        },
-        function (response) {
-          console.log("facebook error");
-          console.log(JSON.stringify(response));
-          info.reject(response);
-        }
-      );*/
       return info.promise;
     };
 
-    return FacebookCtrl;
+    var getFacebookWork = function(profileInfo) {
+      var work = "";
+      if (profileInfo.work != undefined && profileInfo.work[0] != undefined && profileInfo.work[0].employer != undefined) {
+        work = profileInfo.work[0].employer.name;
+      }
+      return work;
+    };
+
+    var getFacebookEducation = function(profileInfo) {
+      var education = "";
+      if (profileInfo.education != undefined && profileInfo.education[0] != undefined && profileInfo.education[0].school != undefined) {
+        education = profileInfo.education[0].school.name;
+      }
+      return education;
+    };
+
+    var getFacebookPhotos = function(profileInfo) {
+      var photos = [];
+      if(profileInfo.albums != undefined && profileInfo.albums.data != undefined){
+
+        var profilePictures = _.filter(profileInfo.albums.data, {"type": "profile"});
+        if (profilePictures.length > 0 && profilePictures[0].photos) {
+          _.forEach(profilePictures[0].photos.data, function (photoImages) {
+            photos.push(photoImages.images[0].source);
+          });
+        }
+      }
+      return photos;
+    };
+
+    var getFacebookLikes = function(profileInfo) {
+      var likes = [];
+      if(profileInfo.likes != undefined && profileInfo.likes.data !=undefined){
+        _.forEach(profileInfo.likes.data, function(likeObj) {
+          likes.push(likeObj.name);
+        });
+      }
+      return likes;
+    };
+
+    return FirebaseUserCtrl;
   })
 
   .factory('PushNotificationCtrl', function ($http, $q) {
 
     var PushNotificationCtrl = {};
+    const messaging = firebase.messaging();
 
     PushNotificationCtrl.sendPushNotification = function (deviceId, title, text) {
 
       var req = {
         method: 'POST',
-        url: 'https://api.ionic.io/push/notifications',
+        url: 'https://fcm.googleapis.com/fcm/send',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1YTc1YzFjNS1iMDE4LTQ0YWQtYTNiYS00MzVmYTYwOTBjZGQifQ.bsXmG3Bu8xpp6amwpFvtD8kc9mrSY8GlQ1323hPFQdI'
+          'Authorization': 'key=AIzaSyAEUlxJZAfdXzR6WFmjJprbeNNTqFUtHt8'
         },
         data: {
-          "tokens": [deviceId],
-          "profile": "test",
+          "to":deviceId,
           "notification": {
-            "android": {
-              "title": title,
-              "message": text
-            },
-            "ios": {
-              "title": title,
-              "message": text,
-              "badge":1,
-              "sound":"default",
-              "priority": 10
-            }
+            "title": title,
+            "body": text
           }
         }
       }
 
       var info = $q.defer();
       $http(req).then(function(success){
-        console.log(success);
         info.resolve(success);
       }, function(error){
-        console.log(error);
         info.reject(error);
       });
       return info.promise;

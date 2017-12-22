@@ -214,7 +214,8 @@
 }
 
 .newsMessageText{
-  width: 82%;
+  width: 75%;
+  display: table-cell;
 }
 
 .commentDiv{
@@ -337,8 +338,12 @@
 
 .bar .title {
   color: white;
-  font-family: sans-serif;
-  font-size: 22px;
+  height: 55px;
+  line-height: 65px;
+}
+
+.bar{
+  height: 55px;
 }
 
 .has-tabs, .bar-footer.has-tabs {
@@ -348,4 +353,8 @@
 .fa-spin {
   -webkit-animation: fa-spin 1s infinite linear;
   animation: fa-spin 1s infinite linear;
+}
+
+.has-header {
+  top: 55px;
 }
