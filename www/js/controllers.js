@@ -1,57 +1,13 @@
 var stepNote = angular.module('starter.controllers', []);
-/*stepNote.run(function ($rootScope) {
 
-  $rootScope.userID = undefined;
-  $rootScope.displayName = undefined;
-  $rootScope.location = [];
-  $rootScope.reply = [];
-  $rootScope.reply.parentId = '';
-  $rootScope.reply.statusGroupId = '';
-});*/
-
-stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $interval, $ionicPopup, $ionicLoading, $cordovaGeolocation, $stateParams, $ionicModal, GOOGLE_CONFIG, UserGeoService, FacebookCtrl, UserService, LocalStorage) {
-
-  $scope.user = {userID : $rootScope.userID,
-    displayName: $rootScope.displayName
-  };
-  console.log("srujan", JSON.stringify($rootScope))
-  if (!$rootScope.userID) {
-    $state.go("login")
-  }
-  console.log("srujan", JSON.stringify($rootScope))
-  $ionicLoading.show({
-    template: '<ion-spinner></ion-spinner> <br/> Current Location'
-  });
+stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $ionicModal, GOOGLE_CONFIG, UserGeoService, UserService) {
 
   var markersList = [];
-
-  //Geoquery declaration
   var firebaseRef = firebase.database();
   var geoFire = new GeoFire(firebaseRef.ref('/locations/'));
-
-  //show on map button
   $scope.userMap = {};
 
-  var options = {timeout: 300000, enableHighAccuracy: true};
-  $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-    $ionicLoading.hide();
-    var latitude = position.coords.latitude;
-    var longitude = position.coords.longitude;
-    readSucessPosition(latitude, longitude);
-
-  }, function (error) {
-    $ionicLoading.hide();
-    var alertPopup = $ionicPopup.alert({
-      title: 'Network Error',
-      template: 'Error in reading current location! Close and Reopen the App'
-    });
-
-    alertPopup.then(function (res) {
-      console.log(error);
-      $state.go('tab.dash');
-    });
-
-  });
+  readSucessPosition($rootScope.location.latitude, $rootScope.location.longitude);
 
   function readSucessPosition(latitude, longitude) {
     $scope.latLng = new google.maps.LatLng(latitude, longitude);
@@ -75,6 +31,11 @@ stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $
       center: $scope.latLng
     });
 
+    google.maps.event.trigger($scope.map, 'resize');
+    $scope.map.setZoom(17);
+    $scope.map.setCenter($scope.latLng);
+    $scope.circle.setCenter($scope.latLng);
+
     //add id to map for css
     var myoverlay = new google.maps.OverlayView();
     myoverlay.draw = function () {
@@ -83,26 +44,27 @@ stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $
     myoverlay.setMap($scope.map);
 
     //save location
-    UserGeoService.saveUserLocation($scope.user.userID, latitude, longitude)
+    UserGeoService.saveUserLocation($rootScope.uid, $rootScope.photoURL, latitude, longitude)
       .then(function (activeVal, error) {
         console.log("User Location saved to Geo database", activeVal);
         $scope.userMap.showOnMap = activeVal;
         //update markers
         var geoQuery = geoFire.query({center: [latitude, longitude], radius: 0.15});
-        geoQuery.on("key_entered", function (key, location, distance, active) {
-          console.log("users", key, location, active)
-          updateMap(key, location, active)
+        geoQuery.on("key_entered", function (key, location, distance, active, photoURL) {
+          updateMap(key, location, active, photoURL)
         });
         geoQuery.on("ready", function () {
           geoQuery.cancel();
-        })
+        });
         $scope.$apply()
       }, function (error) {
         console.log("User Location can't saved to Geo database: " + error);
       });
   }
 
-  function updateMap(key, location, active) {
+  function updateMap(key, location, active, photoURL) {
+
+    //var photo = photoURL == false ? './img/userPhoto.jpg' : photoURL;
     var result_find = $filter('filter')(markersList, {id: key});
     if (result_find.length == 0) {
       if (active) {
@@ -110,7 +72,7 @@ stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $
           position: new google.maps.LatLng(location[0], location[1]),
           map: $scope.map,
           icon: {
-            url: 'https://graph.facebook.com/' + key + '/picture?type=small',
+            url: photoURL,
             scaledSize: new google.maps.Size(28, 28),
             scale: 10
           },
@@ -132,7 +94,7 @@ stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $
           position: new google.maps.LatLng(location[0], location[1]),
           map: $scope.map,
           icon: {
-            url: 'https://graph.facebook.com/' + key + '/picture?type=small',
+            url: photoURL,
             scaledSize: new google.maps.Size(28, 28),
             scale: 10
           },
@@ -172,24 +134,20 @@ stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $
   });
 
 //modal open
-  $ionicModal.fromTemplateUrl('templates/user-detail.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function (modal) {
-    $scope.modal = modal;
-  });
+
   $scope.openModal = function (userId) {
 
     $scope.chatUserId = userId;
+    $ionicModal.fromTemplateUrl('templates/user-detail.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.modal = modal;
+    });
 
     UserService.getUserProfile(userId).then(function (userQueryRes) {
       $scope.userInfoDisplay = userQueryRes.val();
-      if (userId != $scope.user.userID) {
-        $scope.chatButton = true;
-      }
-      else {
-        $scope.chatButton = false;
-      }
+      $scope.chatButton = userId != $rootScope.uid;
 
       $scope.modal.show();
       var swiper = new Swiper('.swiper-container', {
@@ -209,11 +167,12 @@ stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $
     })
   };
   $scope.closeModal = function () {
-    $scope.modal.hide();
+    $scope.modal.remove();
   };
   $scope.startConversation = function () {
-    $state.go('tab.chat-detail', {chatId: $scope.chatUserId, chatName: $scope.userInfoDisplay.displayName});
-    $scope.modal.hide();
+    var photoURL = ($scope.userInfoDisplay.photoURL && $scope.userInfoDisplay.photoURL.length > 0 )? $scope.userInfoDisplay.photoURL[0] : './img/userPhoto.jpg';
+    $state.go('tab.chat-detail', {chatId: $scope.chatUserId});
+    $scope.modal.remove();
   };
 
   $scope.changeOnMap = function (x) {
@@ -224,7 +183,7 @@ stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $
         position: $scope.latLng,
         map: $scope.map,
         icon: {
-          url: 'https://graph.facebook.com/' + $scope.user.userID + '/picture?type=small',
+          url: $rootScope.photoURL,
           scaledSize: new google.maps.Size(28, 28),
           scale: 10
         },
@@ -232,106 +191,102 @@ stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $
         draggable: true
       });
       marker.addListener('click', function () {
-        $scope.openModal($scope.user.userID);
+        $scope.openModal($rootScope.uid);
       });
 
       _.forEach(markersList, function (v) {
-        if (v.id == $scope.user.userID) {
+        if (v.id == $rootScope.uid) {
           v.active = true;
           v.marker = marker;
         }
       });
-      UserGeoService.activeUserLocation($scope.user.userID);
+      UserGeoService.activeUserLocation($rootScope.uid);
     }
     else {
       _.forEach(markersList, function (v) {
-        if (v.id == $scope.user.userID) {
+        if (v.id == $rootScope.uid) {
           v.active = false;
           v.marker.setMap(null);
         }
       });
-      UserGeoService.deActiveUserLocation($scope.user.userID);
+      UserGeoService.deActiveUserLocation($rootScope.uid);
     }
-  }
-
-});
-
-stepNote.controller('ChatsCtrl', function ($scope, $state, $ionicLoading, $ionicPopup, LocalStorage, UserService) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //get contacts list start
-  /*$scope.$on('$ionicView.enter', function(e) {
-   console.log($scope.chats)
-   });*/
-
-  $ionicLoading.show();
-  var user = LocalStorage.getUser();
-  if (user.userID) {
-    firebase.database().ref('/users/' + user.userID).once('value').then(function (user) {
-
-      var userDetails = user.val();
-      if (userDetails.contacts) {
-
-        var chatContacts = [];
-        _.forEach(userDetails.contacts, function (eachContact) {
-          var eachContactUser = eachContact;
-          UserService.getUserLastLogin(eachContact.contactid).then(function (lastLogin) {
-            eachContactUser.lastLogin = lastLogin;
-            chatContacts.push(eachContactUser);
-          });
-        });
-        $ionicLoading.hide();
-        $scope.chats = chatContacts;
-        $scope.$apply()
-      }
-      else {
-        $ionicLoading.hide();
-        $scope.chats = [];
-        $scope.$apply()
-      }
-    });
-  }
-
-  $scope.deleteChat = function (chatId) {
-    if (user) {
-      var confirmPopup = $ionicPopup.confirm({
-        title: 'Remove Contact',
-        template: 'Are you sure you want to remove this contact?'
-      });
-
-      confirmPopup.then(function (res) {
-        if (res) {
-          //delete chat history
-          console.log("delete chat", $state.current)
-          UserService.removeContact(user.userID, chatId);
-          $state.transitionTo($state.current, $state.$current.params, {reload: true, inherit: true, notify: true});//reload
-        }
-      });
-    }
-    //Chats.remove(chat);
   };
 });
 
-stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $ionicModal, $ionicPopup, $http, UserService, LocalStorage, PushNotificationCtrl) {
+stepNote.controller('ChatsCtrl', function ($scope, $rootScope, $state, $ionicPopup, UserService) {
+
+  //$rootScope.uid = "00ealwMukASMV01JG6rZ4WXOiDI2"
+  $scope.chats = [];
+  firebase.database().ref('/users/' + $rootScope.uid).once('value').then(function (user) {
+    var userDetails = user.val();
+    if (userDetails.contacts) {
+
+      _.forEach(userDetails.contacts, function (eachContact) {
+        var eachContactUser = eachContact;
+        UserService.getUserLastLogin(eachContact.contactid).then(function (lastLogin) {
+          eachContactUser.lastLogin = lastLogin;
+          $scope.chats.push(eachContactUser);
+        });
+      });
+      if(userDetails.contacts.length == 0){
+        $scope.chats = undefined;
+      }
+    }
+    else {
+      $scope.chats = undefined;
+      $scope.$apply()
+    }
+  });
+
+  $scope.getChatUserImage = function (chatObject) {
+    return chatObject.photoURL?chatObject.photoURL:'./img/userPhoto.jpg';
+  };
+
+  $scope.deleteChat = function (chatId) {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Remove Contact',
+      template: 'Are you sure you want to remove this contact?'
+    });
+
+    confirmPopup.then(function (res) {
+      if (res) {
+        UserService.removeContact($rootScope.uid, chatId);
+        $state.transitionTo($state.current, $state.$current.params, {reload: true, inherit: true, notify: true});//reload
+      }
+    });
+  };
+});
+
+stepNote.controller('ChatDetailCtrl', function ($ionicActionSheet, $scope,$timeout,$ionicScrollDelegate, $rootScope, $stateParams, $state, $ionicModal, $ionicPopup, UserService, PushNotificationCtrl) {
+
+  $scope.$on('$ionicView.enter', function (e) {
+    $ionicScrollDelegate.scrollBottom(true);
+    //document.getElementById('messageList').scrollToBottom(0);
+  });
 
   //dom start
   var messageList = document.getElementById('messageList');
   var messageText = document.getElementById('messageText');
   //dom end
+ // $rootScope.uid = "00ealwMukASMV01JG6rZ4WXOiDI2"
 
-  $scope.titleUserDisplayName = $stateParams.chatName;
-  $scope.titleUserDisplayUrl = 'https://graph.facebook.com/' + $stateParams.chatId + '/picture?type=large';
 
-  $scope.user = LocalStorage.getUser();
+  firebase.database().ref('users/' + $rootScope.uid).child('contacts').once('value').then(function(res){
+    var currentContactId = _.filter(res.val(), function(o) { return o.contactid == $stateParams.chatId; });
+    if(currentContactId.length > 0){
+      $scope.titleUserDisplayName = currentContactId[0].displayName;
+      $scope.titleUserDisplayUrl = currentContactId[0].photoURL || './img/userPhoto.jpg';
+    }
+  });
+
+
   var dbName = "";
-  if ($stateParams.chatId < $scope.user.userID) {
-    dbName = $stateParams.chatId + $scope.user.userID
+  if ($stateParams.chatId < $rootScope.uid) {
+    dbName = $stateParams.chatId + $rootScope.uid
   }
   else {
-    dbName = $scope.user.userID + $stateParams.chatId
+    dbName = $rootScope.uid + $stateParams.chatId
   }
 
 
@@ -344,24 +299,40 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
     $state.go('tab.chats')
   };
 
+  $scope.scrollDown = function () {
+    console.log("srujan down")
+    $ionicScrollDelegate.scrollBottom(true);
+  };
+
   //block contact
   $scope.deleteChat = function () {
-    console.log("delete chat")
 
-    if ($scope.user) {
-      var confirmPopup = $ionicPopup.confirm({
-        title: 'Remove Contact',
-        template: 'Are you sure you want to remove this contact?'
-      });
+    var hideSheet = $ionicActionSheet.show({
+      destructiveText: 'Remove Contact',
+      titleText: 'Are you sure you want to remove this contact?',
+      cancelText: 'Cancel',
+      cancel: function () {
+      },
+      buttonClicked: function (index) {
+        return true;
+      },
+      destructiveButtonClicked: function () {
+        UserService.removeContact($rootScope.uid, $stateParams.chatId);
+        $state.go('tab.chats');
+      }
+    });
 
-      confirmPopup.then(function (res) {
-        if (res) {
-          //delete chat history
-          UserService.removeContact($scope.user.userID, $stateParams.chatId)
-          $state.go('tab.chats');
-        }
-      });
-    }
+    /*var confirmPopup = $ionicPopup.confirm({
+      title: 'Remove Contact',
+      template: 'Are you sure you want to remove this contact?'
+    });
+
+    confirmPopup.then(function (res) {
+      if (res) {
+        UserService.removeContact($rootScope.uid, $stateParams.chatId);
+        $state.go('tab.chats');
+      }
+    });*/
   };
 
   // Saves a new message on the Firebase DB.
@@ -375,28 +346,37 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
 
           firebase.database().ref('users/' + $stateParams.chatId).once('value').then(function (userQueryRes) {
 
+            var chatUser = userQueryRes.val();
+            var chatUserPhoto = (chatUser.photos && chatUser.photos.length > 0)? chatUser.photos[0] : null;
+
             var currentUserContactDetails = {
               messageDb: dbName,
               contactid: $stateParams.chatId,
-              displayName: userQueryRes.val().displayName,
-              deviceId: userQueryRes.val().deviceId,
-              status: userQueryRes.val().status
+              displayName: chatUser.displayName,
+              deviceId: chatUser.deviceId,
+              status: chatUser.status,
+              photoURL: chatUserPhoto
             };
 
-            firebase.database().ref('users/' + $scope.user.userID).once('value').then(function (currentUserQueryRes) {
+            firebase.database().ref('users/' + $rootScope.uid).once('value').then(function (currentUserQueryRes) {
+
+              var currentUser = currentUserQueryRes.val();
+              var currentUserPhoto = (currentUser.photos && currentUser.photos.length > 0)? currentUser.photos[0] : null;
+
               var currentUserContacts = currentUserQueryRes.val().contacts || [];
               currentUserContacts.push(currentUserContactDetails);
-              firebase.database().ref('users/' + $scope.user.userID).update({
+              firebase.database().ref('users/' + $rootScope.uid).update({
                 contacts: currentUserContacts
               });
 
-              var chatUserContacts = userQueryRes.val().contacts || [];
+              var chatUserContacts = chatUser.contacts || [];
               var chatUserContactDetails = {
                 messageDb: dbName,
-                contactid: $scope.user.userID,
-                displayName: currentUserQueryRes.val().displayName,
-                deviceId: currentUserQueryRes.val().deviceId,
-                status: currentUserQueryRes.val().status
+                contactid: $rootScope.uid,
+                displayName: currentUser.displayName,
+                deviceId: currentUser.deviceId,
+                status: currentUser.status,
+                photoURL: currentUserPhoto
               };
               chatUserContacts.push(chatUserContactDetails);
               firebase.database().ref('users/' + $stateParams.chatId).update({
@@ -410,7 +390,7 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
         messagesRef.push({
           text: message.text,
           timestamp: new Date().getTime(),
-          sender: $scope.user.userID
+          sender: $rootScope.uid
         }).then(function () {
           // Clear message text field and SEND button state.
           messageText.value = '';
@@ -420,12 +400,12 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
 
         //send push notification
         firebase.database().ref('users/' + $stateParams.chatId).once('value').then(function (userQueryRes) {
-          PushNotificationCtrl.sendPushNotification(userQueryRes.val().deviceId, $scope.user.displayName, message.text).then(function (sucess) {
+          PushNotificationCtrl.sendPushNotification(userQueryRes.val().deviceId, $rootScope.displayName, message.text).then(function (sucess) {
             console.log("push sucess")
-          })
-
+          });
         })
 
+        $ionicScrollDelegate.scrollBottom(true);
       });
       //save in sender and receiver contacts end
     }
@@ -453,7 +433,7 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
     var container = document.createElement('li');
     container.innerHTML = MESSAGE_TEMPLATE;
     var pDiv = container.firstChild.firstChild;
-    if ($scope.user.userID == sender) {
+    if ($rootScope.uid == sender) {
       container.setAttribute('class', "self");
     }
     else {
@@ -496,14 +476,13 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
     $scope.openModal($stateParams.chatId);
   };
 
-  //modal open
-  $ionicModal.fromTemplateUrl('templates/user-detail.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function (modal) {
-    $scope.modal = modal;
-  });
   $scope.openModal = function (userId) {
+    $ionicModal.fromTemplateUrl('templates/user-detail.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.modal = modal;
+    });
     $scope.chatUserId = userId;
     UserService.getUserProfile(userId).then(function (userQueryRes) {
       $scope.userInfoDisplay = userQueryRes.val();
@@ -525,31 +504,32 @@ stepNote.controller('ChatDetailCtrl', function ($scope, $stateParams, $state, $i
       });
     })
   };
-  $scope.closeModal = function () {
-    $scope.modal.hide();
-  };
-  loadMessages()
 
+  $scope.closeModal = function () {
+    $scope.modal.remove();
+  };
+
+  loadMessages();
 });
 
-stepNote.controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, $ionicModal, $firebaseAuth, LocalStorage, UserService) {
-
-  $scope.user = LocalStorage.getUser();
+stepNote.controller('AccountCtrl', function ($scope, $rootScope, $state, $ionicActionSheet, $ionicModal, $firebaseAuth, UserService) {
 
   //show profile
   $scope.showProfile = function () {
-    console.log($scope.user)
-    $scope.openModal($scope.user.userID);
+    $scope.openModal($rootScope.uid);
   };
 
-  //modal open
-  $ionicModal.fromTemplateUrl('templates/user-detail.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function (modal) {
-    $scope.modal = modal;
-  });
+  $scope.getPhotoURL = function(){
+    return $rootScope.photoURL != null ? $rootScope.photoURL : './img/userPhoto.jpg';
+  };
+
   $scope.openModal = function (userId) {
+    $ionicModal.fromTemplateUrl('templates/user-detail.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.modal = modal;
+    });
     UserService.getUserProfile(userId).then(function (userQueryRes) {
       $scope.userInfoDisplay = userQueryRes.val();
       $scope.chatButton = false;
@@ -571,13 +551,13 @@ stepNote.controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, 
     })
   };
   $scope.closeModal = function () {
-    $scope.modal.hide();
+    $scope.modal.remove();
   };
 
   $scope.logout = function () {
     var hideSheet = $ionicActionSheet.show({
       destructiveText: 'Logout',
-      titleText: 'Are you sure you want to logout? This app is awsome so I recommend you to stay.',
+      titleText: 'Are you sure you want to logout? This app is awesome so I recommend you to stay.',
       cancelText: 'Cancel',
       cancel: function () {
       },
@@ -585,141 +565,191 @@ stepNote.controller('AccountCtrl', function ($scope, $state, $ionicActionSheet, 
         return true;
       },
       destructiveButtonClicked: function () {
-
         $firebaseAuth(firebase.auth()).$signOut();
         $state.go('login');
-        //facebook logout
-        /*facebookConnectPlugin.logout(function () {
-            console.log("logging out");
-            $scope.authResponse = undefined;
-            $state.go('login');
-          },
-          function (fail) {
-            console.log("logging out error")
-          });*/
       }
     });
   }
 
 });
 
-stepNote.controller('LoginCtrl', function ($scope, $state, FacebookCtrl, UserService, LocalStorage) {
-
-  var push = new Ionic.Push({
-    "debug": false,
-    "pluginConfig": {
-      "ios": {
-        badge: "true",
-        sound: "true",
-        "alert": "true",
-        "clearBadge": "true"
-      }
-    }
-  });
-
-  //This is the success callback from the login method
-  var fbLoginSuccess = function (response) {
-    //get facebook profile
-    console.log("login response", response);
-    FacebookCtrl.getFacebookProfileInfo(response.authResponse.accessToken).then(function (profileInfo) {
-
-      //push notification
-      push.register(function (token) {
-        try {
-        push.saveToken(token);  // persist the token in the Ionic Platform
-        //save device id
-        //update user info
-        UserService.updateUserProfile(profileInfo.data, token.token);
-        LocalStorage.setUser({
-          userID: profileInfo.data.id,
-          displayName: profileInfo.data.name,
-          location: (profileInfo.data.location) ? profileInfo.data.location.name : ""
-        });
-          $state.go('tab.dash');
-        }
-        catch (err) {
-          console.log("Error " + JSON.stringify(err));
-        }
-      });
-    })
-  };
-
-  //This is the fail callback from the login method
-  var fbLoginError = function (error) {
-    console.log('fbLoginError', error);
-  };
-
-  //This method is executed when the user press the "Login with facebook" button
-  $scope.login = function () {
-    facebookConnectPlugin.login(["user_birthday", "email", "user_about_me", "user_photos", "user_likes", "user_work_history", "user_education_history", "user_location"], fbLoginSuccess, fbLoginError);
-  };
-});
-
-stepNote.controller('LoginCtrl2', function ($scope,$rootScope, $state, $firebaseAuth, $cordovaOauth, $ionicModal, LocalStorage){
+stepNote.controller('LoginCtrl2', function ($scope,$rootScope, $state, $firebaseAuth, $cordovaOauth, FirebaseUserCtrl){
 
   var auth = $firebaseAuth(firebase.auth());
-  $scope.log = "message";
+
   $scope.fbLogin = function () {
-    $cordovaOauth.facebook("454580491577152", ["user_birthday", "email", "user_about_me", "user_photos", "user_likes", "user_work_history", "user_education_history", "user_location"]).then(function(result) {
-      var credential = firebase.auth.FacebookAuthProvider.credential(
-        result.access_token
-      );
+    console.log("started");
+    facebookConnectPlugin.login(["user_birthday", "email", "user_about_me", "user_photos", "user_likes", "user_work_history", "user_education_history", "user_location"], function(response) {
+      $scope.providerAccessToken = response.authResponse.accessToken;
+      var credential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
       auth.$signInWithCredential(credential).then(successLogin).catch(errorLogin);
     }, errorLogin);
   };
-  $scope.gmailLogin = function () {
 
+  $scope.gmailLogin = function () {
     $cordovaOauth.google("666075061271-h83tsb3cdqcieq6cek63eb9lrke8f1df.apps.googleusercontent.com", ["email", "profile"]).then(function(result) {
-      var credential = firebase.auth.GoogleAuthProvider.credential(null,
-        result.access_token
-      );
-      console.log(JSON.stringify(result));
+      $scope.providerAccessToken = result.access_token;
+      var credential = firebase.auth.GoogleAuthProvider.credential(null, result.access_token);
       auth.$signInWithCredential(credential).then(successLogin).catch(errorLogin);
     },errorLogin);
   };
-  $scope.phoneLogin = function () {
-    $ionicModal.fromTemplateUrl('templates/loginWithPhone.html', {
-      scope: $scope,
-      animation: 'slide-in-up'
-    }).then(function (modal) {
-      $scope.loginModal = modal;
-      $scope.loginModal.show();
-      window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
-    });
-
-  };
-
-  $scope.sendPhoneCode = function(phone){
-    var appVerifier = window.recaptchaVerifier;
-    console.log(phone, appVerifier);
-    firebase.auth().signInWithPhoneNumber("+19407821708", appVerifier)
-      .then(function (confirmationResult) {
-        console.log(JSON.stringify(confirmationResult))
-        window.confirmationResult = confirmationResult;
-      }).catch(errorLogin);
-  };
-
-  $scope.validateCode = function(code){
-    var credential = firebase.auth.PhoneAuthProvider.credential(window.confirmationResult.verificationId, code);
-    auth.$signInWithCredential(credential).then(successLogin).catch(errorLogin);
-  };
-
-  $scope.cancelPhoneLogin = function(){
-    $scope.loginModal.remove();
-  };
 
   var successLogin = function(firebaseUser){
-    $rootScope.userID = firebaseUser.providerData.uid;
-    $rootScope.displayName = firebaseUser.providerData.displayName;
-    $state.go('tab.account');
+    firebaseUser.providerAccessToken = $scope.providerAccessToken;
+    FirebaseUserCtrl.updateFirebaseUser(firebaseUser)
+      .then(goToApp(firebaseUser), goToApp(firebaseUser));
   };
 
   var errorLogin = function(error){
-    console.log(JSON.stringify(error));
-    $scope.log = error;
     $state.go('login');
   }
 
+  var goToApp = function(firebaseUser){
+    $rootScope.uid = firebaseUser.uid;
+    $rootScope.displayName = firebaseUser.displayName;
+    $rootScope.photoURL = firebaseUser.photoURL;
+    cordova.exec(undefined, undefined, "FirebasePlugin", "grantPermission", []);
+    $state.go('tab.account');
+  }
+
+});
+
+stepNote.controller('LoginWithPhone', function ($scope,$rootScope, $state, $ionicHistory){
+
+  $scope.errorMsg = undefined;
+  $scope.sendPhoneCode = function (countryCode, phone) {
+
+    var validPhone = phone && phone.length == 10;
+    if (!validPhone) {
+      $scope.errorMsg = "Invalid Phone Number";
+      return 0;
+    }
+
+    if (!countryCode) countryCode = "1";
+    cordova.exec(undefined, undefined, "FirebasePlugin", "grantPermission", []);
+    cordova.exec(function (verificationID) {
+      $scope.errorMsg = undefined;
+      $state.go('phonePinLogin', {verificationId: verificationID});
+    }, function (error) {
+      $scope.errorMsg = "Something went wrong, please try later!";
+    }, "FirebasePlugin", "getVerificationID", ["+" + countryCode + phone]);
+  };
+
+  $scope.goBack = function(){
+    $ionicHistory.goBack();
+  };
+
+});
+
+stepNote.controller('LoginPhonePin', function ($scope,$rootScope, $state, $stateParams, $firebaseAuth, $ionicHistory, FirebaseUserCtrl){
+
+  var auth = $firebaseAuth(firebase.auth());
+  $scope.errorMsg = undefined;
+
+  $scope.validateCode = function(code, displayName){
+
+    var validName = displayName && displayName.length > 1;
+    var validCode = code && code.length > 1;
+    if(!validCode){
+      $scope.errorMsg = "Invalid Code";
+      return 0;
+    }
+    if(!validName){
+      $scope.errorMsg = "Invalid Name";
+      return 0;
+    }
+    $rootScope.displayName = displayName;
+    var credential = firebase.auth.PhoneAuthProvider.credential($stateParams.verificationId, code);
+    auth.$signInWithCredential(credential).then(function(){}).catch(errorLogin); //.then(successLogin).catch(errorLogin);
+  };
+
+  $scope.goBack = function(){
+    $ionicHistory.goBack();
+  };
+
+
+  var errorLogin = function(error){
+    $scope.errorMsg = "Authentication Failed: Try again!";
+  };
+
+});
+
+stepNote.directive('phoneInput', function($filter, $browser) {
+  return {
+    require: 'ngModel',
+    link: function($scope, $element, $attrs, ngModelCtrl) {
+      var listener = function() {
+        var value = $element.val().replace(/[^0-9]/g, '');
+        $element.val($filter('tel')(value, false));
+      };
+
+      // This runs when we update the text field
+      ngModelCtrl.$parsers.push(function(viewValue) {
+        return viewValue.replace(/[^0-9]/g, '').slice(0,10);
+      });
+
+      // This runs when the model gets updated on the scope directly and keeps our view in sync
+      ngModelCtrl.$render = function() {
+        $element.val($filter('tel')(ngModelCtrl.$viewValue, false));
+      };
+
+      $element.bind('change', listener);
+      $element.bind('keydown', function(event) {
+        var key = event.keyCode;
+        // If the keys include the CTRL, SHIFT, ALT, or META keys, or the arrow keys, do nothing.
+        // This lets us support copy and paste too
+        if (key == 91 || (15 < key && key < 19) || (37 <= key && key <= 40)){
+          return;
+        }
+        $browser.defer(listener); // Have to do this or changes don't get picked up properly
+      });
+
+      $element.bind('paste cut', function() {
+        $browser.defer(listener);
+      });
+    }
+
+  };
+});
+stepNote.filter('tel', function () {
+  return function (tel) {
+    if (!tel) { return ''; }
+
+    var value = tel.toString().trim().replace(/^\+/, '');
+
+    if (value.match(/[^0-9]/)) {
+      return tel;
+    }
+
+    var country, city, number;
+
+    switch (value.length) {
+      case 1:
+      case 2:
+      case 3:
+        city = value;
+        break;
+
+      default:
+        city = value.slice(0, 3);
+        number = value.slice(3);
+    }
+
+    if(number){
+      if(number.length>3){
+        number = number.slice(0, 3) + '-' + number.slice(3,7);
+      }
+      else{
+        number = number;
+      }
+
+      return ("(" + city + ") " + number).trim();
+    }
+    else{
+      return "(" + city;
+    }
+
+  };
 });
 
 stepNote.filter('escape', function () {

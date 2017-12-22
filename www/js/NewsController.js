@@ -6,17 +6,13 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $cordovaGeolocatio
 
   //get location
   $scope.loading = true;
-  var options = {timeout: 30000, enableHighAccuracy: true};
-  $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-    $rootScope.location.latitude = position.coords.latitude;
-    $rootScope.location.longitude = position.coords.longitude;
-    NewsService.getNews({
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
-    }, 30, user.userID).then(function (newsQueryRes) {
-      $scope.loading = false;
-      $scope.newsFeed = newsQueryRes;
-    });
+
+  NewsService.getNews({
+    latitude: $rootScope.location.latitude,
+    longitude: $rootScope.location.longitude
+  }, 30, user.userID).then(function (newsQueryRes) {
+    $scope.loading = false;
+    $scope.newsFeed = newsQueryRes;
   });
 
   $scope.getLocation = function (status) {

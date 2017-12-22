@@ -676,13 +676,13 @@ var GeoFire = (function () {
      * @param {?Array.<number>} location The location as [latitude, longitude] pair
      * @param {?double} distanceFromCenter The distance from the center or null.
      */
-    function _fireCallbacksForKey(eventType, key, location, distanceFromCenter, active) {
+    function _fireCallbacksForKey(eventType, key, location, distanceFromCenter, active, photoURL) {
       _callbacks[eventType].forEach(function (callback) {
         if (typeof location === "undefined" || location === null) {
           callback(key, null, null);
         }
         else {
-          callback(key, location, distanceFromCenter, active);
+          callback(key, location, distanceFromCenter, active, photoURL);
         }
       });
     }
@@ -787,7 +787,7 @@ var GeoFire = (function () {
      * @param {string} key The key of the mylib location.
      * @param {?Array.<number>} location The location as [latitude, longitude] pair.
      */
-    function _updateLocation(key, location, active) {
+    function _updateLocation(key, location, active, photoURL) {
       validateLocation(location);
       // Get the key and location
       var distanceFromCenter, isInQuery;
@@ -804,16 +804,17 @@ var GeoFire = (function () {
         distanceFromCenter: distanceFromCenter,
         isInQuery: isInQuery,
         geohash: encodeGeohash(location, g_GEOHASH_PRECISION),
-        active: active
+        active: active,
+        photoURL: photoURL
       };
 
       // Fire the "key_entered" event if the provided key has entered this query
       if (isInQuery && !wasInQuery) {
-        _fireCallbacksForKey("key_entered", key, location, distanceFromCenter, active);
+        _fireCallbacksForKey("key_entered", key, location, distanceFromCenter, active, photoURL);
       } else if (isInQuery && oldLocation !== null && (location[0] !== oldLocation[0] || location[1] !== oldLocation[1])) {
-        _fireCallbacksForKey("key_moved", key, location, distanceFromCenter, active);
+        _fireCallbacksForKey("key_moved", key, location, distanceFromCenter, active, photoURL);
       } else if (!isInQuery && wasInQuery) {
-        _fireCallbacksForKey("key_exited", key, location, distanceFromCenter, active);
+        _fireCallbacksForKey("key_exited", key, location, distanceFromCenter, active, photoURL);
       }
     }
 
@@ -850,7 +851,7 @@ var GeoFire = (function () {
       delete _locationsTracked[key];
       if (typeof locationDict !== "undefined" && locationDict.isInQuery) {
         var distanceFromCenter = (currentLocation) ? GeoFire.distance(currentLocation, _center) : null;
-        _fireCallbacksForKey("key_exited", key, currentLocation, distanceFromCenter, locationDict.active);
+        _fireCallbacksForKey("key_exited", key, currentLocation, distanceFromCenter, locationDict.active, locationDict.photoURL);
       }
     }
 
@@ -861,8 +862,8 @@ var GeoFire = (function () {
      */
     function _childAddedCallback(locationDataSnapshot) {
       var active = locationDataSnapshot.child("active").exists() ? locationDataSnapshot.child("active").val() : true;
-      console.log("jack", locationDataSnapshot.val(), active);
-      _updateLocation(getKey(locationDataSnapshot), decodeGeoFireObject(locationDataSnapshot.val()), active);
+      var photoURL = locationDataSnapshot.child("photoURL").exists() ? locationDataSnapshot.child("photoURL").val() : './img/userPhoto.jpg';
+      _updateLocation(getKey(locationDataSnapshot), decodeGeoFireObject(locationDataSnapshot.val()), active, photoURL);
     }
 
     /**
@@ -872,8 +873,8 @@ var GeoFire = (function () {
      */
     function _childChangedCallback(locationDataSnapshot) {
       var active = locationDataSnapshot.child("active").exists() ? locationDataSnapshot.child("active").val() : true;
-      console.log("jack", locationDataSnapshot.val(), active);
-      _updateLocation(getKey(locationDataSnapshot), decodeGeoFireObject(locationDataSnapshot.val()), active);
+      var photoURL = locationDataSnapshot.child("photoURL").exists() ? locationDataSnapshot.child("photoURL").val() : './img/userPhoto.jpg';
+      _updateLocation(getKey(locationDataSnapshot), decodeGeoFireObject(locationDataSnapshot.val()), active, photoURL);
     }
 
     /**
@@ -1054,12 +1055,12 @@ var GeoFire = (function () {
 
         // If the location just left the query, fire the "key_exited" callbacks
         if (wasAlreadyInQuery && !locationDict.isInQuery) {
-          _fireCallbacksForKey("key_exited", key, locationDict.location, locationDict.distanceFromCenter, locationDict.active);
+          _fireCallbacksForKey("key_exited", key, locationDict.location, locationDict.distanceFromCenter, locationDict.active, locationDict.photoURL);
         }
 
         // If the location just entered the query, fire the "key_entered" callbacks
         else if (!wasAlreadyInQuery && locationDict.isInQuery) {
-          _fireCallbacksForKey("key_entered", key, locationDict.location, locationDict.distanceFromCenter, locationDict.active);
+          _fireCallbacksForKey("key_entered", key, locationDict.location, locationDict.distanceFromCenter, locationDict.active, locationDict.photoURL);
         }
       }
 

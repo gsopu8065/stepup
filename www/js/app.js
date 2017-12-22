@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','starter.newsservices', 'ngCordova', 'firebase', 'ngCordovaOauth'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.newsservices', 'ngCordova', 'firebase', 'ngCordovaOauth'])
 
-  .run(function ($ionicPlatform, $cordovaGeolocation, $state, $rootScope, $firebaseAuth, FacebookCtrl, UserService, LocalStorage) {
+  .run(function ($ionicPlatform, $cordovaGeolocation, $state, $rootScope, $firebaseAuth, FirebaseUserCtrl) {
     $ionicPlatform.ready(function () {
 
 
@@ -23,89 +23,69 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
         StatusBar.styleDefault();
       }
 
-      $rootScope.userID = undefined;
+      $rootScope.uid = undefined;
       $rootScope.displayName = undefined;
+      $rootScope.photoURL = null;
+      $rootScope.isGlobal = false;
       $rootScope.location = [];
       $rootScope.reply = [];
       $rootScope.reply.parentId = '';
       $rootScope.reply.statusGroupId = '';
-      //document.addEventListener("deviceready", onDeviceReady($state, $rootScope), false);
 
-      $firebaseAuth(firebase.auth()).$onAuthStateChanged(function(firebaseUser) {
+      autoLoginToApp();
+    });
+
+    var autoLoginToApp = function(){
+      $firebaseAuth(firebase.auth()).$onAuthStateChanged(function (firebaseUser) {
         if (firebaseUser) {
-          $rootScope.userID = firebaseUser.providerData.uid;
-          $rootScope.displayName = firebaseUser.providerData.displayName;
-          $state.go('tab.account');
+          if (firebaseUser.providerData[0].providerId == "phone") {
+            if($rootScope.displayName){
+              firebaseUser.myDisplayName = $rootScope.displayName;
+              firebaseUser.updateProfile({
+                displayName: $rootScope.displayName
+              }).then(function () {
+              });
+
+              FirebaseUserCtrl.updateFirebaseUser(firebaseUser)
+                .then(goToApp(firebaseUser), goToApp(firebaseUser));
+            }
+            else{
+              goToApp(firebaseUser);
+            }
+          }else{
+            goToApp(firebaseUser);
+          }
         } else {
           $state.go('login');
         }
       });
-
-      /*if (window.cordova && window.cordova.plugins) {
-        //background running
-        window.cordova.plugins.backgroundMode.configure({
-          silent: true
-        })
-
-        // Enable background mode
-        window.cordova.plugins.backgroundMode.enable();
-
-        // Called when background mode has been activated
-        window.cordova.plugins.backgroundMode.onactivate = function () {
-
-          /!*var firebaseRef = firebase.database().ref();
-          var geoFire = new GeoFire(firebaseRef);
-          var options = {timeout: 30000, enableHighAccuracy: true};
-
-          var userId = JSON.parse(window.localStorage.starter_facebook_user || '{}')
-          if (userId.userID) {
-            // Set an interval of 3 seconds (3000 milliseconds)
-            setInterval(function () {
-              //update last login
-              firebase.database().ref('users/' + userId.userID).update({
-                lastLogin: new Date().getTime()
-              });
-
-              //update location
-              $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-                geoFire.set(userId.userID, [position.coords.latitude, position.coords.longitude]);
-              });
-
-            }, 3000);
-          }*!/
-
-        }
-      }*/
-
-    });
-
-    function onDeviceReady($state, $rootScope) {
-
-      /*facebookConnectPlugin.getLoginStatus(function (success) {
-        if (success.status === 'connected') {
-          //get facebook profile
-          FacebookCtrl.getFacebookProfileInfo(success.authResponse.accessToken).then(function (profileInfo) {
-            UserService.updateUserProfile(profileInfo.data, undefined);
-            LocalStorage.setUser({
-              userID: profileInfo.data.id,
-              displayName: profileInfo.data.name,
-              location: (profileInfo.data.location) ? profileInfo.data.location.name : ""
-            });
-            $state.go('tab.news');
-          }, function (error) {
-            $state.go('login');
-          })
-        }
-        else {
-          $state.go('login');
-        }
-      }, function (error) {
-        $state.go('login');
-      });*/
-
     }
 
+    var goToApp = function(firebaseUser){
 
+      var userFireDBRef = firebase.database().ref('/users/' + firebaseUser.uid);
+      userFireDBRef.update({   lastLogin: new Date().getTime() });
+      userFireDBRef.once('value').then(function(res){
+        console.log(res.val().isGlobal);
+        $rootScope.isGlobal = res.val().isGlobal || false;
+        console.log($rootScope.isGlobal);
+      });
+
+      cordova.exec(function(token) {
+        var userFireDBRef = firebase.database().ref('/users/' + firebaseUser.uid);
+        userFireDBRef.update({   deviceId: token });
+      }, function(error) {}, "FirebasePlugin", "onTokenRefresh", []);
+
+      var options = {timeout: 30000, enableHighAccuracy: true};
+      $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+        $rootScope.location.latitude = position.coords.latitude;
+        $rootScope.location.longitude = position.coords.longitude;
+        $rootScope.uid = firebaseUser.uid;
+        $rootScope.displayName = firebaseUser.displayName;
+        $rootScope.photoURL = firebaseUser.photoURL == null? './img/userPhoto.jpg':firebaseUser.photoURL;
+        $state.go('tab.account');
+      });
+    }
   })
 
   .config(function ($stateProvider, $urlRouterProvider) {
@@ -122,6 +102,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
         abstract: false,
         templateUrl: 'templates/login.html',
         controller: 'LoginCtrl2'
+      })
+      .state('phoneLogin', {
+        url: '/phoneLogin',
+        abstract: false,
+        templateUrl: 'templates/loginWithPhone.html',
+        controller: 'LoginWithPhone'
+      })
+      .state('phonePinLogin', {
+        url: '/phonePinLogin:verificationId',
+        abstract: false,
+        templateUrl: 'templates/loginPhonePin.html',
+        controller: 'LoginPhonePin'
       })
 
       // setup an abstract state for the tabs directive
@@ -154,7 +146,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','s
         }
       })
       .state('tab.chat-detail', {
-        url: '/chats/:chatId?chatName',
+        url: '/chats/:chatId',
         views: {
           'tab-chats': {
             templateUrl: 'templates/chat-detail.html',

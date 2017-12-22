@@ -2,13 +2,13 @@
   <ion-nav-bar class="header-wrap headerCss"></ion-nav-bar>
   <ion-content>
     <ion-list>
-      <div ng-show="chats.length == 0" class="nocontacts-error">
+      <div ng-if="chats == undefined" class="nocontacts-error">
         No Contacts Find
       </div>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.contactid}}?chatName={{chat.displayName}}">
-        <img ng-src="https://graph.facebook.com/{{chat.contactid}}/picture?type=small">
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.contactid}}">
+        <img ng-src="{{getChatUserImage(chat)}}">
         <h2>{{chat.displayName}}</h2>
-        <p>Last Login {{chat.lastLogin | date:'MM/dd/yyyy h:mma'}}</p>
+        <p>Last Login {{chat.lastLogin | date:'MM/dd h:mma'}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
 
         <ion-option-button class="button-assertive" ng-click="deleteChat(chat.contactid)">

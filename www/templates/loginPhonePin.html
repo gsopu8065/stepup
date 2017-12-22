@@ -1,0 +1,25 @@
+<ion-view view-title="Myna">
+  <ion-nav-bar class="header-wrap headerCss"></ion-nav-bar>
+  <ion-nav-buttons side="left">
+    <span ng-click="goBack()" style="font-size: 18px;margin-top: 25%;">
+      <i class="ion-chevron-left"></i> &nbsp; Back
+    </span>
+  </ion-nav-buttons>
+
+  <ion-content class="padding">
+    <div style="margin-top: 20px;text-align: center;">
+      <span style="font-size: 17px;">Enter Your Code</span>
+      <input type="tel" class="input-phone" style="display: inline-table;" ng-model="code"/>
+
+      <div class="errorMsg">
+        {{errorMsg}}
+      </div>
+      <div style="margin-top: 10px;display: table;width: 100%;">
+        <span style="display: table-cell">Name: </span>
+        <input type="text" class="input-phone" style="width: 90%;display: table-cell;" ng-model="displayName"/>
+      </div>
+
+      <button type="button" class="phone-nextButton" ng-click="validateCode(code, displayName)">Login Into Myna</button>
+    </div>
+  </ion-content>
+</ion-view>

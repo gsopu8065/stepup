@@ -18,7 +18,7 @@
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="OverrideUserAgent" value="AppleWebKit/537.36 Chrome/36.0.1985.135 Mobile Safari/537.36" />
+    <preference name="OverrideUserAgent" value="Chrome/36.0.1985.135 Mobile" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
@@ -84,7 +84,7 @@
     </plugin>
     <plugin name="cordova-plugin-x-socialsharing" spec="https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
-    <allow-navigation href="http://10.0.0.6:8102" />
     <plugin name="cordova-plugin-firebase-messaging" spec="~0.12.0" />
     <engine name="ios" spec="~4.1.1" />
+    <allow-navigation href="*" />
 </widget>
