@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.newsservices', 'ngCordova', 'firebase', 'ngCordovaOauth'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.newsservices', 'ngCordova', 'firebase', 'ngCordovaOauth', 'ionicLazyLoad'])
 
   .run(function ($ionicPlatform, $cordovaGeolocation, $state, $rootScope, $firebaseAuth, FirebaseUserCtrl) {
     $ionicPlatform.ready(function () {
@@ -27,12 +27,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       $rootScope.displayName = undefined;
       $rootScope.photoURL = null;
       $rootScope.isGlobal = false;
-      $rootScope.location = [];
-      $rootScope.reply = [];
-      $rootScope.reply.parentId = '';
-      $rootScope.reply.statusGroupId = '';
+      $rootScope.location = {};
+      $rootScope.reply = {};
+      $rootScope.articleDetails = {};
+      $rootScope.providerAccessToken = undefined;
 
       autoLoginToApp();
+
     });
 
     var autoLoginToApp = function(){
@@ -52,7 +53,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
             else{
               goToApp(firebaseUser);
             }
-          }else{
+          } else if ((firebaseUser.providerData[0].providerId == "facebook.com") || (firebaseUser.providerData[0].providerId == "google.com")) {
+            if ($rootScope.providerAccessToken) {
+              cordova.exec(undefined, undefined, "FirebasePlugin", "grantPermission", []);
+              firebaseUser.providerAccessToken = $rootScope.providerAccessToken;
+              FirebaseUserCtrl.updateFirebaseUser(firebaseUser)
+                .then(goToApp(firebaseUser), goToApp(firebaseUser));
+            }
+            else {
+              goToApp(firebaseUser);
+            }
+          }
+          else {
             goToApp(firebaseUser);
           }
         } else {
@@ -66,15 +78,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       var userFireDBRef = firebase.database().ref('/users/' + firebaseUser.uid);
       userFireDBRef.update({   lastLogin: new Date().getTime() });
       userFireDBRef.once('value').then(function(res){
-        console.log(res.val().isGlobal);
         $rootScope.isGlobal = res.val().isGlobal || false;
-        console.log($rootScope.isGlobal);
       });
 
       cordova.exec(function(token) {
-        var userFireDBRef = firebase.database().ref('/users/' + firebaseUser.uid);
+        //var userFireDBRef = firebase.database().ref('/users/' + firebaseUser.uid);
         userFireDBRef.update({   deviceId: token });
-      }, function(error) {}, "FirebasePlugin", "onTokenRefresh", []);
+      }, function (error) {
+        console.log("notice error", error);
+      }, "FirebasePlugin", "onTokenRefresh", []);
 
       var options = {timeout: 30000, enableHighAccuracy: true};
       $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
@@ -83,7 +95,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         $rootScope.uid = firebaseUser.uid;
         $rootScope.displayName = firebaseUser.displayName;
         $rootScope.photoURL = firebaseUser.photoURL == null? './img/userPhoto.jpg':firebaseUser.photoURL;
-        $state.go('tab.account');
+        $state.go('tab.news');
       });
     }
   })
@@ -101,7 +113,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         url: '/login',
         abstract: false,
         templateUrl: 'templates/login.html',
-        controller: 'LoginCtrl2'
+        controller: 'LoginCtrl'
       })
       .state('phoneLogin', {
         url: '/phoneLogin',

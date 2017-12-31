@@ -1,8 +1,46 @@
-stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordovaGeolocation, $state, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, $cordovaImagePicker, $cordovaCamera, $ionicScrollDelegate, LocalStorage, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordovaGeolocation, $state, $ionicBackdrop, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, $cordovaImagePicker, $cordovaCamera, $ionicSlideBoxDelegate, $ionicScrollDelegate, NewsService) {
 
-  //get User
-  var user = LocalStorage.getUser();
-  $scope.user = user;
+
+  /*$rootScope.uid = "6qDGwYfzFjQQ16kZMCM2i9TJhfn2";
+   $rootScope.displayName = "jack phone";
+   $rootScope.location = {
+   "longitude": -86.929105 ,
+   "latitude": 36.073874};*/
+
+
+  $scope.showDetails = function (article) {
+    $rootScope.articleDetails = article;
+    $state.go('tab.news-detail', {statusId: article._id});
+  };
+
+  $scope.showImages = function (zoomedArticle, index) {
+    $scope.zoomedArticle = zoomedArticle;
+    $scope.activeSlide = index;
+    $scope.showZoomModal('templates/gallery-zoomview.html');
+  };
+
+  $scope.showZoomModal = function (templateUrl) {
+    $ionicModal.fromTemplateUrl(templateUrl, {
+      scope: $scope
+    }).then(function (modal) {
+      $scope.zoomModal = modal;
+      $scope.zoomModal.show();
+    });
+  }
+
+  $scope.closeZoomModal = function () {
+    $scope.zoomModal.hide();
+    $scope.zoomModal.remove()
+  };
+
+  $scope.updateSlideStatus = function (slide) {
+    var zoomFactor = $ionicScrollDelegate.$getByHandle('scrollHandle' + slide).getScrollPosition().zoom;
+    if (zoomFactor == 1) {
+      $ionicSlideBoxDelegate.enableSlide(true);
+    } else {
+      $ionicSlideBoxDelegate.enableSlide(false);
+    }
+  };
 
   //get location
   $scope.loading = true;
@@ -10,14 +48,24 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
   NewsService.getNews({
     latitude: $rootScope.location.latitude,
     longitude: $rootScope.location.longitude
-  }, 30, user.userID).then(function (newsQueryRes) {
+  }, 50, $rootScope.uid).then(function (newsQueryRes) {
     $scope.loading = false;
     $scope.newsFeed = newsQueryRes;
   });
 
   $scope.doRefresh = function (status) {
-    console.log("refresh")
+    $ionicScrollDelegate.resize();
     $scope.$broadcast('scroll.refreshComplete');
+    /*NewsService.getNews({
+     latitude: $rootScope.location.latitude,
+     longitude: $rootScope.location.longitude
+     }, 30, $rootScope.uid).then(function (newsQueryRes) {
+     $scope.newsFeed = newsQueryRes;
+     $scope.$broadcast('scroll.refreshComplete');
+     }, function(error){
+     $scope.$broadcast('scroll.refreshComplete');
+     });*/
+
   };
 
   $scope.getLocation = function (status) {
@@ -115,15 +163,12 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
     return new Blob(byteArrays, {type: contentType});
   }
 
-
   $scope.message = {
-    files: [{
-      url: "https://www.planwallpaper.com/static/images/desktop-year-of-the-tiger-images-wallpaper.jpg"
-    }]
+    files: []
   };
   $scope.saveStatus = function (message) {
     $scope.closeModal();
-    NewsService.saveStatus(message, user.userID, user.displayName, "", [$rootScope.location.longitude, $rootScope.location.latitude], 30, "text", null, null).then(function (updateQueryRes) {
+    NewsService.saveStatus(message, $rootScope.uid, [$rootScope.location.longitude, $rootScope.location.latitude], "text", null, null).then(function (updateQueryRes) {
       $scope.newsFeed.push(updateQueryRes.ops[0]);
     });
   };
@@ -162,8 +207,9 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
   };
 
   $scope.updateEmotion = function (status, emotion) {
-    NewsService.updateEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
-      var currentIndex = _.findIndex($scope.newsFeed, {'_id': status._id});
+    var currentIndex = _.findIndex($scope.newsFeed, {'_id': status._id});
+    $scope.newsFeed[currentIndex].userstatusEmotion = emotion;
+    NewsService.updateEmotion(status._id, $rootScope.uid, emotion).then(function (updateQueryRes) {
       $scope.newsFeed[currentIndex].dislikeCount = updateQueryRes.dislikeCount;
       $scope.newsFeed[currentIndex].likeCount = updateQueryRes.likeCount;
       $scope.newsFeed[currentIndex].replyCount = updateQueryRes.replyCount;
@@ -172,8 +218,9 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
   };
 
   $scope.deleteEmotion = function (status, emotion) {
-    NewsService.deleteEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
-      var currentIndex = _.findIndex($scope.newsFeed, {'_id': status._id});
+    var currentIndex = _.findIndex($scope.newsFeed, {'_id': status._id});
+    $scope.newsFeed[currentIndex].userstatusEmotion = undefined;
+    NewsService.deleteEmotion(status._id, $rootScope.uid, emotion).then(function (updateQueryRes) {
       $scope.newsFeed[currentIndex].dislikeCount = updateQueryRes.dislikeCount;
       $scope.newsFeed[currentIndex].likeCount = updateQueryRes.likeCount;
       $scope.newsFeed[currentIndex].replyCount = updateQueryRes.replyCount;
@@ -201,20 +248,10 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
     $scope.modal.remove();
   };
 
-
-
-  $ionicModal.fromTemplateUrl('templates/reportSpam.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function (modal) {
-    $scope.reportModal = modal;
-  });
-
   $scope.closeReportSpam = function (reportStatus) {
-    console.log("reportStatus ", reportStatus);
     if (reportStatus == 1 || reportStatus == 2 || reportStatus == 3) {
       //send report
-      NewsService.reportIssue($scope.reportArticle._id, user.userID, reportStatus).then(function (reportIssue) {
+      NewsService.reportIssue($scope.reportArticle._id, $rootScope.uid, reportStatus).then(function (reportIssue) {
       })
     }
     if (reportStatus == 4) {
@@ -229,11 +266,9 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
     var sameUserEvent = function (index) {
       switch (index) {
         case 0 :
-          console.log("share")
           $scope.shareStatus(article);
           return true;
         case 1 :
-          console.log("Delete Status")
           deleteStatus(article._id);
           return true;
       }
@@ -242,17 +277,20 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
     var differentUserEvent = function (index) {
       switch (index) {
         case 0 :
-          console.log("share")
           $scope.shareStatus(article);
           return true;
         case 1 :
-          console.log("Block this user");
-          blockUser(article.userId)
+          blockUser(article.userId);
           return true;
         case 2 :
-          console.log("Report Status");
           $scope.reportArticle = article;
-          $scope.reportModal.show();
+          $ionicModal.fromTemplateUrl('templates/reportSpam.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+          }).then(function (modal) {
+            $scope.reportModal = modal;
+            $scope.reportModal.show();
+          });
           return true;
       }
     };
@@ -260,7 +298,6 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
     var globalUserEvent = function (index) {
       switch (index) {
         case 0 :
-          console.log("share")
           $scope.shareStatus(article);
           return true;
       }
@@ -270,10 +307,9 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
       cancelText: 'Cancel'
     };
 
-    if (article.userId == $scope.user.userID) {
+    if (article.userId == $rootScope.uid) {
 
       actionSheet.buttons = [{text: 'Share Status via...'},
-        {text: 'Edit Status'},
         {text: 'Delete Status'}
       ];
       actionSheet.buttonClicked = sameUserEvent
@@ -304,7 +340,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
    }*/
 
   $scope.updateStatus = function (message) {
-    NewsService.editStatus(message, $scope.optionsStatusId, user.userID).then(function (updateQueryRes) {
+    NewsService.editStatus(message, $scope.optionsStatusId, $rootScope.uid).then(function (updateQueryRes) {
       var currentIndex = _.findIndex($scope.newsFeed, {'_id': $scope.optionsStatusId});
       $scope.newsFeed[currentIndex].dislikeCount = updateQueryRes.dislikeCount;
       $scope.newsFeed[currentIndex].likeCount = updateQueryRes.likeCount;
@@ -323,7 +359,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
 
     confirmPopup.then(function (res) {
       if (res) {
-        NewsService.deleteStatus(optionsStatusId, user.userID).then(function (updateQueryRes) {
+        NewsService.deleteStatus(optionsStatusId, $rootScope.uid).then(function (updateQueryRes) {
           var statusIndex = _.findIndex($scope.newsFeed, {_id: optionsStatusId});
           $scope.newsFeed.splice(statusIndex, 1);
         });
@@ -339,10 +375,10 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
 
     confirmPopup.then(function (res) {
       if (res) {
-        NewsService.blockUser(user.userID, optionsUserId).then(function (updateQueryRes) {
-          _.remove($scope.newsFeed, function (eachStatus) {
+        NewsService.blockUser($rootScope.uid, optionsUserId).then(function (updateQueryRes) {
+          /*_.remove($scope.newsFeed, function (eachStatus) {
             return eachStatus.userId == optionsUserId;
-          });
+           });*/
         });
       }
     });
@@ -351,7 +387,7 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
 
   $scope.shareStatus = function (article) {
     $cordovaSocialSharing
-      .share(article.status, "From: Myna", null, null) // Share via native share sheet
+      .share(article.status, "From: Myna", article.media, null) // Share via native share sheet
       .then(function (result) {
         // Success!
       }, function (err) {
@@ -372,13 +408,13 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
     var order = 0;
     switch ($scope.sort) {
       case 1:
-        order = status['likeCount'] + status['dislikeCount'] + status['replyCount'];
+        order = status['sort'];
         break;
       case 2:
         order = status['timeStamp'];
         break;
       default:
-        order = status['likeCount'] + status['dislikeCount'] + status['replyCount'];
+        order = status['sort'];
     }
     return order;
   };
@@ -386,60 +422,47 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordova
   //on every tab level
   $scope.$on('$ionicView.enter', function (e) {
     if ($rootScope.location.latitude) {
-      $scope.loading = true;
-      //$scope.newsFeed = [];
+      //$scope.loading = true;
       NewsService.getNews({
         latitude: $rootScope.location.latitude,
         longitude: $rootScope.location.longitude
-      }, 30, user.userID).then(function (newsQueryRes) {
-        $scope.loading = false;
-        $scope.newsFeed = newsQueryRes;
+      }, 30, $rootScope.uid).then(function (newsQueryRes) {
+        _.forEach(newsQueryRes, function (eachObject) {
+          var index = _.findIndex($scope.newsFeed, function (o) {
+            return o._id == eachObject._id;
+          })
+          if (index == -1) {
+            $scope.newsFeed.push(eachObject);
+          }
+        });
       });
     }
   });
-
+  console.log($rootScope.location.longitude, $rootScope.location.latitude)
 });
 
-stepNote.controller('NewsDetailCtrl', function ($scope, $state, $cordovaSocialSharing, $stateParams, $ionicPopup, $rootScope, $timeout, $cordovaGeolocation, LocalStorage, NewsService) {
+stepNote.controller('NewsDetailCtrl', function ($scope, $rootScope, $state, $stateParams, $ionicPopup, $timeout, NewsService) {
 
-  if ($rootScope.location.latitude == null || $rootScope.location.latitude == undefined) {
-    var options = {timeout: 30000, enableHighAccuracy: true};
-    $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-      $rootScope.location.latitude = position.coords.latitude;
-      $rootScope.location.longitude = position.coords.longitude;
-    });
-  }
-
-  var user = LocalStorage.getUser();
+  //var user = LocalStorage.getUser();
   $scope.inputValue = {
     message: ""
   };
 
-  $scope.showBlockUser = function (articleUserId) {
-    return user.userID != articleUserId
-  };
+  $scope.article = $rootScope.articleDetails;
+  $rootScope.reply.statusGroupId = $scope.article._id;
 
-  $scope.shareStatus = function () {
-    $cordovaSocialSharing
-      .share($scope.article.status, "From: Myna", null, null) // Share via native share sheet
-      .then(function (result) {
-        // Success!
-      }, function (err) {
-        // An error occured. Show a message to the user
-      });
+  $scope.showBlockUser = function (articleUserId, isGlobal) {
+    return isGlobal || ($rootScope.uid == articleUserId);
   };
-
 
   $scope.loading = true;
-  NewsService.getStatus($stateParams.statusId, user.userID).then(function (statusQueryRes) {
-    $scope.article = statusQueryRes;
-    $rootScope.reply.statusGroupId = $scope.article._id;
+  NewsService.getStatus($stateParams.statusId, $rootScope.uid).then(function (statusQueryRes) {
+    $scope.article.replies = statusQueryRes.replies;
     $scope.loading = false;
   });
 
   $rootScope.reply.parentId = $stateParams.statusId;
   $scope.startReply = function (replyId) {
-
     $rootScope.reply.parentId = replyId;
     var element = document.getElementById('replyText');
     if (element) {
@@ -481,10 +504,10 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $cordovaSocialSh
     var status = $scope.article;
     confirmPopup.then(function (res) {
       if (res) {
-        NewsService.blockUser(user.userID, status.userId).then(function (updateQueryRes) {
-          _.remove($scope.newsFeed, function (eachStatus) {
+        NewsService.blockUser($rootScope.uid, status.userId).then(function (updateQueryRes) {
+          /* _.remove($scope.newsFeed, function (eachStatus) {
             return eachStatus.userId == optionsUserId;
-          });
+           });*/
         });
       }
     });
@@ -503,7 +526,8 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $cordovaSocialSh
   };
 
   var updateEmotion = function (emotion) {
-    NewsService.updateEmotion($scope.article._id, user.userID, emotion).then(function (updateQueryRes) {
+    $scope.article.userstatusEmotion = emotion;
+    NewsService.updateEmotion($scope.article._id, $rootScope.uid, emotion).then(function (updateQueryRes) {
       $scope.article.dislikeCount = updateQueryRes.dislikeCount;
       $scope.article.likeCount = updateQueryRes.likeCount;
       $scope.article.userstatusEmotion = updateQueryRes.userstatusEmotion;
@@ -511,7 +535,8 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $cordovaSocialSh
   };
 
   var deleteEmotion = function (emotion) {
-    NewsService.deleteEmotion($scope.article._id, user.userID, emotion).then(function (updateQueryRes) {
+    $scope.article.userstatusEmotion = undefined;
+    NewsService.deleteEmotion($scope.article._id, $rootScope.uid, emotion).then(function (updateQueryRes) {
       $scope.article.dislikeCount = updateQueryRes.dislikeCount;
       $scope.article.likeCount = updateQueryRes.likeCount;
       $scope.article.userstatusEmotion = updateQueryRes.userstatusEmotion;
@@ -521,7 +546,7 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $cordovaSocialSh
   $scope.saveComment = function () {
     $scope.loading = true;
     $scope.article.replies = [];
-    NewsService.saveStatus($scope.inputValue.message, user.userID, user.displayName, "", [$rootScope.location.longitude, $rootScope.location.latitude], 30, "commentText", $rootScope.reply.parentId, $rootScope.reply.statusGroupId).then(function (updateQueryRes) {
+    NewsService.saveStatus({text: $scope.inputValue.message}, $rootScope.uid, [$rootScope.location.longitude, $rootScope.location.latitude], "commentText", $rootScope.reply.parentId, $rootScope.reply.statusGroupId).then(function (updateQueryRes) {
       $scope.article.replies = updateQueryRes.replies;
       $scope.inputValue.message = "";
       $scope.loading = false;
@@ -534,7 +559,7 @@ stepNote.controller('NewsDetailCtrl', function ($scope, $state, $cordovaSocialSh
 
 });
 
-stepNote.directive('commenttree', function ($compile, NewsService, LocalStorage) {
+stepNote.directive('commenttree', function ($compile, NewsService, $rootScope, LocalStorage) {
   return {
     restrict: 'E',
     scope: {commenttree: '@'},
@@ -542,33 +567,28 @@ stepNote.directive('commenttree', function ($compile, NewsService, LocalStorage)
     '<div class="replyComment" ng-click="divClicked(status)">{{ status.status  }}</div>' +
     '<div class="commentbottom">' +
     '<span class="articlebottomitem" ng-click="startReply(status._id)"> Reply </span>' +
-    ' <span class="articlebottomitem" ng-click="divClicked(status)"> {{status.replies.length}} comments</span>' +
+    ' <span class="articlebottomitem" ng-click="divClicked(status)"> {{status.replies.length}} <i class="fa fa-comments-o" style="font-size: 21px;color: darkgray;"></i></span>' +
 
     '<span class="eachLikeIcon" ng-click="updateOrDeleteEmotion(status, \'like\')">' +
     '<span class="fontOfLike likeCount blackColor">{{getEmotionCount(status, \'like\')}}</span>' +
-  '<span class="icon ion-arrow-up-c fontOfLikeIcon" ng-class="{true:\'makeLikeIconBold\',false:\'\'}[checkStatus(status, \'like\')]"></span>' +
-    '<Span class="fontOfLike" ng-class="{true:\'makeLikeIconBold\',false:\'\'}[checkStatus(status, \'like\')]"> Like</Span>' +
+    '<i class="fa  fontOfLikeIcon" aria-hidden="true" ng-class="{true:\'fa-thumbs-up makeLikeIconBold\',false:\'fa-thumbs-o-up\', undefined:\'fa-thumbs-o-up\'}[checkStatus(status, \'like\')]"></i>' +
     '</span>'+
 
     '<span class="eachLikeIcon" ng-click="updateOrDeleteEmotion(status, \'dislike\')">' +
     '<span class="fontOfLike likeCount blackColor">{{getEmotionCount(status, \'dislike\')}}</span>' +
-  '<span class="icon ion-arrow-down-c fontOfLikeIcon" ng-class="{true:\'makeLikeIconBold\',false:\'\'}[checkStatus(status, \'dislike\')]"></span>' +
-    '<Span class="fontOfLike" ng-class="{true:\'makeLikeIconBold\',false:\'\'}[checkStatus(status, \'dislike\')]"> Dislike</Span>' +
+    '<i class="fa fontOfLikeIcon" aria-hidden="true" ng-class="{true:\'fa-thumbs-down makeLikeIconBold\',false:\'fa-thumbs-o-down\', undefined:\'fa-thumbs-o-down\'}[checkStatus(status, \'dislike\')]"></i>' +
     '</span>' +
 
     ' </div>' +
     '</div>',
 
     link: function (scope, elem, attr) {
-      var user = LocalStorage.getUser();
-      NewsService.getStatus(attr.statusid, user.userID).then(function (statusQueryRes) {
+      NewsService.getStatus(attr.statusid, $rootScope.uid).then(function (statusQueryRes) {
         scope.status = statusQueryRes;
       }.bind(scope));
     },
 
-    controller: function ($scope, $element, $rootScope, $timeout, $attrs, NewsService, LocalStorage) {
-
-      var user = LocalStorage.getUser();
+    controller: function ($scope, $element, $rootScope, $timeout, $attrs, NewsService) {
       $scope.divClicked = function (status) {
 
         if (status.active == undefined || !status.active) {
@@ -588,7 +608,6 @@ stepNote.directive('commenttree', function ($compile, NewsService, LocalStorage)
 
       $scope.startReply = function (replyId) {
         $rootScope.reply.parentId = replyId;
-        //console.log(document.getElementById('replyText'), replyId)
         var element = document.getElementById('replyText')
         if (element) {
           $timeout(function () {
@@ -618,10 +637,11 @@ stepNote.directive('commenttree', function ($compile, NewsService, LocalStorage)
         else{
           $scope.updateEmotion(status, emotion)
         }
-      }
+      };
 
       $scope.updateEmotion = function (status, emotion) {
-        NewsService.updateEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
+        $scope.status.userstatusEmotion = emotion;
+        NewsService.updateEmotion(status._id, $rootScope.uid, emotion).then(function (updateQueryRes) {
           $scope.status.dislikeCount = updateQueryRes.dislikeCount;
           $scope.status.likeCount = updateQueryRes.likeCount;
           $scope.status.userstatusEmotion = updateQueryRes.userstatusEmotion;
@@ -629,7 +649,8 @@ stepNote.directive('commenttree', function ($compile, NewsService, LocalStorage)
       };
 
       $scope.deleteEmotion = function (status, emotion) {
-        NewsService.deleteEmotion(status._id, user.userID, emotion).then(function (updateQueryRes) {
+        $scope.status.userstatusEmotion = undefined;
+        NewsService.deleteEmotion(status._id, $rootScope.uid, emotion).then(function (updateQueryRes) {
           $scope.status.dislikeCount = updateQueryRes.dislikeCount;
           $scope.status.likeCount = updateQueryRes.likeCount;
           $scope.status.userstatusEmotion = updateQueryRes.userstatusEmotion;
@@ -659,7 +680,7 @@ stepNote.filter('formatdate', function ($filter) {
 
 stepNote.filter('orderByHot', function() {
   return function(item) {
-    return item.dislikeCount + item.likeCount + item.replyCount;
+    return item.sort;
   };
 });
 

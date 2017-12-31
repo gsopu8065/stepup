@@ -1,0 +1,26 @@
+<div class="modal image-modal transparent" on-swipe-down="closeZoomModal()" on-swipe-up="closeZoomModal()">
+  <div class="ion-close closeModal" ng-click="closeZoomModal()" style="    padding-bottom: 3px;
+    padding-top: 2%;
+    color: white;"></div>
+  <ion-slide-box show-pager="false" on-slide-changed="slideChanged(index)" active-slide="activeSlide">
+    <ion-slide ng-repeat="zoomImage in zoomedArticle.media">
+      <ion-scroll direction="xy" scrollbar-x="false" scrollbar-y="false"
+                  zooming="true" min-zoom="1" style="width: 100%; height: 100%; display: initial"
+                  delegate-handle="scrollHandle{{$index}}" on-scroll="updateSlideStatus(activeSlide)"
+                  on-release="updateSlideStatus(activeSlide)">
+
+        <div class="image" style="background-image: url( {{zoomImage}} ); height: 100%"></div>
+      </ion-scroll>
+    </ion-slide>
+  </ion-slide-box>
+  <div class="articlebottom zoomArticleBottom">
+    <div class="eachLikeIcon" ng-click="updateOrDeleteEmotion(zoomedArticle, 'like')">
+      <i class="fa  fontOfLikeIcon" aria-hidden="true"
+         ng-class="{true:'fa-thumbs-up makeLikeIconBold',false:'fa-thumbs-o-up', undefined:'fa-thumbs-o-up'}[checkStatus(zoomedArticle, 'like')]"></i>
+    </div>
+    <div class="eachLikeIcon" ng-click="updateOrDeleteEmotion(zoomedArticle, 'dislike')">
+      <i class="fa fontOfLikeIcon" aria-hidden="true"
+         ng-class="{true:'fa-thumbs-down makeLikeIconBold',false:'fa-thumbs-o-down', undefined:'fa-thumbs-o-down'}[checkStatus(zoomedArticle, 'dislike')]"></i>
+    </div>
+  </div>
+</div>

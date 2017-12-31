@@ -12,34 +12,31 @@
                 ng-class="{statusTextHeight90: message.files.length == 0, statusTextHeight50: message.files.length > 0}"
                 id="statusText"></textarea>
 
-      <div class="imagesSlide">
-        <span class="slide" ng-repeat="file in message.files">
-          <img ng-src="{{file.url}}" height="100%"/>
-          <span class="ion-close imageDelete" ng-click="deleteFile($index)"></span>
-        </span>
+      <div class="imagesSlide list">
+
+        <ion-scroll direction="x" class="item wide-item">
+          <span ng-repeat="file in message.files" height="90px" style="margin-right: 10px">
+            <span class="ion-close imageDelete" ng-click="deleteFile($index)"></span>
+            <img ng-src="{{file.url}}" height="90px"/>
+          </span>
+
+        </ion-scroll>
       </div>
+
     </div>
-
-
+  </ion-content>
+  <ion-footer-bar keyboard-attach>
     <div class="newStatusBottom">
-
       <div class="newStatusBottomLeft">
         <i class="icon ion-images" ng-click="imageClick()"></i>
         <i class="icon ion-camera" ng-click="takePhoto()"></i>
       </div>
-
       <div class="newStatusBottomRight">
-        <!--<button ng-if="editWindow && checkMessage(message)" class="rightAlign"
-                ng-click="updateStatus(message.text)">
-          UPDATE
-        </button>-->
         <button ng-if="!editWindow && checkMessage(message)" class="rightAlign" ng-click="saveStatus(message)">
           POST
         </button>
       </div>
-
     </div>
-
-  </ion-content>
+  </ion-footer-bar>
 
 </ion-modal-view>

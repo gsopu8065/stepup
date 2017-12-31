@@ -28,7 +28,9 @@
   border-color: #27447e; }
 
 .scroll {
-  height: 100%;
+  height: 100% !important;
+  width: 100% !important;
+  -webkit-overflow-scrolling: touch !important;
 }
 
 #map {
@@ -85,7 +87,7 @@
 
 .swiper-container {
   width: 100%;
-  height: 200px;
+  height: 315px;
   background-color: rgba(0, 0, 0, 0.07);
 }
 .swiper-slide {
@@ -169,19 +171,25 @@
 
 
 .viewProfileDiv{
-  width: 100%;
-  margin-left: 5%;
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .viewProfileDiv2{
   font-size: 17px;
   font-weight: 500;
-  color: chocolate;
+  text-align: center;
 }
 
 .logout{
   width: 80%;
   margin-left: 10%;
+  bottom: 0px;
+  position: absolute;
 }
 
 
@@ -368,3 +376,22 @@ ion-tabs.tabs-color-active-positive .tab-item.tab-item-active {
   margin-top: 6px;
   padding-left: 6px;
 }
+
+.accountBg {
+  height: 50%;
+  background-size: cover;
+}
+
+.loginHeader {
+  font-size: -webkit-xxx-large !important;
+  font-weight: 900;
+  font-family: fantasy;
+}
+
+.loginTerms {
+  text-align: center;
+  color: azure;
+  font-size: x-small;
+  line-height: initial;
+}
+

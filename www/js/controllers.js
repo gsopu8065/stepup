@@ -46,7 +46,6 @@ stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $
     //save location
     UserGeoService.saveUserLocation($rootScope.uid, $rootScope.photoURL, latitude, longitude)
       .then(function (activeVal, error) {
-        console.log("User Location saved to Geo database", activeVal);
         $scope.userMap.showOnMap = activeVal;
         //update markers
         var geoQuery = geoFire.query({center: [latitude, longitude], radius: 0.15});
@@ -58,7 +57,6 @@ stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $
         });
         $scope.$apply()
       }, function (error) {
-        console.log("User Location can't saved to Geo database: " + error);
       });
   }
 
@@ -216,7 +214,6 @@ stepNote.controller('DashCtrl', function ($scope, $rootScope, $state, $filter, $
 
 stepNote.controller('ChatsCtrl', function ($scope, $rootScope, $state, $ionicPopup, UserService) {
 
-  //$rootScope.uid = "00ealwMukASMV01JG6rZ4WXOiDI2"
   $scope.chats = [];
   firebase.database().ref('/users/' + $rootScope.uid).once('value').then(function (user) {
     var userDetails = user.val();
@@ -300,7 +297,6 @@ stepNote.controller('ChatDetailCtrl', function ($ionicActionSheet, $scope,$timeo
   };
 
   $scope.scrollDown = function () {
-    console.log("srujan down")
     $ionicScrollDelegate.scrollBottom(true);
   };
 
@@ -395,15 +391,13 @@ stepNote.controller('ChatDetailCtrl', function ($ionicActionSheet, $scope,$timeo
           // Clear message text field and SEND button state.
           messageText.value = '';
         }.bind(this)).catch(function (error) {
-          console.error('Error writing new message to Firebase Database', error);
         });
 
         //send push notification
         firebase.database().ref('users/' + $stateParams.chatId).once('value').then(function (userQueryRes) {
           PushNotificationCtrl.sendPushNotification(userQueryRes.val().deviceId, $rootScope.displayName, message.text).then(function (sucess) {
-            console.log("push sucess")
           });
-        })
+        });
 
         $ionicScrollDelegate.scrollBottom(true);
       });
@@ -519,6 +513,10 @@ stepNote.controller('AccountCtrl', function ($scope, $rootScope, $state, $ionicA
     $scope.openModal($rootScope.uid);
   };
 
+  $scope.getDisplayName = function () {
+    return $rootScope.displayName;
+  };
+
   $scope.getPhotoURL = function(){
     return $rootScope.photoURL != null ? $rootScope.photoURL : './img/userPhoto.jpg';
   };
@@ -573,14 +571,14 @@ stepNote.controller('AccountCtrl', function ($scope, $rootScope, $state, $ionicA
 
 });
 
-stepNote.controller('LoginCtrl2', function ($scope,$rootScope, $state, $firebaseAuth, $cordovaOauth, FirebaseUserCtrl){
+stepNote.controller('LoginCtrl', function ($scope, $rootScope, $state, $firebaseAuth, $cordovaOauth) {
 
   var auth = $firebaseAuth(firebase.auth());
 
   $scope.fbLogin = function () {
     console.log("started");
     facebookConnectPlugin.login(["user_birthday", "email", "user_about_me", "user_photos", "user_likes", "user_work_history", "user_education_history", "user_location"], function(response) {
-      $scope.providerAccessToken = response.authResponse.accessToken;
+      $rootScope.providerAccessToken = response.authResponse.accessToken;
       var credential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
       auth.$signInWithCredential(credential).then(successLogin).catch(errorLogin);
     }, errorLogin);
@@ -588,29 +586,19 @@ stepNote.controller('LoginCtrl2', function ($scope,$rootScope, $state, $firebase
 
   $scope.gmailLogin = function () {
     $cordovaOauth.google("666075061271-h83tsb3cdqcieq6cek63eb9lrke8f1df.apps.googleusercontent.com", ["email", "profile"]).then(function(result) {
-      $scope.providerAccessToken = result.access_token;
+      $rootScope.providerAccessToken = result.access_token;
       var credential = firebase.auth.GoogleAuthProvider.credential(null, result.access_token);
       auth.$signInWithCredential(credential).then(successLogin).catch(errorLogin);
     },errorLogin);
   };
 
   var successLogin = function(firebaseUser){
-    firebaseUser.providerAccessToken = $scope.providerAccessToken;
-    FirebaseUserCtrl.updateFirebaseUser(firebaseUser)
-      .then(goToApp(firebaseUser), goToApp(firebaseUser));
   };
 
   var errorLogin = function(error){
     $state.go('login');
   }
 
-  var goToApp = function(firebaseUser){
-    $rootScope.uid = firebaseUser.uid;
-    $rootScope.displayName = firebaseUser.displayName;
-    $rootScope.photoURL = firebaseUser.photoURL;
-    cordova.exec(undefined, undefined, "FirebasePlugin", "grantPermission", []);
-    $state.go('tab.account');
-  }
 
 });
 
@@ -631,6 +619,7 @@ stepNote.controller('LoginWithPhone', function ($scope,$rootScope, $state, $ioni
       $scope.errorMsg = undefined;
       $state.go('phonePinLogin', {verificationId: verificationID});
     }, function (error) {
+      console.log(error);
       $scope.errorMsg = "Something went wrong, please try later!";
     }, "FirebasePlugin", "getVerificationID", ["+" + countryCode + phone]);
   };
@@ -641,7 +630,7 @@ stepNote.controller('LoginWithPhone', function ($scope,$rootScope, $state, $ioni
 
 });
 
-stepNote.controller('LoginPhonePin', function ($scope,$rootScope, $state, $stateParams, $firebaseAuth, $ionicHistory, FirebaseUserCtrl){
+stepNote.controller('LoginPhonePin', function ($scope, $rootScope, $state, $stateParams, $firebaseAuth, $ionicHistory) {
 
   var auth = $firebaseAuth(firebase.auth());
   $scope.errorMsg = undefined;

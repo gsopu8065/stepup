@@ -1,14 +1,23 @@
-<ion-view view-title="Account">
+<ion-view>
+  <ion-nav-title>
+    <span class="myHeader">
+      <span class="myHeaderM">S</span>
+      <span class="myHeaderN">e</span>
+      <span class="myHeaderY">t</span>
+      <span class="myHeaderA">t</span>
+      <span class="myHeaderM">i</span>
+      <span class="myHeaderN">n</span>
+      <span class="myHeaderY">g</span>
+      <span class="myHeaderA">s</span>
+    </span>
+  </ion-nav-title>
   <ion-nav-bar class="header-wrap headerCss"></ion-nav-bar>
-  <ion-content>
-
-    <ion-list>
-      <div class="item-avatar item-icon-right viewProfileDiv" type="item-text-wrap">
-        <img ng-src="{{getPhotoURL()}}" ng-click="showProfile()">
-        <div class="viewProfileDiv2" ng-click="showProfile()">View Profile</div>
-      </div>
-    </ion-list>
-
+  <ion-content overflow-scroll="true">
+    <div class="accountBg" style="background-image: url('img/userbg.jpg');">
+      <div style="padding-top: 25%"></div>
+      <img class="viewProfileDiv" ng-src="{{getPhotoURL()}}" ng-click="showProfile()">
+      <div class="viewProfileDiv2">{{getDisplayName()}}</div>
+    </div>
     <button class="button buttonChat redColor logout" ng-click="logout()">Logout</button>
   </ion-content>
 </ion-view>

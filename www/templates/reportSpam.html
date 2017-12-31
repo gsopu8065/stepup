@@ -1,10 +1,7 @@
 <ion-modal-view>
 
   <ion-header-bar class="headerCss displayElement">
-    <span class="title">Describe the issue</span>
-    <span class="rightAlign" ng-click="closeReportSpam(0)">
-      Cancel
-    </span>
+    <span class="title" style="color: black">Describe the issue</span>
   </ion-header-bar>
 
   <ion-content style="top: 43px;">
@@ -26,6 +23,10 @@
     </div>
     <div ng-click="closeReportSpam(4)" class="reportList reportBlockUser" style="border: 1px solid indianred;">
       Block User
+    </div>
+
+    <div class="reportList reportBlockUser" style="border: 1px solid indianred;" ng-click="closeReportSpam(0)">
+      Cancel
     </div>
 
   </ion-content>

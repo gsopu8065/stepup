@@ -1,6 +1,6 @@
 angular.module('starter.newsservices', [])
 
-  .factory('NewsService', function ($http, $q, SERVER_API) {
+  .factory('NewsService', function ($rootScope, $http, $q, SERVER_API) {
 
     var userPort = "8001/myna";
     var statusPort = "8002/myna";
@@ -27,8 +27,6 @@ angular.module('starter.newsservices', [])
       $http(req).then(function(success){
         info.resolve(success.data);
       }, function(error){
-        console.log("Http Error");
-        console.log(error);
         info.reject(error);
       });
       return info.promise;
@@ -53,7 +51,6 @@ angular.module('starter.newsservices', [])
       $http(req).then(function(success){
         info.resolve(success.data);
       }, function(error){
-        console.log(error);
         info.reject(error);
       });
       return info.promise;
@@ -77,10 +74,8 @@ angular.module('starter.newsservices', [])
       };
 
       $http(req).then(function(success){
-        console.log(success);
         info.resolve(success.data);
       }, function(error){
-        console.log(error);
         info.reject(error);
       });
       return info.promise;
@@ -103,40 +98,35 @@ angular.module('starter.newsservices', [])
       };
 
       $http(req).then(function(success){
-        console.log(success);
         info.resolve(success.data);
       }, function(error){
-        console.log(error);
         info.reject(error);
       });
       return info.promise;
 
     };
 
-    NewsService.saveStatus = function(status, userId, userName, isAnnonymous, location, radius, type, parentId,  statusGroupId){
+    NewsService.saveStatus = function (status, userId, location, type, parentId, statusGroupId) {
       var info = $q.defer();
 
       var inputData = {
         "status": status.text || "",
         "userId": userId,
-        "userName": userName,
-        "isAnnonymous": true,
         "location":location,
-        "radius": radius,
         "type": type,
+        "isGlobal": $rootScope.isGlobal || false,
         "parentId" : parentId,
         "statusGroupId" : statusGroupId,
-        "count": status.files.length
+        "count": (status.files && status.files.length) || 0
       };
       var reqData = {
         data: JSON.stringify(inputData)
-      }
+      };
 
       _.each(status.files, function (eachFile, index) {
         reqData[index] = eachFile._file;
       });
 
-      console.log(reqData);
       $http({
         method: 'POST',
         url: SERVER_API+statusPort+'/status/saveStatus',
@@ -206,10 +196,8 @@ angular.module('starter.newsservices', [])
       };
 
       $http(req).then(function(success){
-        console.log(success);
         info.resolve(success.data);
       }, function(error){
-        console.log(error);
         info.reject(error);
       });
       return info.promise;
@@ -227,7 +215,6 @@ angular.module('starter.newsservices', [])
       $http(req).then(function(success){
         info.resolve(success.data);
       }, function(error){
-        console.log(error);
         info.reject(error);
       });
       return info.promise;
@@ -253,7 +240,6 @@ angular.module('starter.newsservices', [])
       $http(req).then(function (success) {
         info.resolve(success.data);
       }, function (error) {
-        console.log(error);
         info.reject(error);
       });
       return info.promise;

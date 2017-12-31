@@ -1,19 +1,55 @@
-<ion-view class="welcome-view" cache-view="false">
-  <ion-content scroll="false">
-    <div class="top-content row">
-      <div class="app-copy col col-top">
-        <h1 class="app-logo">logo</h1>
-        <p class="app-tagline">
-          This app helps you discover new friends. {{log}}
-        </p>
-      </div>
+<ion-view hide-nav-bar="true" cache-view="false">
+
+  <ion-content style="background: url(img/loginbg.jpeg) center; background-size: cover;">
+
+    <div style="padding-top: 25%"></div>
+    <div style="text-align: center; ">
+      <span class="myHeaderM loginHeader">M</span>
+      <span class="myHeaderN loginHeader">y</span>
+      <span class="myHeaderY loginHeader">n</span>
+      <span class="myHeaderA loginHeader">a</span>
     </div>
-    <div class="bottom-content row">
-      <!--<div class="col col-bottom">
-        <a class="facebook-sign-in button button-block" ng-click="login()">
+
+    <div style="bottom: 10%;
+    position: absolute;
+    width: 100%;">
+      <div class="loginTerms">
+        By signing in, you agree with our <br/>
+        <a href="#"
+           onclick="window.open('https://termsfeed.com/terms-conditions/58f36daaf01909548d7657a9dc87f389', '_system', 'location=yes'); return false;"
+           style="color: #181586;">Terms of Use</a> and <a href="#"
+                                                           onclick="window.open('https://www.iubenda.com/privacy-policy/12135328', '_system', 'location=yes'); return false;"
+                                                           style="color: #181586;">Privacy Policy</a>
+      </div>
+      <div class="col col-bottom">
+        <a class="facebook-sign-in button button-block" style="margin-bottom: 0px;background: #3b5998;color: white;"
+           ng-click="fbLogin()">
+          &nbsp;&nbsp;&nbsp;<i class="icon ion-social-facebook"></i>&nbsp;&nbsp;
           Log in with Facebook
         </a>
-      </div>-->
+        <div class="loginTerms" style="margin-bottom: 10px">
+          <i class="icon ion-ios-information-outline"></i>
+          We don't post anything on facebook
+        </div>
+      </div>
+      <div style="display: table;width: 100%;">
+        <div class="col col-bottom" style="display: table-cell;width: 50%;">
+          <a class="facebook-sign-in button" style="width: 100%;background-color: #db3236;color: white;"
+             ng-click="gmailLogin()">
+            &nbsp;&nbsp;&nbsp;<i class="icon ion-social-googleplus"></i>&nbsp;&nbsp;
+            Google
+          </a>
+        </div>
+        <div class="col col-bottom" style="display: table-cell;width: 50%;">
+          <a class="facebook-sign-in button" style="width: 100%;background-color: #3cba54;color: white;"
+             nav-transition="none" href="#/phoneLogin">
+            &nbsp;&nbsp;&nbsp;<i class="icon ion-ios-telephone"></i>&nbsp;&nbsp;
+            Phone
+          </a>
+        </div>
+      </div>
+    </div>
+    <!--<div class="bottom-content row">
       <div class="col col-bottom">
         <a class="facebook-sign-in button button-block" ng-click="fbLogin()">
           Log in with Facebook
@@ -29,7 +65,6 @@
           Log in with Phone Number
         </a>
       </div>
-
-    </div>
+    </div>-->
   </ion-content>
 </ion-view>

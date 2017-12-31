@@ -20,14 +20,12 @@ angular.module('starter.services', [])
           .then(function (snapshot) {
             var active = snapshot.exists() ? snapshot.child("active").val() : true;
             geoFire.set(userId, [lat, long]).then(function () {
-              console.log("User Location saved to Geo database");
               locationFireDBRef.update({
                 active: active,
                 photoURL: photoURL
               });
               resolve(active);
             }, function (error) {
-              console.log("User Location can't saved to Geo database: " + error);
               reject(error)
             });
           })
@@ -283,7 +281,6 @@ angular.module('starter.services', [])
       };
 
       $http(req).then(function(success){
-        console.log(JSON.stringify(success));
         info.resolve(success.data);
       }, function(error){
         info.reject(error);
