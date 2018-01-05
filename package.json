@@ -3,6 +3,7 @@
   "version": "1.1.1",
   "description": "stepup: An Ionic project",
   "dependencies": {
+    "cordova-android": "^7.0.0",
     "cordova-plugin-facebook4": "git+https://github.com/Telerik-Verified-Plugins/Facebook.git",
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",
@@ -25,7 +26,8 @@
     "cordova-plugin-whitelist",
     "cordova-plugin-console",
     "cordova-plugin-splashscreen",
-    "ionic-plugin-keyboard"
+    "ionic-plugin-keyboard",
+    "cordova-plugin-geolocation"
   ],
   "cordovaPlatforms": [
     "ios",

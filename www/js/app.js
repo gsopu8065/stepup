@@ -10,9 +10,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   .run(function ($ionicPlatform, $cordovaGeolocation, $state, $rootScope, $firebaseAuth, FirebaseUserCtrl) {
     $ionicPlatform.ready(function () {
 
-
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         cordova.plugins.Keyboard.disableScroll(true);
@@ -46,9 +43,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 displayName: $rootScope.displayName
               }).then(function () {
               });
+              cordova.exec(function(token) {
+                if(token){
+                  firebaseUser.providerAccessToken = $rootScope.providerAccessToken;
+                  firebaseUser.deviceId = token;
+                  FirebaseUserCtrl.updateFirebaseUser(firebaseUser)
+                    .then(goToApp(firebaseUser), goToApp(firebaseUser));
+                }
+              }, function(error) {}, "FirebasePlugin", "getToken", []);
 
-              FirebaseUserCtrl.updateFirebaseUser(firebaseUser)
-                .then(goToApp(firebaseUser), goToApp(firebaseUser));
             }
             else{
               goToApp(firebaseUser);
@@ -56,9 +59,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
           } else if ((firebaseUser.providerData[0].providerId == "facebook.com") || (firebaseUser.providerData[0].providerId == "google.com")) {
             if ($rootScope.providerAccessToken) {
               cordova.exec(undefined, undefined, "FirebasePlugin", "grantPermission", []);
-              firebaseUser.providerAccessToken = $rootScope.providerAccessToken;
-              FirebaseUserCtrl.updateFirebaseUser(firebaseUser)
-                .then(goToApp(firebaseUser), goToApp(firebaseUser));
+              cordova.exec(function(token) {
+                if(token){
+                  firebaseUser.providerAccessToken = $rootScope.providerAccessToken;
+                  firebaseUser.deviceId = token;
+                  FirebaseUserCtrl.updateFirebaseUser(firebaseUser)
+                    .then(goToApp(firebaseUser), goToApp(firebaseUser));
+                }
+              }, function(error) {}, "FirebasePlugin", "getToken", []);
+
             }
             else {
               goToApp(firebaseUser);
@@ -74,29 +83,33 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
 
     var goToApp = function(firebaseUser){
-
       var userFireDBRef = firebase.database().ref('/users/' + firebaseUser.uid);
       userFireDBRef.update({   lastLogin: new Date().getTime() });
       userFireDBRef.once('value').then(function(res){
         $rootScope.isGlobal = res.val().isGlobal || false;
       });
 
-      cordova.exec(function(token) {
+      /*cordova.exec(function(token) {
         //var userFireDBRef = firebase.database().ref('/users/' + firebaseUser.uid);
         userFireDBRef.update({   deviceId: token });
       }, function (error) {
         console.log("notice error", error);
-      }, "FirebasePlugin", "onTokenRefresh", []);
+      }, "FirebasePlugin", "onTokenRefresh", []);*/
 
-      var options = {timeout: 30000, enableHighAccuracy: true};
-      $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+      var onSuccess = function(position) {
         $rootScope.location.latitude = position.coords.latitude;
         $rootScope.location.longitude = position.coords.longitude;
         $rootScope.uid = firebaseUser.uid;
         $rootScope.displayName = firebaseUser.displayName;
         $rootScope.photoURL = firebaseUser.photoURL == null? './img/userPhoto.jpg':firebaseUser.photoURL;
         $state.go('tab.news');
-      });
+      };
+
+      var onError = function(error) {
+        $state.go('login');
+      };
+      var options = {timeout: 30000, enableHighAccuracy: true};
+      navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
     }
   })
 

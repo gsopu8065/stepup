@@ -51,83 +51,6 @@ angular.module('starter.services', [])
   .factory('UserService', function ($q) {
     var UserService = {};
 
-    UserService.updateUserProfile = function(profileInfo, deviceId){
-
-      var info = $q.defer();
-
-      var userInfo = {
-        displayName: profileInfo.name,
-        email: profileInfo.email || "",
-        birthday: profileInfo.birthday || "",
-        photos: getPhotos(profileInfo),
-        likes: getLikes(profileInfo),
-        gender: profileInfo.gender || "",
-        about: profileInfo.about || "",
-        education: getEducation(profileInfo),
-        work: getWork(profileInfo),
-        location: getLocation(profileInfo),
-        token: profileInfo.id,
-        lastLogin: new Date().getTime(),
-        status: "active"
-      }
-
-      if(deviceId != undefined){
-        userInfo.deviceId = deviceId;
-      }
-
-      firebase.database().ref('users/' + profileInfo.id).update(userInfo);
-      info.resolve();
-      return info.promise;
-    };
-
-    var getLocation = function(profileInfo) {
-      var location = "";
-      if(profileInfo.location != undefined){
-        location = profileInfo.location.name;
-      }
-      return location;
-    };
-
-    var getWork = function(profileInfo) {
-      var work = "";
-      if (profileInfo.work != undefined && profileInfo.work[0] != undefined && profileInfo.work[0].employer != undefined) {
-        work = profileInfo.work[0].employer.name;
-      }
-      return work;
-    };
-
-    var getEducation = function(profileInfo) {
-      var education = "";
-      if (profileInfo.education != undefined && profileInfo.education[0] != undefined && profileInfo.education[0].school != undefined) {
-        education = profileInfo.education[0].school.name;
-      }
-      return education;
-    };
-
-    var getPhotos = function(profileInfo) {
-      var photos = [];
-      if(profileInfo.albums != undefined && profileInfo.albums.data != undefined){
-
-        var profilePictures = _.filter(profileInfo.albums.data, {"type": "profile"});
-        if (profilePictures.length > 0 && profilePictures[0].photos) {
-          _.forEach(profilePictures[0].photos.data, function (photoImages) {
-            photos.push(photoImages.images[0].source);
-          });
-        }
-      }
-      return photos;
-    };
-
-    var getLikes = function(profileInfo) {
-      var likes = [];
-      if(profileInfo.likes != undefined && profileInfo.likes.data !=undefined){
-        _.forEach(profileInfo.likes.data, function(likeObj) {
-          likes.push(likeObj.name);
-        });
-      }
-      return likes;
-    };
-
     UserService.getUserLastLogin = function(userId){
       var info = $q.defer();
        firebase.database().ref('users/' + userId).child('lastLogin').once('value').then(function(res){
@@ -192,16 +115,16 @@ angular.module('starter.services', [])
 
     FirebaseUserCtrl.updateFirebaseUser = function (firebaseUser) {
       var info = $q.defer();
-      cordova.exec(function(token) {
-        updateFirebaseUser(token, firebaseUser, info)
+    /*  cordova.exec(function(token) {
+
       }, function(error) {
          updateFirebaseUser(null, firebaseUser, info)
-      }, "FirebasePlugin", "getToken", []);
-
+      }, "FirebasePlugin", "getToken", []);*/
+      updateFirebaseUser(firebaseUser, info);
       return info.promise;
     };
 
-    var updateFirebaseUser = function(token, firebaseUser, promise){
+    var updateFirebaseUser = function(firebaseUser, promise){
 
       if(firebaseUser.providerData[0].providerId == "facebook.com"){
 
@@ -222,8 +145,8 @@ angular.module('starter.services', [])
               status: "active"
             };
 
-            if(token != null){
-              userInfo.deviceId = token;
+            if(firebaseUser.token != null){
+              userInfo.deviceId = firebaseUser.token;
             }
 
             updateUserProfile(firebaseUser.uid,userInfo);
@@ -241,8 +164,8 @@ angular.module('starter.services', [])
           status: "active"
         };
 
-        if(token != null){
-          googleUserInfo.deviceId = token;
+        if(firebaseUser.token != null){
+          googleUserInfo.deviceId = firebaseUser.token;
         }
 
         updateUserProfile(firebaseUser.uid,googleUserInfo);
@@ -255,8 +178,8 @@ angular.module('starter.services', [])
           status: "active"
         };
 
-        if(token != null){
-          userInfo.deviceId = token;
+        if(firebaseUser.token != null){
+          userInfo.deviceId = firebaseUser.token;
         }
 
         updateUserProfile(firebaseUser.uid,userInfo);

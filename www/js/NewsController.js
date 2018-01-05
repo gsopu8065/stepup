@@ -1,7 +1,7 @@
-stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $cordovaGeolocation, $state, $ionicBackdrop, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, $cordovaImagePicker, $cordovaCamera, $ionicSlideBoxDelegate, $ionicScrollDelegate, NewsService) {
+stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $state, $ionicBackdrop, $ionicModal, $ionicPopup, $ionicActionSheet, $cordovaSocialSharing, $cordovaImagePicker, $cordovaCamera, $ionicSlideBoxDelegate, $ionicScrollDelegate, NewsService) {
 
 
-  /*$rootScope.uid = "6qDGwYfzFjQQ16kZMCM2i9TJhfn2";
+   /*$rootScope.uid = "6qDGwYfzFjQQ16kZMCM2i9TJhfn2";
    $rootScope.displayName = "jack phone";
    $rootScope.location = {
    "longitude": -86.929105 ,

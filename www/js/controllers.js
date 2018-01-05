@@ -571,25 +571,33 @@ stepNote.controller('AccountCtrl', function ($scope, $rootScope, $state, $ionicA
 
 });
 
-stepNote.controller('LoginCtrl', function ($scope, $rootScope, $state, $firebaseAuth, $cordovaOauth) {
+stepNote.controller('LoginCtrl', function ($scope, $rootScope, $state, $firebaseAuth, $cordovaOauth, $ionicPopup) {
 
   var auth = $firebaseAuth(firebase.auth());
 
   $scope.fbLogin = function () {
-    console.log("started");
     facebookConnectPlugin.login(["user_birthday", "email", "user_about_me", "user_photos", "user_likes", "user_work_history", "user_education_history", "user_location"], function(response) {
       $rootScope.providerAccessToken = response.authResponse.accessToken;
       var credential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
       auth.$signInWithCredential(credential).then(successLogin).catch(errorLogin);
     }, errorLogin);
+    /*if($scope.terms == true){
+
+     }
+     else {
+     $ionicPopup.alert({
+     title: 'Terms of use',
+     templateUrl: 'https://www.google.com'
+     }).then(function(res) {});
+     }*/
   };
 
   $scope.gmailLogin = function () {
-    $cordovaOauth.google("666075061271-h83tsb3cdqcieq6cek63eb9lrke8f1df.apps.googleusercontent.com", ["email", "profile"]).then(function(result) {
+    $cordovaOauth.google("666075061271-h83tsb3cdqcieq6cek63eb9lrke8f1df.apps.googleusercontent.com", ["email", "profile"]).then(function (result) {
       $rootScope.providerAccessToken = result.access_token;
       var credential = firebase.auth.GoogleAuthProvider.credential(null, result.access_token);
       auth.$signInWithCredential(credential).then(successLogin).catch(errorLogin);
-    },errorLogin);
+    }, errorLogin);
   };
 
   var successLogin = function(firebaseUser){
