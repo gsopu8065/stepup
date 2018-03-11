@@ -204,8 +204,10 @@ angular.module('starter.services', [])
       };
 
       $http(req).then(function(success){
+        console.log(JSON.stringify(success))
         info.resolve(success.data);
       }, function(error){
+        console.log(JSON.stringify(error))
         info.reject(error);
       });
 

@@ -42,19 +42,34 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $state, 
     }
   };
 
-  //get location
-  $scope.loading = true;
+  $scope.grantLocation = function () {
+    if (typeof cordova.plugins.settings.openSetting != undefined) {
+      cordova.plugins.settings.open(function () {
+        },
+        function () {
+        });
+    }
+  };
 
-  NewsService.getNews({
-    latitude: $rootScope.location.latitude,
-    longitude: $rootScope.location.longitude
-  }, 50, $rootScope.uid).then(function (newsQueryRes) {
-    $scope.loading = false;
-    $scope.newsFeed = newsQueryRes;
-  });
+  if ($rootScope.location.latitude != null) {
+    //get location
+    $scope.loading = true;
+    NewsService.getNews({
+      latitude: $rootScope.location.latitude,
+      longitude: $rootScope.location.longitude
+    }, 50, $rootScope.uid).then(function (newsQueryRes) {
+      $scope.loading = false;
+      $scope.newsFeed = newsQueryRes;
+    });
+  }
+  else {
+    $scope.noLocation = true;
+  }
+
 
   $scope.doRefresh = function (status) {
-    $ionicScrollDelegate.resize();
+    console.log("srujan");
+    //$ionicScrollDelegate.resize();
     $scope.$broadcast('scroll.refreshComplete');
     /*NewsService.getNews({
      latitude: $rootScope.location.latitude,
@@ -395,9 +410,13 @@ stepNote.controller('NewsCtrl', function ($scope, $rootScope, $timeout, $state, 
       });
   };
 
-  $scope.sort = 1;
+  $scope.sort = 2;
   $scope.sortHot = function () {
     $scope.sort = 1;
+  };
+
+  $scope.scrollTop = function () {
+    $ionicScrollDelegate.scrollTop();
   };
 
   $scope.sortRecent = function () {

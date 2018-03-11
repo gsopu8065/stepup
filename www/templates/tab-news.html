@@ -1,6 +1,6 @@
 <ion-view>
 
-  <ion-nav-title>
+  <ion-nav-title ng-click="scrollTop()">
     <span class="myHeader">
       <span class="myHeaderM">M</span>
       <span class="myHeaderN">y</span>
@@ -18,19 +18,21 @@
     </ion-nav-buttons>
   </ion-nav-bar>
 
-  <ion-content overflow-scroll="true" class="padding" lazy-scroll>
+  <ion-content overflow-scroll="true">
 
-    <ion-refresher on-refresh="doRefresh()"></ion-refresher>
+    <ion-refresher on-refresh="doRefresh()">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
     <div style="height: 35px;text-align: center;" ng-if="loading">
       <spinner/>
     </div>
 
     <div class="mytabs" ng-if="newsFeed.length != 0">
-      <a class="mytab" style="border-right: 0" ng-class="{1:'tabBackGroundColored',2:'tabBackGroundWhite'}[sort]"
-         ng-click="sortHot()">Hot</a>
-      <a class="mytab" ng-class="{2:'tabBackGroundColored',1:'tabBackGroundWhite'}[sort]"
+      <a class="mytab" style="border-right: 0" ng-class="{2:'tabBackGroundColored',1:'tabBackGroundWhite'}[sort]"
          ng-click="sortRecent()">Recent</a>
+      <a class="mytab" ng-class="{1:'tabBackGroundColored',2:'tabBackGroundWhite'}[sort]"
+         ng-click="sortHot()">Hot</a>
     </div>
 
     <div class="noNewsFeed" ng-if="newsFeed.length == 0">
@@ -39,8 +41,75 @@
         <button class="statusButton" ng-click="openStatus()"> Post Status</button>
       </div>
     </div>
+    <div class="noNewsFeed" ng-if="noLocation == true">
+      Can't access current location. Please grant location access and restart.
+      <div>
+        <button class="statusButton" ng-click="grantLocation()"> Grant Location</button>
+      </div>
+    </div>
 
-    <div class="article" ng-repeat="article in newsFeed | orderBy:dynamicOrderFunction:true track by article._id">
+    <ion-list>
+      <ion-item class="article"
+                ng-repeat="article in newsFeed | orderBy:dynamicOrderFunction:true track by article._id">
+        <i class="icon ion-ios-arrow-down dropDownStatus" ng-click="openOptionsMenu(article)"></i>
+
+        <span class="articleTime"> {{article.timeStamp |  formatdate}} </span>
+        <span class="articleTime"> {{getLocation(article)}} </span>
+        <div class="articleTextAnchor articleText" ng-click="showDetails(article)">
+          {{article.status}}
+        </div>
+        <span class="item item-list-detail" ng-if="article.media.length > 0"
+              style=" height: auto;border-top: 0;border-bottom: 0;padding-top: 0;padding-bottom: 0;">
+          <span ng-if="article.media.length > 1" style="min-height: 25px">
+        <ion-slides options="{}" slider="{}">
+          <ion-slide-page ng-repeat="image in article.media">
+            <div style="height:100% ;width: 100%;vertical-align: middle; display: -webkit-inline-box;">
+              <img src="{{image}}" ng-click="showImages(article, $index)"
+                   class="image-list-thumb" style="height: auto" lazy-scroll-resize="true" image-lazy-loader="lines"/>
+            </div>
+          </ion-slide-page>
+        </ion-slides>
+            </span>
+
+          <span ng-if="article.media.length == 1" style="min-height: 25px">
+             <ion-slides options="{pagination: false}" slider="{}">
+               <ion-slide-page ng-repeat="image in article.media">
+                 <div style="height:100% ;width: 100%;vertical-align: middle; display: -webkit-inline-box;">
+                   <img src="{{image}}" ng-click="showImages(article, $index)"
+                        class="image-list-thumb" style="height: auto" lazy-scroll-resize="true"
+                        image-lazy-loader="lines"/>
+                 </div>
+               </ion-slide-page>
+             </ion-slides>
+            </span>
+
+          </span>
+
+
+        <div class="articlebottom">
+
+          <div class="eachLikeIcon" ng-click="updateOrDeleteEmotion(article, 'like')">
+            <span class="fontOfLike blackColor">{{getEmotionCount(article, 'like')}}</span>
+            <i class="fa  fontOfLikeIcon" aria-hidden="true"
+               ng-class="{true:'fa-thumbs-up makeLikeIconBold',false:'fa-thumbs-o-up', undefined:'fa-thumbs-o-up'}[checkStatus(article, 'like')]"></i>
+          </div>
+          <div class="eachLikeIcon" ng-click="updateOrDeleteEmotion(article, 'dislike')">
+            <span class="fontOfLike blackColor">{{getEmotionCount(article, 'dislike')}}</span>
+            <i class="fa fontOfLikeIcon" aria-hidden="true"
+               ng-class="{true:'fa-thumbs-down makeLikeIconBold',false:'fa-thumbs-o-down', undefined:'fa-thumbs-o-down'}[checkStatus(article, 'dislike')]"></i>
+          </div>
+          <div class="eachLikeIcon" ng-click="showDetails(article)">
+            <span class="eachLikeIcon blackColor" style="display: inline-block;"> {{article.replyCount}} replies </span>
+          </div>
+          <div class="eachLikeIcon" ng-click="shareStatus(article)">
+            <span class="eachLikeIcon icon ion-android-share fontOfLikeIcon blackColor"></span>
+          </div>
+        </div>
+
+      </ion-item>
+    </ion-list>
+
+    <!--<div class="article" ng-repeat="article in newsFeed | orderBy:dynamicOrderFunction:true track by article._id">
 
       <i class="icon ion-ios-arrow-down dropDownStatus" ng-click="openOptionsMenu(article)"></i>
 
@@ -75,26 +144,8 @@
           </span>
         </span>
 
-      <div class="articlebottom">
 
-        <div class="eachLikeIcon" ng-click="updateOrDeleteEmotion(article, 'like')">
-          <span class="fontOfLike blackColor">{{getEmotionCount(article, 'like')}}</span>
-          <i class="fa  fontOfLikeIcon" aria-hidden="true"
-             ng-class="{true:'fa-thumbs-up makeLikeIconBold',false:'fa-thumbs-o-up', undefined:'fa-thumbs-o-up'}[checkStatus(article, 'like')]"></i>
-        </div>
-        <div class="eachLikeIcon" ng-click="updateOrDeleteEmotion(article, 'dislike')">
-          <span class="fontOfLike blackColor">{{getEmotionCount(article, 'dislike')}}</span>
-          <i class="fa fontOfLikeIcon" aria-hidden="true"
-             ng-class="{true:'fa-thumbs-down makeLikeIconBold',false:'fa-thumbs-o-down', undefined:'fa-thumbs-o-down'}[checkStatus(article, 'dislike')]"></i>
-        </div>
-        <div class="eachLikeIcon" ng-click="showDetails(article)">
-          <span class="eachLikeIcon blackColor" style="display: inline-block;"> {{article.replyCount}} replies </span>
-        </div>
-        <div class="eachLikeIcon" ng-click="shareStatus(article)">
-          <span class="eachLikeIcon icon ion-android-share fontOfLikeIcon blackColor"></span>
-        </div>
-      </div>
-    </div>
+    </div>-->
 
     <div style="height: 15%"></div>
 

@@ -576,20 +576,12 @@ stepNote.controller('LoginCtrl', function ($scope, $rootScope, $state, $firebase
   var auth = $firebaseAuth(firebase.auth());
 
   $scope.fbLogin = function () {
+
     facebookConnectPlugin.login(["user_birthday", "email", "user_about_me", "user_photos", "user_likes", "user_work_history", "user_education_history", "user_location"], function(response) {
       $rootScope.providerAccessToken = response.authResponse.accessToken;
       var credential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
       auth.$signInWithCredential(credential).then(successLogin).catch(errorLogin);
     }, errorLogin);
-    /*if($scope.terms == true){
-
-     }
-     else {
-     $ionicPopup.alert({
-     title: 'Terms of use',
-     templateUrl: 'https://www.google.com'
-     }).then(function(res) {});
-     }*/
   };
 
   $scope.gmailLogin = function () {

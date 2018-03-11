@@ -109,14 +109,24 @@
   border-radius: 0 !important;
 }
 
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+.article .swiper-slide {
+  height: unset;
+  background-color: white;
+}
+
+.image-list-thumb {
+  display: flex;
+  margin: 0 auto;
+}
+
 .article{
-  margin-bottom: 10px;
-  padding-bottom: 4px;
-  padding-top: 4px;
-  -moz-box-shadow: 0px 3px 7px #6f6e6e;
-  -webkit-box-shadow: 0px 3px 7px #6f6e6e;
-  box-shadow: 0px 3px 7px #6f6e6e;
-  border-radius: 12px;
+  padding-left: 2px;
+  padding-top: 2px;
+  padding-right: 2px;
 }
 
 .articleTextAnchor{
@@ -141,11 +151,12 @@
 .articleText{
   margin-left: 2%;
   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   font-size: medium;
   float: left;
   width: 93%;
   text-align: justify;
+  white-space: normal;
 }
 
 .articlebottom{
@@ -329,6 +340,8 @@
   display: inline-block;
   width: 100%;
   padding-left: 26%;
+  margin-top: 5px;
+  margin-bottom: 6px;
 }
 
 .mytab{

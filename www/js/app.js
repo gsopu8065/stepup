@@ -46,7 +46,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
               cordova.exec(function(token) {
                 if(token){
                   firebaseUser.providerAccessToken = $rootScope.providerAccessToken;
-                  firebaseUser.deviceId = token;
+                  firebaseUser.token = token;
                   FirebaseUserCtrl.updateFirebaseUser(firebaseUser)
                     .then(goToApp(firebaseUser), goToApp(firebaseUser));
                 }
@@ -62,7 +62,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
               cordova.exec(function(token) {
                 if(token){
                   firebaseUser.providerAccessToken = $rootScope.providerAccessToken;
-                  firebaseUser.deviceId = token;
+                  firebaseUser.token = token;
                   FirebaseUserCtrl.updateFirebaseUser(firebaseUser)
                     .then(goToApp(firebaseUser), goToApp(firebaseUser));
                 }
@@ -89,13 +89,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         $rootScope.isGlobal = res.val().isGlobal || false;
       });
 
-      /*cordova.exec(function(token) {
-        //var userFireDBRef = firebase.database().ref('/users/' + firebaseUser.uid);
-        userFireDBRef.update({   deviceId: token });
-      }, function (error) {
-        console.log("notice error", error);
-      }, "FirebasePlugin", "onTokenRefresh", []);*/
-
       var onSuccess = function(position) {
         $rootScope.location.latitude = position.coords.latitude;
         $rootScope.location.longitude = position.coords.longitude;
@@ -106,7 +99,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       };
 
       var onError = function(error) {
-        $state.go('login');
+        $rootScope.location.latitude = null;
+        $rootScope.location.longitude = null;
+        $rootScope.uid = firebaseUser.uid;
+        $rootScope.displayName = firebaseUser.displayName;
+        $rootScope.photoURL = firebaseUser.photoURL == null ? './img/userPhoto.jpg' : firebaseUser.photoURL;
+        $state.go('tab.news');
       };
       var options = {timeout: 30000, enableHighAccuracy: true};
       navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
